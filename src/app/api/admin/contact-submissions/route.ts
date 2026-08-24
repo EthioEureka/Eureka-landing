@@ -19,11 +19,11 @@ export async function PUT(request: Request) {
   }
 
   try {
-    const { id, status } = await request.json();
-    if (!id || !status) {
-      return NextResponse.json({ error: "ID and status are required" }, { status: 400 });
+    const { id, status, read } = await request.json();
+    if (!id) {
+      return NextResponse.json({ error: "Lead ID is required" }, { status: 400 });
     }
-    const result = await updateContactStatus(id, status);
+    const result = await updateContactStatus(id, status, read);
     if (!result.success) {
       return NextResponse.json({ error: result.error }, { status: 400 });
     }

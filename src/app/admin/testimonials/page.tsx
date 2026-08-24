@@ -1,8 +1,17 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Plus, Quote, Edit, Trash2, Loader2, X, Save } from "lucide-react";
+import Image from "next/image";
+import { Plus, Quote, Edit, Trash2, Loader2, X, Save, User, Image as ImageIcon } from "lucide-react";
 import { Testimonial } from "@/lib/types";
+
+const AVATAR_PRESETS = [
+  "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=400&q=80",
+  "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=400&q=80",
+  "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80",
+  "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=400&q=80",
+  "https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=400&q=80",
+];
 
 export default function AdminTestimonialsPage() {
   const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
@@ -17,6 +26,7 @@ export default function AdminTestimonialsPage() {
     role: "",
     company: "",
     quote: "",
+    photo: "",
     featured: true,
     published: true,
     sort_order: 1,
@@ -47,6 +57,7 @@ export default function AdminTestimonialsPage() {
       role: "",
       company: "",
       quote: "",
+      photo: AVATAR_PRESETS[0],
       featured: true,
       published: true,
       sort_order: testimonials.length + 1,
@@ -114,7 +125,7 @@ export default function AdminTestimonialsPage() {
         <div>
           <h1 className="text-2xl font-light text-off-white">Testimonial Management</h1>
           <p className="text-xs font-mono text-soft-gray mt-1">
-            Manage client quotes, endorsements, and roles
+            Manage client quotes, avatar pictures, endorsements, and roles
           </p>
         </div>
 
@@ -137,9 +148,24 @@ export default function AdminTestimonialsPage() {
           {testimonials.map((t, idx) => (
             <div key={t.id || idx} className="bg-dark-gray border border-border-gray p-6 font-mono text-xs space-y-4 relative group">
               <div className="flex items-center justify-between text-soft-gray border-b border-border-gray/50 pb-3">
-                <span className="flex items-center gap-2 text-off-white font-semibold font-sans text-sm">
-                  <Quote size={14} className="text-eureka-green" /> {t.client_name}
-                </span>
+                <div className="flex items-center gap-3">
+                  {t.photo ? (
+                    <div className="relative w-10 h-10 rounded-full overflow-hidden border border-eureka-green/60 shrink-0">
+                      <Image src={t.photo} alt={t.client_name} fill className="object-cover" />
+                    </div>
+                  ) : (
+                    <div className="w-10 h-10 rounded-full bg-deep-black border border-border-gray flex items-center justify-center font-mono text-xs text-eureka-green shrink-0">
+                      {t.client_name ? t.client_name.substring(0, 2).toUpperCase() : "TS"}
+                    </div>
+                  )}
+                  <div>
+                    <span className="text-off-white font-semibold font-sans text-sm block">
+                      {t.client_name}
+                    </span>
+                    <span className="text-[10px] text-soft-gray">{t.role} · {t.company}</span>
+                  </div>
+                </div>
+
                 <div className="flex items-center gap-3">
                   <button
                     onClick={() => handleOpenEdit(t)}
@@ -161,13 +187,12 @@ export default function AdminTestimonialsPage() {
 
               <p className="text-soft-gray italic font-sans text-xs leading-relaxed">&ldquo;{t.quote}&rdquo;</p>
 
-              <div className="text-[11px] text-soft-gray pt-2 border-t border-border-gray/30 flex justify-between items-end">
-                <div>
-                  <p className="text-off-white font-semibold">{t.role}</p>
-                  <p>{t.company}</p>
-                </div>
+              <div className="text-[11px] text-soft-gray pt-2 border-t border-border-gray/30 flex justify-between items-center">
+                <span className="flex items-center gap-1.5 text-soft-gray text-[10px]">
+                  <Quote size={12} className="text-eureka-green" /> Client Endorsement
+                </span>
                 {t.featured && (
-                  <span className="text-[10px] uppercase text-eureka-green border border-eureka-green/40 px-2 py-0.5">
+                  <span className="text-[10px] uppercase text-eureka-green border border-eureka-green/40 px-2 py-0.5 font-bold">
                     FEATURED
                   </span>
                 )}
@@ -196,6 +221,7 @@ export default function AdminTestimonialsPage() {
                 <input
                   type="text"
                   required
+                  placeholder="e.g. Yonas Tadesse"
                   value={formData.client_name || ""}
                   onChange={(e) => setFormData({ ...formData, client_name: e.target.value })}
                   className="w-full bg-deep-black border border-border-gray text-off-white px-3 py-2 focus:border-eureka-green focus:outline-none"
@@ -208,6 +234,7 @@ export default function AdminTestimonialsPage() {
                   <input
                     type="text"
                     required
+                    placeholder="e.g. Founder & CEO"
                     value={formData.role || ""}
                     onChange={(e) => setFormData({ ...formData, role: e.target.value })}
                     className="w-full bg-deep-black border border-border-gray text-off-white px-3 py-2 focus:border-eureka-green focus:outline-none"
@@ -219,10 +246,56 @@ export default function AdminTestimonialsPage() {
                   <input
                     type="text"
                     required
+                    placeholder="e.g. Abyssinia Artisan Group"
                     value={formData.company || ""}
                     onChange={(e) => setFormData({ ...formData, company: e.target.value })}
                     className="w-full bg-deep-black border border-border-gray text-off-white px-3 py-2 focus:border-eureka-green focus:outline-none"
                   />
+                </div>
+              </div>
+
+              {/* Avatar Picture / Photo URL */}
+              <div>
+                <label className="block text-soft-gray uppercase mb-1 flex items-center justify-between">
+                  <span>Client Avatar Picture (Photo URL)</span>
+                  <span className="text-[10px] text-eureka-green">Optional URL</span>
+                </label>
+
+                <div className="flex gap-3 items-center">
+                  <div className="relative w-12 h-12 rounded-full overflow-hidden border border-eureka-green/70 bg-deep-black shrink-0 flex items-center justify-center">
+                    {formData.photo ? (
+                      <Image src={formData.photo} alt="Avatar preview" fill className="object-cover" />
+                    ) : (
+                      <User size={20} className="text-soft-gray" />
+                    )}
+                  </div>
+
+                  <input
+                    type="url"
+                    placeholder="https://images.unsplash.com/..."
+                    value={formData.photo || ""}
+                    onChange={(e) => setFormData({ ...formData, photo: e.target.value })}
+                    className="w-full bg-deep-black border border-border-gray text-off-white px-3 py-2 text-xs focus:border-eureka-green focus:outline-none"
+                  />
+                </div>
+
+                {/* Quick Avatar Presets */}
+                <div className="mt-2 pt-2 border-t border-border-gray/40">
+                  <span className="text-[10px] text-soft-gray uppercase block mb-1">Select Preset Avatar:</span>
+                  <div className="flex items-center gap-2">
+                    {AVATAR_PRESETS.map((preset, pIdx) => (
+                      <button
+                        key={pIdx}
+                        type="button"
+                        onClick={() => setFormData({ ...formData, photo: preset })}
+                        className={`relative w-7 h-7 rounded-full overflow-hidden border transition-all ${
+                          formData.photo === preset ? "border-eureka-green ring-2 ring-eureka-green/50 scale-110" : "border-border-gray hover:border-white"
+                        }`}
+                      >
+                        <Image src={preset} alt={`Avatar preset ${pIdx + 1}`} fill className="object-cover" />
+                      </button>
+                    ))}
+                  </div>
                 </div>
               </div>
 
@@ -231,6 +304,7 @@ export default function AdminTestimonialsPage() {
                 <textarea
                   required
                   rows={4}
+                  placeholder="Enter the client testimonial quote..."
                   value={formData.quote || ""}
                   onChange={(e) => setFormData({ ...formData, quote: e.target.value })}
                   className="w-full bg-deep-black border border-border-gray text-off-white p-3 focus:border-eureka-green focus:outline-none font-sans text-sm"

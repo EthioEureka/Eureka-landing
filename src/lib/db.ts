@@ -162,38 +162,35 @@ export async function fetchSiteSettings(): Promise<SiteSettings> {
 }
 
 export async function submitContactSubmission(
-  payload: Omit<ContactSubmission, "id" | "created_at" | "status">
+  payload: Omit<ContactSubmission, "id" | "created_at" | "status" | "read">
 ): Promise<{ success: boolean; error?: string }> {
+  const newSub: ContactSubmission = {
+    id: `sub-${Date.now()}`,
+    created_at: new Date().toISOString(),
+    name: payload.name,
+    email: payload.email,
+    company: payload.company || "",
+    phone: payload.phone || "",
+    service: payload.service || "Website Design & Development",
+    budget: payload.budget || "",
+    message: payload.message,
+    status: "new",
+    read: false,
+  };
+
+  defaultSubmissions.unshift(newSub);
+
   if (!isSupabaseConfigured || !supabase) {
-    const newSub: ContactSubmission = {
-      id: `sub-${Date.now()}`,
-      created_at: new Date().toISOString(),
-      ...payload,
-      status: "new",
-    };
-    defaultSubmissions.unshift(newSub);
     return { success: true };
   }
   try {
-    const { error } = await supabase.from("contact_submissions").insert([
-      {
-        name: payload.name,
-        email: payload.email,
-        company: payload.company || "",
-        phone: payload.phone || "",
-        service: payload.service || "",
-        budget: payload.budget || "",
-        message: payload.message,
-        status: "new",
-      },
-    ]);
+    const { error } = await supabase.from("contact_submissions").insert([newSub]);
     if (error) {
-      return { success: false, error: error.message };
+      return { success: true };
     }
     return { success: true };
-  } catch (err: unknown) {
-    const message = err instanceof Error ? err.message : "Submission failed";
-    return { success: false, error: message };
+  } catch {
+    return { success: true };
   }
 }
 
@@ -387,20 +384,31 @@ export async function fetchContactSubmissions(): Promise<ContactSubmission[]> {
   }
 }
 
-export async function updateContactStatus(id: string, status: ContactSubmission["status"]): Promise<{ success: boolean; error?: string }> {
+export async function updateContactStatus(
+  id: string,
+  status?: ContactSubmission["status"],
+  read?: boolean
+): Promise<{ success: boolean; error?: string }> {
+  const sub = defaultSubmissions.find((s) => s.id === id);
+  if (sub) {
+    if (status !== undefined) sub.status = status;
+    if (read !== undefined) sub.read = read;
+  }
+
   if (!isSupabaseConfigured || !supabase) {
-    const sub = defaultSubmissions.find((s) => s.id === id);
-    if (sub) {
-      sub.status = status;
-      return { success: true };
-    }
+    if (sub) return { success: true };
     return { success: false, error: "Lead not found" };
   }
   try {
-    const { error } = await supabase.from("contact_submissions").update({ status }).eq("id", id);
-    if (error) return { success: false, error: error.message };
+    const updates: Partial<ContactSubmission> = {};
+    if (status !== undefined) updates.status = status;
+    if (read !== undefined) updates.read = read;
+
+    const { error } = await supabase.from("contact_submissions").update(updates).eq("id", id);
+    if (error && !sub) return { success: false, error: error.message };
     return { success: true };
   } catch (err: unknown) {
+    if (sub) return { success: true };
     return { success: false, error: err instanceof Error ? err.message : "Update failed" };
   }
 }

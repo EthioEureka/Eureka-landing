@@ -29,22 +29,33 @@ export default function ContactSection() {
     setLoading(true);
     setErrorMsg("");
 
-    const res = await submitContactSubmission(formData);
-    setLoading(false);
-
-    if (res.success) {
-      setSubmitted(true);
-      setFormData({
-        name: "",
-        email: "",
-        company: "",
-        phone: "",
-        service: "Website Design & Development",
-        budget: "",
-        message: "",
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
       });
-    } else {
-      setErrorMsg(res.error || "Failed to submit inquiry. Please try again.");
+
+      const data = await res.json();
+
+      if (res.ok && data.success) {
+        setSubmitted(true);
+        setFormData({
+          name: "",
+          email: "",
+          company: "",
+          phone: "",
+          service: "Website Design & Development",
+          budget: "",
+          message: "",
+        });
+      } else {
+        setErrorMsg(data.error || "Failed to submit inquiry. Please try again.");
+      }
+    } catch {
+      setErrorMsg("Network error submitting inquiry. Please try again.");
+    } finally {
+      setLoading(false);
     }
   };
 

@@ -59,6 +59,7 @@ export interface ContactSubmission {
   budget?: string;
   message: string;
   status: 'new' | 'contacted' | 'in_progress' | 'completed' | 'archived';
+  read?: boolean;
 }
 
 export interface SiteSettings {
