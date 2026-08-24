@@ -6,11 +6,14 @@ import Image from "next/image";
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { ArrowRight, ArrowDownRight, Check, ExternalLink, Sparkles, Layout, Share2, PenTool, Layers } from "lucide-react";
 
+import { Project } from "@/lib/types";
+
 // Card data configuration array
 interface HeroCardData {
   id: string;
   title: string;
   category: string;
+  slug?: string;
   type: "website" | "brand" | "dashboard" | "mobile" | "social" | "poster";
   image: string;
   // Positional configuration for desktop canvas
@@ -28,13 +31,8 @@ interface HeroCardData {
   hasLightBar?: boolean;
 }
 
-const HERO_CARDS: HeroCardData[] = [
+const HERO_CARD_PRESETS = [
   {
-    id: "card-01",
-    title: "Abyssinia Craft",
-    category: "Luxury E-Commerce & Brand",
-    type: "website",
-    image: "https://images.unsplash.com/photo-1544816155-12df9643f363?auto=format&fit=crop&w=1200&q=80",
     left: "52%",
     top: "-5%",
     width: "360px",
@@ -48,11 +46,6 @@ const HERO_CARDS: HeroCardData[] = [
     delay: 0,
   },
   {
-    id: "card-02",
-    title: "Ethio-Eureka Brand System",
-    category: "Identity & Visual Strategy",
-    type: "brand",
-    image: "https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=1200&q=80",
     left: "48%",
     top: "30%",
     width: "420px",
@@ -67,11 +60,6 @@ const HERO_CARDS: HeroCardData[] = [
     hasLightBar: true,
   },
   {
-    id: "card-03",
-    title: "Kality Freight Portal",
-    category: "Supply Chain & Logistics UI",
-    type: "dashboard",
-    image: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=1200&q=80",
     left: "58%",
     top: "65%",
     width: "390px",
@@ -85,11 +73,6 @@ const HERO_CARDS: HeroCardData[] = [
     delay: 0.4,
   },
   {
-    id: "card-04",
-    title: "Nile Capital Mobile App",
-    category: "Fintech Mobile Interface",
-    type: "mobile",
-    image: "https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=1200&q=80",
     left: "25%",
     top: "42%",
     width: "280px",
@@ -103,11 +86,6 @@ const HERO_CARDS: HeroCardData[] = [
     delay: 0.3,
   },
   {
-    id: "card-05",
-    title: "Zoma Sustainable Monograph",
-    category: "Editorial Architecture",
-    type: "website",
-    image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80",
     left: "75%",
     top: "22%",
     width: "340px",
@@ -121,11 +99,6 @@ const HERO_CARDS: HeroCardData[] = [
     delay: 0.5,
   },
   {
-    id: "card-06",
-    title: "Creative Storytelling Grid",
-    category: "Social Media Campaign",
-    type: "social",
-    image: "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1200&q=80",
     left: "22%",
     top: "5%",
     width: "300px",
@@ -139,11 +112,6 @@ const HERO_CARDS: HeroCardData[] = [
     delay: 0.6,
   },
   {
-    id: "card-07",
-    title: "Design System Tokens",
-    category: "Graphic & UI Component Framework",
-    type: "poster",
-    image: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1200&q=80",
     left: "40%",
     top: "78%",
     width: "320px",
@@ -158,8 +126,91 @@ const HERO_CARDS: HeroCardData[] = [
   },
 ];
 
-export default function Hero() {
+const HERO_CARDS: HeroCardData[] = [
+  {
+    id: "card-01",
+    title: "Abyssinia Craft",
+    category: "Luxury E-Commerce & Brand",
+    type: "website",
+    image: "https://images.unsplash.com/photo-1544816155-12df9643f363?auto=format&fit=crop&w=1200&q=80",
+    ...HERO_CARD_PRESETS[0],
+  },
+  {
+    id: "card-02",
+    title: "Ethio-Eureka Brand System",
+    category: "Identity & Visual Strategy",
+    type: "brand",
+    image: "https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=1200&q=80",
+    ...HERO_CARD_PRESETS[1],
+  },
+  {
+    id: "card-03",
+    title: "Kality Freight Portal",
+    category: "Supply Chain & Logistics UI",
+    type: "dashboard",
+    image: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=1200&q=80",
+    ...HERO_CARD_PRESETS[2],
+  },
+  {
+    id: "card-04",
+    title: "Nile Capital Mobile App",
+    category: "Fintech Mobile Interface",
+    type: "mobile",
+    image: "https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=1200&q=80",
+    ...HERO_CARD_PRESETS[3],
+  },
+  {
+    id: "card-05",
+    title: "Zoma Sustainable Monograph",
+    category: "Editorial Architecture",
+    type: "website",
+    image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80",
+    ...HERO_CARD_PRESETS[4],
+  },
+  {
+    id: "card-06",
+    title: "Creative Storytelling Grid",
+    category: "Social Media Campaign",
+    type: "social",
+    image: "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1200&q=80",
+    ...HERO_CARD_PRESETS[5],
+  },
+  {
+    id: "card-07",
+    title: "Design System Tokens",
+    category: "Graphic & UI Component Framework",
+    type: "poster",
+    image: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1200&q=80",
+    ...HERO_CARD_PRESETS[6],
+  },
+];
+
+interface HeroProps {
+  projects?: Project[];
+}
+
+export default function Hero({ projects }: HeroProps) {
   const heroRef = useRef<HTMLElement>(null);
+
+  // Map real CMS projects to floating card configuration
+  const displayCards: HeroCardData[] = React.useMemo(() => {
+    if (!projects || projects.length === 0) {
+      return HERO_CARDS;
+    }
+
+    return projects.map((p, idx) => {
+      const preset = HERO_CARD_PRESETS[idx % HERO_CARD_PRESETS.length];
+      return {
+        id: p.id || p.slug,
+        title: p.title,
+        category: p.category,
+        slug: p.slug,
+        type: "website",
+        image: p.cover_image || "https://images.unsplash.com/photo-1544816155-12df9643f363?auto=format&fit=crop&w=1200&q=80",
+        ...preset,
+      };
+    });
+  }, [projects]);
   
   // Mouse position state for subtle parallax and radial glow
   const mouseX = useMotionValue(0);
@@ -341,7 +392,7 @@ export default function Hero() {
         {/* RIGHT COLUMN: 3D ANIMATED FLOATING CARD STAGE (.hero-card-stage) */}
         <div className="lg:col-span-6 xl:col-span-6 relative h-[640px] sm:h-[720px] w-full hidden lg:block">
           <div className="hero-card-stage absolute inset-0 w-full h-full">
-            {HERO_CARDS.map((card) => (
+            {displayCards.map((card) => (
               <FloatingCard
                 key={card.id}
                 card={card}
@@ -462,7 +513,7 @@ function FloatingCard({ card, mouseX, mouseY }: FloatingCardProps) {
           <div className="absolute -left-1.5 top-1/2 -translate-y-1/2 w-1.5 h-16 bg-eureka-green rounded-full shadow-[0_0_20px_rgba(184,255,61,0.6)] z-30" />
         )}
 
-        <Link href="/work" className="block">
+        <Link href={card.slug ? `/work/${card.slug}` : "/work"} className="block">
           {/* Card Technical Display Bezel Frame */}
           <div className="bg-[#0D0D0D] border border-white/[0.06] rounded-xl p-2.5 relative overflow-hidden">
             

@@ -21,7 +21,7 @@ export default async function HomePage() {
 
   return (
     <>
-      <Hero />
+      <Hero projects={projects} />
       <IntroSection />
       <Marquee />
       <ServiceList services={services} />

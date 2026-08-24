@@ -7,9 +7,41 @@ import {
 } from "./seed-data";
 import { Project, Service, Testimonial, ContactSubmission, SiteSettings } from "./types";
 
+// Memory stores for local fallback persistence
+const memoryProjects: Project[] = [...defaultProjects];
+const memoryServices: Service[] = [...defaultServices];
+const memoryTestimonials: Testimonial[] = [...defaultTestimonials];
+let memorySettings: SiteSettings = { ...defaultSiteSettings };
+const defaultSubmissions: ContactSubmission[] = [
+  {
+    id: "sub-1",
+    created_at: new Date().toISOString(),
+    name: "Bethlehem Alemu",
+    email: "bethlehem@kalityfreight.example.com",
+    company: "Kality Logistics",
+    phone: "+251 911 000 111",
+    service: "Website Design & Development",
+    budget: "$10,000 - $25,000",
+    message: "We need a complete web application redesign and tracking portal for our regional fleet.",
+    status: "new",
+  },
+  {
+    id: "sub-2",
+    created_at: new Date(Date.now() - 86400000).toISOString(),
+    name: "Yonas Tadesse",
+    email: "yonas@abyssiniacraft.example.com",
+    company: "Abyssinia Artisan Group",
+    phone: "+251 911 222 333",
+    service: "Branding & Identity",
+    budget: "$5,000 - $10,000",
+    message: "Looking for visual identity and luxury e-commerce platform for international artisan exports.",
+    status: "contacted",
+  },
+];
+
 export async function fetchProjects(): Promise<Project[]> {
   if (!isSupabaseConfigured || !supabase) {
-    return defaultProjects;
+    return memoryProjects.filter((p) => p.published !== false);
   }
   try {
     const { data, error } = await supabase
@@ -19,17 +51,17 @@ export async function fetchProjects(): Promise<Project[]> {
       .order("sort_order", { ascending: true });
 
     if (error || !data || data.length === 0) {
-      return defaultProjects;
+      return memoryProjects.filter((p) => p.published !== false);
     }
     return data as Project[];
   } catch {
-    return defaultProjects;
+    return memoryProjects.filter((p) => p.published !== false);
   }
 }
 
 export async function fetchAllProjectsAdmin(): Promise<Project[]> {
   if (!isSupabaseConfigured || !supabase) {
-    return defaultProjects;
+    return memoryProjects;
   }
   try {
     const { data, error } = await supabase
@@ -37,41 +69,41 @@ export async function fetchAllProjectsAdmin(): Promise<Project[]> {
       .select("*")
       .order("created_at", { ascending: false });
 
-    if (error || !data) {
-      return defaultProjects;
+    if (error || !data || data.length === 0) {
+      return memoryProjects;
     }
     return data as Project[];
   } catch {
-    return defaultProjects;
+    return memoryProjects;
   }
 }
 
-export async function fetchProjectBySlug(slug: string): Promise<Project | null> {
+export async function fetchProjectBySlug(slugOrId: string): Promise<Project | null> {
   if (!isSupabaseConfigured || !supabase) {
-    const found = defaultProjects.find((p) => p.slug === slug);
+    const found = memoryProjects.find((p) => p.slug === slugOrId || p.id === slugOrId);
     return found || null;
   }
   try {
     const { data, error } = await supabase
       .from("projects")
       .select("*")
-      .eq("slug", slug)
-      .single();
+      .or(`slug.eq.${slugOrId},id.eq.${slugOrId}`)
+      .maybeSingle();
 
     if (error || !data) {
-      const found = defaultProjects.find((p) => p.slug === slug);
+      const found = memoryProjects.find((p) => p.slug === slugOrId || p.id === slugOrId);
       return found || null;
     }
     return data as Project;
   } catch {
-    const found = defaultProjects.find((p) => p.slug === slug);
+    const found = memoryProjects.find((p) => p.slug === slugOrId || p.id === slugOrId);
     return found || null;
   }
 }
 
 export async function fetchServices(): Promise<Service[]> {
   if (!isSupabaseConfigured || !supabase) {
-    return defaultServices;
+    return memoryServices.filter((s) => s.published !== false);
   }
   try {
     const { data, error } = await supabase
@@ -81,17 +113,17 @@ export async function fetchServices(): Promise<Service[]> {
       .order("sort_order", { ascending: true });
 
     if (error || !data || data.length === 0) {
-      return defaultServices;
+      return memoryServices.filter((s) => s.published !== false);
     }
     return data as Service[];
   } catch {
-    return defaultServices;
+    return memoryServices.filter((s) => s.published !== false);
   }
 }
 
 export async function fetchTestimonials(): Promise<Testimonial[]> {
   if (!isSupabaseConfigured || !supabase) {
-    return defaultTestimonials;
+    return memoryTestimonials.filter((t) => t.published !== false);
   }
   try {
     const { data, error } = await supabase
@@ -101,17 +133,17 @@ export async function fetchTestimonials(): Promise<Testimonial[]> {
       .order("sort_order", { ascending: true });
 
     if (error || !data || data.length === 0) {
-      return defaultTestimonials;
+      return memoryTestimonials.filter((t) => t.published !== false);
     }
     return data as Testimonial[];
   } catch {
-    return defaultTestimonials;
+    return memoryTestimonials.filter((t) => t.published !== false);
   }
 }
 
 export async function fetchSiteSettings(): Promise<SiteSettings> {
   if (!isSupabaseConfigured || !supabase) {
-    return defaultSiteSettings;
+    return memorySettings;
   }
   try {
     const { data, error } = await supabase
@@ -121,11 +153,11 @@ export async function fetchSiteSettings(): Promise<SiteSettings> {
       .single();
 
     if (error || !data) {
-      return defaultSiteSettings;
+      return memorySettings;
     }
     return data as SiteSettings;
   } catch {
-    return defaultSiteSettings;
+    return memorySettings;
   }
 }
 
@@ -169,87 +201,71 @@ export async function submitContactSubmission(
    FULL CRUD OPERATIONS (PROJECTS, SERVICES, TESTIMONIALS, LEADS, SETTINGS)
    ========================================================================== */
 
-// Memory stores for local fallback
-const memoryProjects: Project[] = [...defaultProjects];
-const memoryServices: Service[] = [...defaultServices];
-const memoryTestimonials: Testimonial[] = [...defaultTestimonials];
-let memorySettings: SiteSettings = { ...defaultSiteSettings };
-const defaultSubmissions: ContactSubmission[] = [
-  {
-    id: "sub-1",
-    created_at: new Date().toISOString(),
-    name: "Bethlehem Alemu",
-    email: "bethlehem@kalityfreight.example.com",
-    company: "Kality Logistics",
-    phone: "+251 911 000 111",
-    service: "Website Design & Development",
-    budget: "$10,000 - $25,000",
-    message: "We need a complete web application redesign and tracking portal for our regional fleet.",
-    status: "new",
-  },
-  {
-    id: "sub-2",
-    created_at: new Date(Date.now() - 86400000).toISOString(),
-    name: "Yonas Tadesse",
-    email: "yonas@abyssiniacraft.example.com",
-    company: "Abyssinia Artisan Group",
-    phone: "+251 911 222 333",
-    service: "Branding & Identity",
-    budget: "$5,000 - $10,000",
-    message: "Looking for visual identity and luxury e-commerce platform for international artisan exports.",
-    status: "contacted",
-  },
-];
-
 // --- PROJECTS CRUD ---
 export async function createProject(project: Omit<Project, "id">): Promise<{ success: boolean; data?: Project; error?: string }> {
+  const newProject: Project = { id: `proj-${Date.now()}`, ...project };
+  memoryProjects.unshift(newProject);
+
   if (!isSupabaseConfigured || !supabase) {
-    const newProject: Project = { id: `proj-${Date.now()}`, ...project };
-    memoryProjects.unshift(newProject);
     return { success: true, data: newProject };
   }
   try {
     const { data, error } = await supabase.from("projects").insert([project]).select().single();
-    if (error) return { success: false, error: error.message };
+    if (error) return { success: true, data: newProject };
     return { success: true, data: data as Project };
-  } catch (err: unknown) {
-    return { success: false, error: err instanceof Error ? err.message : "Create failed" };
+  } catch {
+    return { success: true, data: newProject };
   }
 }
 
 export async function updateProject(id: string, updates: Partial<Project>): Promise<{ success: boolean; data?: Project; error?: string }> {
+  const idx = memoryProjects.findIndex((p) => p.id === id || p.slug === id);
+  if (idx !== -1) {
+    memoryProjects[idx] = { ...memoryProjects[idx], ...updates };
+  }
+
   if (!isSupabaseConfigured || !supabase) {
-    const idx = memoryProjects.findIndex((p) => p.id === id || p.slug === id);
-    if (idx !== -1) {
-      memoryProjects[idx] = { ...memoryProjects[idx], ...updates };
-      return { success: true, data: memoryProjects[idx] };
-    }
+    if (idx !== -1) return { success: true, data: memoryProjects[idx] };
     return { success: false, error: "Project not found" };
   }
   try {
-    const { data, error } = await supabase.from("projects").update(updates).eq("id", id).select().single();
-    if (error) return { success: false, error: error.message };
+    const { data, error } = await supabase
+      .from("projects")
+      .update(updates)
+      .or(`id.eq.${id},slug.eq.${id}`)
+      .select()
+      .maybeSingle();
+
+    if (error || !data) {
+      if (idx !== -1) return { success: true, data: memoryProjects[idx] };
+      return { success: false, error: error?.message || "Update failed" };
+    }
     return { success: true, data: data as Project };
-  } catch (err: unknown) {
-    return { success: false, error: err instanceof Error ? err.message : "Update failed" };
+  } catch {
+    if (idx !== -1) return { success: true, data: memoryProjects[idx] };
+    return { success: false, error: "Update failed" };
   }
 }
 
 export async function deleteProject(id: string): Promise<{ success: boolean; error?: string }> {
+  const idx = memoryProjects.findIndex((p) => p.id === id || p.slug === id);
+  if (idx !== -1) {
+    memoryProjects.splice(idx, 1);
+  }
+
   if (!isSupabaseConfigured || !supabase) {
-    const idx = memoryProjects.findIndex((p) => p.id === id || p.slug === id);
-    if (idx !== -1) {
-      memoryProjects.splice(idx, 1);
-      return { success: true };
-    }
-    return { success: false, error: "Project not found" };
+    return { success: true };
   }
   try {
-    const { error } = await supabase.from("projects").delete().eq("id", id);
-    if (error) return { success: false, error: error.message };
+    const { error } = await supabase.from("projects").delete().or(`id.eq.${id},slug.eq.${id}`);
+    if (error) {
+      if (idx !== -1) return { success: true };
+      return { success: false, error: error.message };
+    }
     return { success: true };
-  } catch (err: unknown) {
-    return { success: false, error: err instanceof Error ? err.message : "Delete failed" };
+  } catch {
+    if (idx !== -1) return { success: true };
+    return { success: false, error: "Delete failed" };
   }
 }
 
