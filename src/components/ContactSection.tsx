@@ -1,10 +1,18 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ArrowRight, CheckCircle, MapPin, Mail, Phone, ExternalLink } from "lucide-react";
-import { submitContactSubmission } from "@/lib/db";
+import { SiteSettings } from "@/lib/types";
 
 export default function ContactSection() {
+  const [settings, setSettings] = useState<Partial<SiteSettings>>({
+    location: "Bole Medhanialem, Executive Tower 4th Floor",
+    address: "Addis Ababa, Ethiopia",
+    email: "hello@ethio-eureka.com",
+    phone: "+251 911 234 567",
+    google_maps_url: "https://maps.google.com/?q=Addis+Ababa+Ethiopia",
+  });
+
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -18,6 +26,23 @@ export default function ContactSection() {
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
+
+  useEffect(() => {
+    async function loadSettings() {
+      try {
+        const res = await fetch("/api/settings");
+        if (res.ok) {
+          const data = await res.json();
+          if (data.settings) {
+            setSettings(data.settings);
+          }
+        }
+      } catch (err: unknown) {
+        console.error("Failed to load settings in ContactSection", err);
+      }
+    }
+    loadSettings();
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -111,7 +136,7 @@ export default function ContactSection() {
                     <input
                       type="text"
                       required
-                      placeholder="e.g. Bethlehem Alemu"
+                      placeholder="e.g. Your name "
                       value={formData.name}
                       onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                       className="w-full bg-deep-black border border-border-gray text-off-white px-4 py-3 text-sm focus:border-eureka-green focus:outline-none transition-colors"
@@ -125,7 +150,7 @@ export default function ContactSection() {
                     <input
                       type="email"
                       required
-                      placeholder="name@company.com"
+                      placeholder="name@gmail.com"
                       value={formData.email}
                       onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                       className="w-full bg-deep-black border border-border-gray text-off-white px-4 py-3 text-sm focus:border-eureka-green focus:outline-none transition-colors"
@@ -231,20 +256,17 @@ export default function ContactSection() {
               <span className="text-xs font-mono text-eureka-green uppercase tracking-widest block mb-4">
                 LOCATION & POSITIONING
               </span>
-              <h3 className="text-2xl font-light text-off-white mb-4">
-                Based in Ethiopia. Working with ambitious businesses anywhere.
-              </h3>
               <p className="text-sm text-soft-gray leading-relaxed mb-6">
-                Our physical studio is situated in Addis Ababa, operating at global digital standards across timezones.
+                Based in Ethiopia. Working with ambitious businesses anywhere.
               </p>
 
-              <div className="space-y-4 font-mono text-xs text-soft-gray pt-6 border-t border-border-gray/40">
+              <div className="space-y-4 font-mono text-xs text-soft-gray pt-2 border-t border-border-gray/40">
                 <div className="flex items-start gap-3">
                   <MapPin size={16} className="text-eureka-green shrink-0 mt-0.5" />
                   <div>
                     <p className="text-off-white font-semibold">Studio Address</p>
-                    <p>Bole Medhanialem, Executive Tower 4th Floor</p>
-                    <p>Addis Ababa, Ethiopia</p>
+                    <p>{settings.location || "Bole Medhanialem, Executive Tower 4th Floor"}</p>
+                    <p>{settings.address || "Addis Ababa, Ethiopia"}</p>
                   </div>
                 </div>
 
@@ -252,8 +274,8 @@ export default function ContactSection() {
                   <Mail size={16} className="text-eureka-green shrink-0" />
                   <div>
                     <p className="text-off-white font-semibold">General Inquiries</p>
-                    <a href="mailto:hello@ethio-eureka.com" className="hover:text-eureka-green">
-                      hello@ethio-eureka.com
+                    <a href={`mailto:${settings.email || "hello@ethio-eureka.com"}`} className="hover:text-eureka-green">
+                      {settings.email || "hello@ethio-eureka.com"}
                     </a>
                   </div>
                 </div>
@@ -262,27 +284,55 @@ export default function ContactSection() {
                   <Phone size={16} className="text-eureka-green shrink-0" />
                   <div>
                     <p className="text-off-white font-semibold">Direct Phone</p>
-                    <p>+251 911 234 567</p>
+                    <p>{settings.phone || "+251 911 234 567"}</p>
                   </div>
                 </div>
               </div>
 
-              <a
-                href="https://maps.google.com/?q=Addis+Ababa+Ethiopia"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="mt-6 inline-flex items-center gap-2 font-mono text-xs text-eureka-green uppercase tracking-widest hover:underline"
-              >
-                <span>View Google Maps location</span>
-                <ExternalLink size={12} />
-              </a>
+              {/* Map Preview Box */}
+              <div className="mt-6 pt-6 border-t border-border-gray/40">
+                <a
+                  href={settings.google_maps_url || "https://maps.google.com/?q=Addis+Ababa+Ethiopia"}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group block relative overflow-hidden border border-border-gray/80 bg-deep-black hover:border-eureka-green transition-all"
+                >
+                  <div className="relative aspect-video w-full overflow-hidden">
+                    <img
+                      src="/map.png"
+                      alt={`Studio Map Location - ${settings.address || "Addis Ababa, Ethiopia"}`}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-85 group-hover:opacity-100"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-deep-black via-deep-black/30 to-transparent" />
+                    
+                    {/* Dynamic Location & Physical Address Overlay */}
+                    <div className="absolute top-3 left-3 right-3">
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className="w-2 h-2 rounded-full bg-eureka-green animate-pulse shrink-0" />
+                        <span className="text-eureka-green font-semibold uppercase text-[10px] tracking-wider truncate">
+                          {settings.location || "Bole Medhanialem, Executive Tower 4th Floor"}
+                        </span>
+                      </div>
+                      <p className="text-off-white font-medium text-xs truncate">
+                        {settings.address || "Addis Ababa, Ethiopia"}
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Action Link Footer */}
+                  <div className="p-3 bg-dark-gray/90 flex items-center justify-between font-mono text-xs text-soft-gray group-hover:text-eureka-green transition-colors">
+                    <span className="uppercase tracking-widest text-[10px]">Open Google Maps</span>
+                    <ExternalLink size={14} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                  </div>
+                </a>
+              </div>
             </div>
 
             {/* Quick Operating Notice */}
-            <div className="bg-deep-black p-6 border border-border-gray/60 font-mono text-xs text-soft-gray">
-              <span className="text-eureka-green font-semibold block mb-1">● ACCEPTING NEW PROJECTS FOR Q3/Q4</span>
+            {/* <div className="bg-deep-black p-6 border border-border-gray/60 font-mono text-xs text-soft-gray">
+              <span className="text-eureka-green font-semibold block mb-1">● ACCEPTING NEW PROJECTS</span>
               <p className="text-[11px]">Average project kickoff within 5–7 business days after discovery alignment.</p>
-            </div>
+            </div> */}
           </div>
 
         </div>

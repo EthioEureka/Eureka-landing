@@ -174,22 +174,29 @@ export async function fetchTestimonials(): Promise<Testimonial[]> {
 }
 
 export async function fetchSiteSettings(): Promise<SiteSettings> {
+  const currentMemory = globalStore.__memorySettings || memorySettings || defaultSiteSettings;
+
   if (!isSupabaseConfigured || !supabase) {
-    return memorySettings;
+    return currentMemory;
   }
   try {
     const { data, error } = await supabase
       .from("site_settings")
       .select("*")
       .limit(1)
-      .single();
+      .maybeSingle();
 
     if (error || !data) {
-      return memorySettings;
+      return currentMemory;
     }
-    return data as SiteSettings;
+
+    // Merge Supabase data with memory store so local updates are retained
+    const merged = { ...defaultSiteSettings, ...data, ...globalStore.__memorySettings };
+    globalStore.__memorySettings = merged;
+    memorySettings = merged;
+    return merged;
   } catch {
-    return memorySettings;
+    return currentMemory;
   }
 }
 
@@ -500,18 +507,41 @@ export async function updateSiteSettings(updates: Partial<SiteSettings>): Promis
   if (!globalStore.__memorySettings) {
     globalStore.__memorySettings = { ...defaultSiteSettings };
   }
-  globalStore.__memorySettings = { ...globalStore.__memorySettings, ...updates } as SiteSettings;
+
+  const updatedSettings = {
+    ...globalStore.__memorySettings,
+    ...updates,
+    updated_at: new Date().toISOString()
+  } as SiteSettings;
+
+  globalStore.__memorySettings = updatedSettings;
   memorySettings = globalStore.__memorySettings;
 
   if (!isSupabaseConfigured || !supabase) {
-    return { success: true, data: memorySettings };
+    return { success: true, data: globalStore.__memorySettings };
   }
   try {
-    const { data, error } = await supabase.from("site_settings").upsert([updates]).select().maybeSingle();
-    if (error || !data) return { success: true, data: memorySettings };
-    return { success: true, data: data as SiteSettings };
-  } catch {
-    return { success: true, data: memorySettings };
+    const { data: existingRow } = await supabase.from("site_settings").select("id").limit(1).maybeSingle();
+    const targetId = existingRow?.id || updates.id || globalStore.__memorySettings.id || "default-settings";
+
+    const payload = {
+      ...updates,
+      id: targetId,
+      updated_at: new Date().toISOString()
+    };
+
+    const { data, error } = await supabase.from("site_settings").upsert([payload]).select().maybeSingle();
+    if (error) {
+      console.warn("Supabase site_settings upsert note:", error.message);
+    } else if (data) {
+      const mergedData = { ...globalStore.__memorySettings, ...data } as SiteSettings;
+      globalStore.__memorySettings = mergedData;
+      memorySettings = mergedData;
+    }
+    return { success: true, data: globalStore.__memorySettings };
+  } catch (err: unknown) {
+    console.error("Failed to update site_settings in DB:", err);
+    return { success: true, data: globalStore.__memorySettings };
   }
 }
 

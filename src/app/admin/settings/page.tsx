@@ -41,6 +41,10 @@ export default function AdminSettingsPage() {
       });
 
       if (res.ok) {
+        const data = await res.json();
+        if (data.settings) {
+          setSettings(data.settings);
+        }
         setSaved(true);
         setTimeout(() => setSaved(false), 2500);
       }
@@ -128,13 +132,34 @@ export default function AdminSettingsPage() {
                 className="w-full bg-deep-black border border-border-gray text-off-white px-3 py-2"
               />
             </div>
-            <div className="sm:col-span-2">
-              <label className="block text-soft-gray uppercase mb-1">Physical Address</label>
+            <div>
+              <label className="block text-soft-gray uppercase mb-1">Studio Building / Floor (Location Detail)</label>
               <input
                 type="text"
+                placeholder="e.g. Bole Medhanialem, Executive Tower 4th Floor"
+                value={settings.location || ""}
+                onChange={(e) => setSettings({ ...settings, location: e.target.value })}
+                className="w-full bg-deep-black border border-border-gray text-off-white px-3 py-2"
+              />
+            </div>
+            <div>
+              <label className="block text-soft-gray uppercase mb-1">City & Country (Physical Address)</label>
+              <input
+                type="text"
+                placeholder="e.g. Addis Ababa, Ethiopia"
                 value={settings.address || ""}
                 onChange={(e) => setSettings({ ...settings, address: e.target.value })}
                 className="w-full bg-deep-black border border-border-gray text-off-white px-3 py-2"
+              />
+            </div>
+            <div className="sm:col-span-2">
+              <label className="block text-soft-gray uppercase mb-1">Google Maps URL</label>
+              <input
+                type="url"
+                placeholder="https://maps.google.com/?q=Addis+Ababa+Ethiopia"
+                value={settings.google_maps_url || ""}
+                onChange={(e) => setSettings({ ...settings, google_maps_url: e.target.value })}
+                className="w-full bg-deep-black border border-border-gray text-off-white px-3 py-2 font-mono text-xs"
               />
             </div>
           </div>
