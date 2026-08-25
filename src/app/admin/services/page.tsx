@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Plus, Edit, Trash2, Loader2, X, Save } from "lucide-react";
+import { Plus, Edit, Trash2, Loader2, X, Save, Sparkles } from "lucide-react";
 import { Service } from "@/lib/types";
 
 export default function AdminServicesPage() {
@@ -231,7 +231,23 @@ export default function AdminServicesPage() {
               </div>
 
               <div>
-                <label className="block text-soft-gray uppercase mb-1">Slug *</label>
+                <div className="flex items-center justify-between mb-1">
+                  <label className="block text-soft-gray uppercase">Slug *</label>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const autoSlug = (formData.title || "")
+                        .toLowerCase()
+                        .trim()
+                        .replace(/[^a-z0-9]+/g, "-")
+                        .replace(/(^-|-$)+/g, "");
+                      setFormData({ ...formData, slug: autoSlug });
+                    }}
+                    className="text-[10px] font-mono text-eureka-green hover:underline flex items-center gap-1"
+                  >
+                    <Sparkles size={10} /> Auto-Generate
+                  </button>
+                </div>
                 <input
                   type="text"
                   required

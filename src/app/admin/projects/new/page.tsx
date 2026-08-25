@@ -142,9 +142,25 @@ export default function NewProjectPage() {
           </div>
 
           <div>
-            <label className="block text-xs font-mono text-soft-gray uppercase mb-2">
-              URL Slug *
-            </label>
+            <div className="flex items-center justify-between mb-2">
+              <label className="block text-xs font-mono text-soft-gray uppercase">
+                URL Slug *
+              </label>
+              <button
+                type="button"
+                onClick={() => {
+                  const autoSlug = formData.title
+                    .toLowerCase()
+                    .trim()
+                    .replace(/[^a-z0-9]+/g, "-")
+                    .replace(/(^-|-$)+/g, "");
+                  setFormData({ ...formData, slug: autoSlug });
+                }}
+                className="text-[10px] font-mono text-eureka-green hover:underline flex items-center gap-1"
+              >
+                <Sparkles size={10} /> Auto-Generate
+              </button>
+            </div>
             <input
               type="text"
               required
