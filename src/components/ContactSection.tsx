@@ -297,23 +297,31 @@ export default function ContactSection() {
                   rel="noopener noreferrer"
                   className="group block relative overflow-hidden border border-border-gray/80 bg-deep-black hover:border-eureka-green transition-all"
                 >
-                  <div className="relative aspect-video w-full overflow-hidden">
+                  <div className="relative aspect-video w-full overflow-hidden flex items-center justify-center">
                     <img
                       src="/map.png"
                       alt={`Studio Map Location - ${settings.address || "Addis Ababa, Ethiopia"}`}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-85 group-hover:opacity-100"
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-75 group-hover:opacity-90"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-deep-black via-deep-black/30 to-transparent" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-deep-black via-deep-black/40 to-deep-black/20" />
                     
-                    {/* Dynamic Location & Physical Address Overlay */}
-                    <div className="absolute top-3 left-3 right-3">
-                      <div className="flex items-center gap-2 mb-1">
-                        <span className="w-2 h-2 rounded-full bg-eureka-green animate-pulse shrink-0" />
-                        <span className="text-eureka-green font-semibold uppercase text-[10px] tracking-wider truncate">
-                          {settings.location || "Bole Medhanialem, Executive Tower 4th Floor"}
-                        </span>
+                    {/* Top-Left Status Badge */}
+                    <div className="absolute top-3 left-3 bg-deep-black/80 backdrop-blur-md px-3 py-1 border border-border-gray/80 text-[10px] font-mono text-eureka-green flex items-center gap-2">
+                      <span className="w-1.5 h-1.5 rounded-full bg-eureka-green animate-pulse" />
+                      <span>STUDIO LOCATION</span>
+                    </div>
+
+                    {/* Centered Location & Address Overlay */}
+                    <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-4 z-10">
+                      <div className="relative mb-2 group-hover:scale-110 transition-transform duration-300">
+                        <MapPin size={28} className="text-eureka-green drop-shadow-[0_0_12px_rgba(0,255,102,0.8)]" />
                       </div>
-                      <p className="text-off-white font-medium text-xs truncate">
+
+                      <h4 className="text-eureka-green font-bold text-sm sm:text-base tracking-widest font-mono uppercase drop-shadow-[0_0_10px_rgba(0,255,102,0.4)] px-2">
+                        {settings.location || "BOLE MEDHANIALEM, EXECUTIVE TOWER 4TH FLOOR"}
+                      </h4>
+
+                      <p className="text-soft-gray font-mono text-xs mt-1 bg-deep-black/80 backdrop-blur-md px-3 py-1 border border-border-gray/60 tracking-wide">
                         {settings.address || "Addis Ababa, Ethiopia"}
                       </p>
                     </div>
