@@ -136,26 +136,26 @@ export default function Hero({ projects }: HeroProps) {
       />
 
       {/* 2. HERO MAIN CONTENT CANVAS */}
-      <div className="relative z-10 max-w-[1440px] mx-auto px-6 md:px-12 w-full my-auto pt-20 lg:pt-24 pb-12 grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-start">
+      <div className="relative z-10 max-w-[1440px] mx-auto px-6 md:px-12 w-full my-auto pt-16 sm:pt-20 lg:pt-24 pb-8 sm:pb-12 grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-start">
         
         {/* LEFT COLUMN: EDITORIAL COPY & BRANDING */}
-        <div className="lg:col-span-6 xl:col-span-6 flex flex-col justify-center z-20 pt-2">
+        <div className="lg:col-span-6 xl:col-span-6 flex flex-col justify-center z-20 pt-0 sm:pt-2">
           
           {/* Eyebrow with Brand Logo Icon */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="inline-flex items-center gap-3 mb-6"
+            className="inline-flex items-center gap-2.5 sm:gap-3 mb-5 sm:mb-6"
           >
-            <div className="relative w-5 h-5 shrink-0">
+            <div className="relative w-4 h-4 sm:w-5 sm:h-5 shrink-0">
               <Image src="/logo.svg" alt="Ethio-Eureka Icon" fill className="object-contain" />
             </div>
-            <span className="text-xs font-mono tracking-[0.2em] text-eureka-green uppercase font-semibold">
-              Eureka cerative
+            <span className="text-[11px] sm:text-xs font-mono tracking-[0.15em] sm:tracking-[0.2em] text-eureka-green uppercase font-semibold">
+              EUREKA CREATIVE
             </span>
             <span className="text-xs font-mono text-white/20">/</span>
-            <span className="text-xs font-mono text-soft-gray uppercase tracking-widest">
+            <span className="text-[11px] sm:text-xs font-mono text-soft-gray uppercase tracking-widest">
               DIGITAL STUDIO
             </span>
           </motion.div>
@@ -165,10 +165,10 @@ export default function Hero({ projects }: HeroProps) {
             initial={{ opacity: 0, y: 35 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
-            className="text-hero-headline font-normal text-off-white mb-8 tracking-tight max-w-[650px] leading-[1.04]"
+            className="text-hero-headline font-normal text-off-white mb-6 sm:mb-8 tracking-tight max-w-[650px] leading-[1.04]"
           >
-            Your product moves{" "}
-              <span className="italic font-serif text-eureka-green decoration-2 underline-offset-8">
+           If your product moves{" "}
+            <span className="italic font-serif text-eureka-green decoration-2 underline-offset-8">
               fast
             </span>
             <br />
@@ -183,7 +183,7 @@ export default function Hero({ projects }: HeroProps) {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.45 }}
-            className="text-base sm:text-lg text-white/60 max-w-[520px] mb-10 leading-relaxed font-normal"
+            className="text-sm sm:text-lg text-white/60 max-w-[520px] mb-8 sm:mb-10 leading-relaxed font-normal"
           >
             Ethio-Eureka is a partner for ambitious brands helping them build, improve, and grow digital experiences that keep pace with their products.
           </motion.p>
@@ -193,11 +193,11 @@ export default function Hero({ projects }: HeroProps) {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.6 }}
-            className="flex flex-wrap items-center gap-4 mb-10"
+            className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5 mb-8 sm:mb-10 w-full sm:w-auto"
           >
             <Link
               href="/contact"
-              className="inline-flex items-center justify-center gap-3 bg-off-white text-deep-black font-semibold text-sm rounded-full px-8 py-4 hover:bg-eureka-green transition-all duration-300 group shadow-xl shadow-white/5"
+              className="inline-flex items-center justify-center gap-3 bg-off-white text-deep-black font-semibold text-sm rounded-full px-8 py-3.5 sm:py-4 hover:bg-eureka-green transition-all duration-300 group shadow-xl shadow-white/5 w-full sm:w-auto text-center"
             >
               <span>Start partnership</span>
               <ArrowRight size={16} className="group-hover:translate-x-1.5 transition-transform" />
@@ -205,7 +205,7 @@ export default function Hero({ projects }: HeroProps) {
 
             <Link
               href="/work"
-              className="inline-flex items-center justify-center gap-3 bg-[#151515] border border-white/15 text-off-white font-medium text-sm rounded-full px-8 py-4 hover:border-eureka-green hover:text-eureka-green transition-all duration-300 group"
+              className="inline-flex items-center justify-center gap-3 bg-[#151515] border border-white/15 text-off-white font-medium text-sm rounded-full px-8 py-3.5 sm:py-4 hover:border-eureka-green hover:text-eureka-green transition-all duration-300 group w-full sm:w-auto text-center"
             >
               <span>View work</span>
               <ArrowDownRight size={16} className="group-hover:translate-x-0.5 group-hover:translate-y-0.5 transition-transform" />
@@ -217,26 +217,26 @@ export default function Hero({ projects }: HeroProps) {
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.75 }}
-            className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-6 border-t border-white/[0.08] max-w-[540px]"
+            className="grid grid-cols-2 sm:grid-cols-2 gap-2.5 pt-6 border-t border-white/[0.08] max-w-[540px] w-full"
           >
-            <div className="flex items-center gap-2.5 text-xs text-soft-gray font-mono">
-              <span className="w-1.5 h-1.5 rounded-full bg-eureka-green" />
-              <span>Launch in 4-6 weeks</span>
+            <div className="flex items-center gap-2 bg-white/[0.03] border border-white/[0.06] px-3 py-2 rounded-lg text-[11px] text-soft-gray font-mono">
+              <span className="w-1.5 h-1.5 rounded-full bg-eureka-green shrink-0" />
+              <span className="truncate">Launch in 4-6 wks</span>
             </div>
 
-            <div className="flex items-center gap-2.5 text-xs text-soft-gray font-mono">
-              <span className="w-1.5 h-1.5 rounded-full bg-eureka-green" />
-              <span>Websites & App Design</span>
+            <div className="flex items-center gap-2 bg-white/[0.03] border border-white/[0.06] px-3 py-2 rounded-lg text-[11px] text-soft-gray font-mono">
+              <span className="w-1.5 h-1.5 rounded-full bg-eureka-green shrink-0" />
+              <span className="truncate">Web & App Design</span>
             </div>
 
-            <div className="flex items-center gap-2.5 text-xs text-soft-gray font-mono">
-              <span className="w-1.5 h-1.5 rounded-full bg-eureka-green" />
-              <span>Brand Identity Systems</span>
+            <div className="flex items-center gap-2 bg-white/[0.03] border border-white/[0.06] px-3 py-2 rounded-lg text-[11px] text-soft-gray font-mono">
+              <span className="w-1.5 h-1.5 rounded-full bg-eureka-green shrink-0" />
+              <span className="truncate">Brand Systems</span>
             </div>
 
-            <div className="flex items-center gap-2.5 text-xs text-soft-gray font-mono">
-              <span className="w-1.5 h-1.5 rounded-full bg-eureka-green" />
-              <span>Built for High Growth</span>
+            <div className="flex items-center gap-2 bg-white/[0.03] border border-white/[0.06] px-3 py-2 rounded-lg text-[11px] text-soft-gray font-mono">
+              <span className="w-1.5 h-1.5 rounded-full bg-eureka-green shrink-0" />
+              <span className="truncate">High Growth Tech</span>
             </div>
           </motion.div>
 
@@ -326,21 +326,21 @@ export default function Hero({ projects }: HeroProps) {
       </div>
 
       {/* 3. BOTTOM HERO METADATA & SCROLL INDICATOR */}
-      <footer className="relative z-40 max-w-[1440px] mx-auto px-6 md:px-12 w-full pt-6 flex items-center justify-between text-xs font-mono text-soft-gray border-t border-white/[0.06]">
+      <footer className="relative z-40 max-w-[1440px] mx-auto px-6 md:px-12 w-full pt-4 sm:pt-6 flex flex-row items-center justify-between text-xs font-mono text-soft-gray border-t border-white/[0.06] gap-3">
         {/* Left Info */}
-        <div className="flex items-center gap-6">
+        <div className="flex items-center gap-4">
           <span className="hidden sm:inline">Web · Brand · Content · Systems</span>
           <span className="text-white/20 hidden sm:inline">/</span>
-          <span className="text-eureka-green flex items-center gap-2">
-            <span className="w-1.5 h-1.5 bg-eureka-green rounded-full animate-pulse" />
-           Contact us now
+          <span className="text-eureka-green flex items-center gap-2 text-[11px] sm:text-xs">
+            <span className="w-1.5 h-1.5 bg-eureka-green rounded-full animate-pulse shrink-0" />
+            Contact us now
           </span>
         </div>
 
         {/* Center Scroll Indicator Line */}
-        <div className="flex items-center gap-3">
-          <span className="text-[11px] uppercase tracking-widest text-soft-gray/80">(Scroll)</span>
-          <div className="w-px h-6 bg-white/20 relative overflow-hidden">
+        <div className="flex items-center gap-2 sm:gap-3">
+          <span className="text-[10px] sm:text-[11px] uppercase tracking-widest text-soft-gray/80">(SCROLL)</span>
+          <div className="w-px h-5 sm:h-6 bg-white/20 relative overflow-hidden">
             <motion.div
               className="w-full h-full bg-eureka-green"
               animate={{ y: ["-100%", "100%"] }}

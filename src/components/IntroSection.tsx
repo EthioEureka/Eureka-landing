@@ -73,8 +73,8 @@ export default function IntroSection() {
 
             {/* Bottom highlight footnote indicator */}
             <div className="mt-12 pt-8 border-t border-border-gray/50 flex flex-wrap justify-between items-center text-xs font-mono text-soft-gray">
-              <span>HOVER KEYWORDS TO EXPLORE CONCEPT</span>
-              <span className="text-eureka-green">ETHIO-EUREKA // BRAND SYSTEM</span>
+              <span></span>
+              <span className="text-eureka-green">ETHIO-EUREKA CREATIVE TEAM</span>
             </div>
           </div>
         </div>
