@@ -13,6 +13,8 @@ const AVATAR_PRESETS = [
   "https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=400&q=80",
 ];
 
+import ConfirmModal from "@/components/admin/ConfirmModal";
+
 export default function AdminTestimonialsPage() {
   const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
   const [loading, setLoading] = useState(true);
@@ -20,6 +22,17 @@ export default function AdminTestimonialsPage() {
   const [editingTestimonial, setEditingTestimonial] = useState<Testimonial | null>(null);
   const [saving, setSaving] = useState(false);
   const [deletingId, setDeletingId] = useState<string | null>(null);
+
+  // Custom Confirmation Modal state
+  const [confirmModal, setConfirmModal] = useState<{
+    isOpen: boolean;
+    testimonialId: string;
+    clientName: string;
+  }>({
+    isOpen: false,
+    testimonialId: "",
+    clientName: "",
+  });
 
   const [formData, setFormData] = useState<Partial<Testimonial>>({
     client_name: "",
@@ -103,18 +116,29 @@ export default function AdminTestimonialsPage() {
     }
   };
 
-  const handleDelete = async (id: string, clientName: string) => {
-    if (!window.confirm(`Are you sure you want to delete testimonial by "${clientName}"?`)) return;
-    setDeletingId(id);
+  const openDeleteModal = (id: string, clientName: string) => {
+    setConfirmModal({
+      isOpen: true,
+      testimonialId: id,
+      clientName: clientName,
+    });
+  };
+
+  const handleConfirmDelete = async () => {
+    const { testimonialId } = confirmModal;
+    if (!testimonialId) return;
+
+    setDeletingId(testimonialId);
     try {
-      const res = await fetch(`/api/admin/testimonials?id=${id}`, { method: "DELETE" });
+      const res = await fetch(`/api/admin/testimonials?id=${testimonialId}`, { method: "DELETE" });
       if (res.ok) {
-        setTestimonials((prev) => prev.filter((t) => t.id !== id));
+        setTestimonials((prev) => prev.filter((t) => t.id !== testimonialId));
       }
     } catch (err: unknown) {
       console.error("Failed to delete testimonial", err);
     } finally {
       setDeletingId(null);
+      setConfirmModal({ isOpen: false, testimonialId: "", clientName: "" });
     }
   };
 
@@ -175,7 +199,7 @@ export default function AdminTestimonialsPage() {
                     <Edit size={14} />
                   </button>
                   <button
-                    onClick={() => handleDelete(t.id, t.client_name)}
+                    onClick={() => openDeleteModal(t.id, t.client_name)}
                     disabled={deletingId === t.id}
                     className="text-soft-gray hover:text-red-400"
                     title="Delete Testimonial"
@@ -337,13 +361,26 @@ export default function AdminTestimonialsPage() {
                   className="px-6 py-2.5 bg-eureka-green text-deep-black font-semibold uppercase tracking-wider hover:bg-white flex items-center gap-2"
                 >
                   {saving ? <Loader2 size={14} className="animate-spin" /> : <Save size={14} />}
-                  <span>Save Testimonial</span>
+                  <span>{editingTestimonial ? "Update Testimonial" : "Save Testimonial"}</span>
                 </button>
               </div>
             </form>
           </div>
         </div>
       )}
+
+      {/* Custom Delete Confirmation Modal */}
+      <ConfirmModal
+        isOpen={confirmModal.isOpen}
+        title="Delete Client Testimonial"
+        message={`Are you sure you want to delete the testimonial from "${confirmModal.clientName}"? This review will be removed from the landing page.`}
+        confirmText="Delete Testimonial"
+        cancelText="Keep Testimonial"
+        variant="danger"
+        loading={deletingId === confirmModal.testimonialId}
+        onConfirm={handleConfirmDelete}
+        onCancel={() => setConfirmModal({ isOpen: false, testimonialId: "", clientName: "" })}
+      />
     </div>
   );
 }

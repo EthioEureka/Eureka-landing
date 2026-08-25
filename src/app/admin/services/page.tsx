@@ -4,6 +4,8 @@ import { useState, useEffect } from "react";
 import { Plus, Edit, Trash2, Loader2, X, Save, Sparkles } from "lucide-react";
 import { Service } from "@/lib/types";
 
+import ConfirmModal from "@/components/admin/ConfirmModal";
+
 export default function AdminServicesPage() {
   const [services, setServices] = useState<Service[]>([]);
   const [loading, setLoading] = useState(true);
@@ -11,6 +13,17 @@ export default function AdminServicesPage() {
   const [editingService, setEditingService] = useState<Service | null>(null);
   const [saving, setSaving] = useState(false);
   const [deletingId, setDeletingId] = useState<string | null>(null);
+
+  // Custom Confirmation Modal state
+  const [confirmModal, setConfirmModal] = useState<{
+    isOpen: boolean;
+    serviceId: string;
+    serviceTitle: string;
+  }>({
+    isOpen: false,
+    serviceId: "",
+    serviceTitle: "",
+  });
 
   const [formData, setFormData] = useState<Partial<Service>>({
     title: "",
@@ -94,18 +107,29 @@ export default function AdminServicesPage() {
     }
   };
 
-  const handleDelete = async (id: string, title: string) => {
-    if (!window.confirm(`Are you sure you want to delete service "${title}"?`)) return;
-    setDeletingId(id);
+  const openDeleteModal = (id: string, title: string) => {
+    setConfirmModal({
+      isOpen: true,
+      serviceId: id,
+      serviceTitle: title,
+    });
+  };
+
+  const handleConfirmDelete = async () => {
+    const { serviceId } = confirmModal;
+    if (!serviceId) return;
+
+    setDeletingId(serviceId);
     try {
-      const res = await fetch(`/api/admin/services?id=${id}`, { method: "DELETE" });
+      const res = await fetch(`/api/admin/services?id=${serviceId}`, { method: "DELETE" });
       if (res.ok) {
-        setServices((prev) => prev.filter((s) => s.id !== id && s.slug !== id));
+        setServices((prev) => prev.filter((s) => s.id !== serviceId && s.slug !== serviceId));
       }
     } catch (err: unknown) {
       console.error("Failed to delete service", err);
     } finally {
       setDeletingId(null);
+      setConfirmModal({ isOpen: false, serviceId: "", serviceTitle: "" });
     }
   };
 
@@ -171,7 +195,7 @@ export default function AdminServicesPage() {
                       <Edit size={14} />
                     </button>
                     <button
-                      onClick={() => handleDelete(s.id || s.slug, s.title)}
+                      onClick={() => openDeleteModal(s.id || s.slug, s.title)}
                       disabled={deletingId === (s.id || s.slug)}
                       className="text-soft-gray hover:text-red-400 transition-colors inline-flex items-center gap-1"
                       title="Delete Service"
@@ -293,13 +317,26 @@ export default function AdminServicesPage() {
                   className="px-6 py-2.5 bg-eureka-green text-deep-black font-semibold uppercase tracking-wider hover:bg-white flex items-center gap-2"
                 >
                   {saving ? <Loader2 size={14} className="animate-spin" /> : <Save size={14} />}
-                  <span>Save Service</span>
+                  <span>{editingService ? "Update Service" : "Save Service"}</span>
                 </button>
               </div>
             </form>
           </div>
         </div>
       )}
+
+      {/* Custom Delete Confirmation Modal */}
+      <ConfirmModal
+        isOpen={confirmModal.isOpen}
+        title="Delete Agency Service"
+        message={`Are you sure you want to delete service "${confirmModal.serviceTitle}"? This capability will no longer appear on the services section or project creation form.`}
+        confirmText="Delete Service"
+        cancelText="Keep Service"
+        variant="danger"
+        loading={deletingId === confirmModal.serviceId}
+        onConfirm={handleConfirmDelete}
+        onCancel={() => setConfirmModal({ isOpen: false, serviceId: "", serviceTitle: "" })}
+      />
     </div>
   );
 }

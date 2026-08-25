@@ -20,6 +20,8 @@ import {
 } from "lucide-react";
 import { ContactSubmission } from "@/lib/types";
 
+import ConfirmModal from "@/components/admin/ConfirmModal";
+
 export default function ContactSubmissionsPage() {
   const [submissions, setSubmissions] = useState<ContactSubmission[]>([]);
   const [loading, setLoading] = useState(true);
@@ -27,6 +29,17 @@ export default function ContactSubmissionsPage() {
   const [statusFilter, setStatusFilter] = useState<"all" | "unread" | "contacted" | "completed" | "archived">("all");
   const [selectedSub, setSelectedSub] = useState<ContactSubmission | null>(null);
   const [deletingId, setDeletingId] = useState<string | null>(null);
+
+  // Custom Confirmation Modal state
+  const [confirmModal, setConfirmModal] = useState<{
+    isOpen: boolean;
+    leadId: string;
+    leadName: string;
+  }>({
+    isOpen: false,
+    leadId: "",
+    leadName: "",
+  });
 
   const loadSubmissions = async () => {
     try {
@@ -111,15 +124,25 @@ export default function ContactSubmissionsPage() {
     }
   };
 
-  const handleDelete = async (id: string, name: string) => {
-    if (!window.confirm(`Are you sure you want to delete lead from "${name}"?`)) return;
-    setDeletingId(id);
+  const openDeleteModal = (id: string, name: string) => {
+    setConfirmModal({
+      isOpen: true,
+      leadId: id,
+      leadName: name,
+    });
+  };
+
+  const handleConfirmDelete = async () => {
+    const { leadId } = confirmModal;
+    if (!leadId) return;
+
+    setDeletingId(leadId);
     try {
-      const res = await fetch(`/api/admin/contact-submissions?id=${id}`, { method: "DELETE" });
+      const res = await fetch(`/api/admin/contact-submissions?id=${leadId}`, { method: "DELETE" });
       if (res.ok) {
-        setSubmissions((prev) => prev.filter((s) => s.id !== id));
-        if (selectedSub?.id === id) {
-          const remaining = submissions.filter((s) => s.id !== id);
+        setSubmissions((prev) => prev.filter((s) => s.id !== leadId));
+        if (selectedSub?.id === leadId) {
+          const remaining = submissions.filter((s) => s.id !== leadId);
           setSelectedSub(remaining.length > 0 ? remaining[0] : null);
         }
       }
@@ -127,6 +150,7 @@ export default function ContactSubmissionsPage() {
       console.error("Failed to delete lead", err);
     } finally {
       setDeletingId(null);
+      setConfirmModal({ isOpen: false, leadId: "", leadName: "" });
     }
   };
 
@@ -367,7 +391,7 @@ export default function ContactSubmissionsPage() {
                     </button>
 
                     <button
-                      onClick={() => handleDelete(selectedSub.id, selectedSub.name)}
+                      onClick={() => openDeleteModal(selectedSub.id, selectedSub.name)}
                       disabled={deletingId === selectedSub.id}
                       className="text-soft-gray hover:text-red-400 p-1"
                       title="Delete Lead"
@@ -464,6 +488,19 @@ export default function ContactSubmissionsPage() {
           </div>
         </div>
       )}
+
+      {/* Custom Confirmation Modal */}
+      <ConfirmModal
+        isOpen={confirmModal.isOpen}
+        title="Delete Contact Inquiry"
+        message={`Are you sure you want to delete the lead inquiry from "${confirmModal.leadName}"? This submission will be permanently erased.`}
+        confirmText="Delete Inquiry"
+        cancelText="Keep Inquiry"
+        variant="danger"
+        loading={deletingId === confirmModal.leadId}
+        onConfirm={handleConfirmDelete}
+        onCancel={() => setConfirmModal({ isOpen: false, leadId: "", leadName: "" })}
+      />
     </div>
   );
 }

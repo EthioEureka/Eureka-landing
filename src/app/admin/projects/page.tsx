@@ -5,10 +5,23 @@ import Link from "next/link";
 import { Plus, ExternalLink, Star, Edit, Trash2, Loader2 } from "lucide-react";
 import { Project } from "@/lib/types";
 
+import ConfirmModal from "@/components/admin/ConfirmModal";
+
 export default function AdminProjectsPage() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
   const [deletingId, setDeletingId] = useState<string | null>(null);
+
+  // Custom Confirmation Modal state
+  const [confirmModal, setConfirmModal] = useState<{
+    isOpen: boolean;
+    projectId: string;
+    projectTitle: string;
+  }>({
+    isOpen: false,
+    projectId: "",
+    projectTitle: "",
+  });
 
   const loadProjects = async () => {
     try {
@@ -44,18 +57,29 @@ export default function AdminProjectsPage() {
     }
   };
 
-  const handleDelete = async (id: string, title: string) => {
-    if (!window.confirm(`Are you sure you want to delete "${title}"?`)) return;
-    setDeletingId(id);
+  const openDeleteModal = (id: string, title: string) => {
+    setConfirmModal({
+      isOpen: true,
+      projectId: id,
+      projectTitle: title,
+    });
+  };
+
+  const handleConfirmDelete = async () => {
+    const { projectId } = confirmModal;
+    if (!projectId) return;
+
+    setDeletingId(projectId);
     try {
-      const res = await fetch(`/api/admin/projects/${id}`, { method: "DELETE" });
+      const res = await fetch(`/api/admin/projects/${projectId}`, { method: "DELETE" });
       if (res.ok) {
-        setProjects((prev) => prev.filter((p) => p.id !== id && p.slug !== id));
+        setProjects((prev) => prev.filter((p) => p.id !== projectId && p.slug !== projectId));
       }
     } catch (err: unknown) {
       console.error("Failed to delete project", err);
     } finally {
       setDeletingId(null);
+      setConfirmModal({ isOpen: false, projectId: "", projectTitle: "" });
     }
   };
 
@@ -151,7 +175,7 @@ export default function AdminProjectsPage() {
                       <ExternalLink size={14} />
                     </Link>
                     <button
-                      onClick={() => handleDelete(p.id || p.slug, p.title)}
+                      onClick={() => openDeleteModal(p.id || p.slug, p.title)}
                       disabled={deletingId === (p.id || p.slug)}
                       className="text-soft-gray hover:text-red-400 transition-colors inline-flex items-center gap-1"
                       title="Delete Project"
@@ -169,6 +193,19 @@ export default function AdminProjectsPage() {
           </table>
         )}
       </div>
+
+      {/* Custom Confirmation Modal */}
+      <ConfirmModal
+        isOpen={confirmModal.isOpen}
+        title="Delete Portfolio Project"
+        message={`Are you sure you want to delete project "${confirmModal.projectTitle}"? This will remove the project from both the admin CMS database and the landing page.`}
+        confirmText="Delete Project"
+        cancelText="Keep Project"
+        variant="danger"
+        loading={deletingId === confirmModal.projectId}
+        onConfirm={handleConfirmDelete}
+        onCancel={() => setConfirmModal({ isOpen: false, projectId: "", projectTitle: "" })}
+      />
     </div>
   );
 }
