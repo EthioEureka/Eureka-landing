@@ -214,9 +214,19 @@ export async function fetchContactSubmissions(): Promise<ContactSubmission[]> {
    FULL CRUD OPERATIONS (PROJECTS, SERVICES, TESTIMONIALS, LEADS, SETTINGS)
    ========================================================================== */
 
+export function generateSlug(text: string): string {
+  if (!text) return "";
+  return text
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)+/g, "");
+}
+
 // --- PROJECTS CRUD ---
 export async function createProject(project: Omit<Project, "id">): Promise<{ success: boolean; data?: Project; error?: string }> {
-  const newProject: Project = { id: `proj-${Date.now()}`, ...project };
+  const slug = (project.slug && project.slug.trim()) || generateSlug(project.title);
+  const newProject: Project = { id: `proj-${Date.now()}`, ...project, slug };
   memoryProjects.unshift(newProject);
 
   if (!isSupabaseConfigured || !supabase) {
@@ -232,9 +242,14 @@ export async function createProject(project: Omit<Project, "id">): Promise<{ suc
 }
 
 export async function updateProject(id: string, updates: Partial<Project>): Promise<{ success: boolean; data?: Project; error?: string }> {
+  const finalUpdates = { ...updates };
+  if (finalUpdates.title && !finalUpdates.slug) {
+    finalUpdates.slug = generateSlug(finalUpdates.title);
+  }
+
   const idx = memoryProjects.findIndex((p) => p.id === id || p.slug === id);
   if (idx !== -1) {
-    memoryProjects[idx] = { ...memoryProjects[idx], ...updates };
+    memoryProjects[idx] = { ...memoryProjects[idx], ...finalUpdates };
   }
 
   if (!isSupabaseConfigured || !supabase) {
@@ -244,7 +259,7 @@ export async function updateProject(id: string, updates: Partial<Project>): Prom
   try {
     const { data, error } = await supabase
       .from("projects")
-      .update(updates)
+      .update(finalUpdates)
       .or(`id.eq.${id},slug.eq.${id}`)
       .select()
       .maybeSingle();
@@ -282,7 +297,8 @@ export async function deleteProject(id: string): Promise<{ success: boolean; err
 
 // --- SERVICES CRUD ---
 export async function createService(service: Omit<Service, "id">): Promise<{ success: boolean; data?: Service; error?: string }> {
-  const newService: Service = { id: `serv-${Date.now()}`, ...service };
+  const slug = (service.slug && service.slug.trim()) || generateSlug(service.title);
+  const newService: Service = { id: `serv-${Date.now()}`, ...service, slug };
   memoryServices.push(newService);
 
   if (!isSupabaseConfigured || !supabase) {
@@ -298,9 +314,14 @@ export async function createService(service: Omit<Service, "id">): Promise<{ suc
 }
 
 export async function updateService(id: string, updates: Partial<Service>): Promise<{ success: boolean; data?: Service; error?: string }> {
+  const finalUpdates = { ...updates };
+  if (finalUpdates.title && (!finalUpdates.slug || !finalUpdates.slug.trim())) {
+    finalUpdates.slug = generateSlug(finalUpdates.title);
+  }
+
   const idx = memoryServices.findIndex((s) => s.id === id || s.slug === id);
   if (idx !== -1) {
-    memoryServices[idx] = { ...memoryServices[idx], ...updates };
+    memoryServices[idx] = { ...memoryServices[idx], ...finalUpdates };
   }
 
   if (!isSupabaseConfigured || !supabase) {
@@ -308,7 +329,7 @@ export async function updateService(id: string, updates: Partial<Service>): Prom
     return { success: false, error: "Service not found" };
   }
   try {
-    const { data, error } = await supabase.from("services").update(updates).or(`id.eq.${id},slug.eq.${id}`).select().maybeSingle();
+    const { data, error } = await supabase.from("services").update(finalUpdates).or(`id.eq.${id},slug.eq.${id}`).select().maybeSingle();
     if (error || !data) {
       if (idx !== -1) return { success: true, data: memoryServices[idx] };
       return { success: false, error: error?.message || "Update failed" };

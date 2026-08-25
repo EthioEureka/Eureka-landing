@@ -166,7 +166,15 @@ export default function EditProjectPage({ params }: { params: Promise<{ id: stri
               type="text"
               required
               value={formData.title}
-              onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+              onChange={(e) => {
+                const title = e.target.value;
+                const autoSlug = title
+                  .toLowerCase()
+                  .trim()
+                  .replace(/[^a-z0-9]+/g, "-")
+                  .replace(/(^-|-$)+/g, "");
+                setFormData({ ...formData, title, slug: autoSlug });
+              }}
               className="w-full bg-deep-black border border-border-gray text-off-white px-4 py-3 text-sm focus:border-eureka-green focus:outline-none"
             />
           </div>
