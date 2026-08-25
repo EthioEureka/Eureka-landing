@@ -8,44 +8,6 @@ import { ArrowRight, ArrowDownRight, ExternalLink } from "lucide-react";
 
 import { Project } from "@/lib/types";
 
-const HERO_DEFAULT_PROJECTS = [
-  {
-    id: "card-01",
-    title: "Abyssinia Craft",
-    category: "Luxury E-Commerce & Brand",
-    slug: "abyssinia-craft",
-    image: "https://images.unsplash.com/photo-1544816155-12df9643f363?auto=format&fit=crop&w=1200&q=80",
-  },
-  {
-    id: "card-02",
-    title: "Ethio-Eureka Brand System",
-    category: "Identity & Visual Strategy",
-    slug: "ethio-eureka-brand-system",
-    image: "https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=1200&q=80",
-  },
-  {
-    id: "card-03",
-    title: "Kality Freight Portal",
-    category: "Supply Chain & Logistics UI",
-    slug: "kality-freight-portal",
-    image: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=1200&q=80",
-  },
-  {
-    id: "card-04",
-    title: "Nile Capital Venture",
-    category: "Fintech Investor Portal",
-    slug: "nile-capital-partners",
-    image: "https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=1200&q=80",
-  },
-  {
-    id: "card-05",
-    title: "Zoma Architecture",
-    category: "Editorial Architecture",
-    slug: "zoma-architecture",
-    image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80",
-  },
-];
-
 interface HeroProps {
   projects?: Project[];
 }
@@ -121,7 +83,7 @@ function Logo3DCard() {
         {/* 3D Typography */}
         <div style={{ transform: "translateZ(30px)" }} className="space-y-2 font-mono">
           <span className="text-[10px] text-eureka-green tracking-[0.25em] uppercase block font-semibold">
-            ETHIO-EUREKA // 3D BRAND SYSTEM
+            ETHIO-EUREKA // Creative Digital Studio
           </span>
           <h3 className="text-xl font-sans font-bold text-off-white tracking-tight">
             Creative Technology Studio
@@ -135,7 +97,7 @@ function Logo3DCard() {
         <div style={{ transform: "translateZ(20px)" }}>
           <span className="inline-flex items-center gap-2 bg-eureka-green/10 text-eureka-green border border-eureka-green/40 px-4 py-1.5 rounded-full text-[10px] font-mono uppercase tracking-wider font-semibold">
             <span className="w-2 h-2 rounded-full bg-eureka-green animate-ping" />
-            3D DIGITAL EXPERIENCE
+            Contact Us Now
           </span>
         </div>
       </motion.div>
@@ -146,17 +108,17 @@ function Logo3DCard() {
 export default function Hero({ projects }: HeroProps) {
   const heroRef = useRef<HTMLElement>(null);
 
-  // Map real CMS projects to showcase card array
+  // Map real CMS projects to showcase card array (empty array if no DB projects exist)
   const displayCards = React.useMemo(() => {
     if (!projects || projects.length === 0) {
-      return HERO_DEFAULT_PROJECTS;
+      return [];
     }
     return projects.map((p) => ({
       id: p.id || p.slug,
       title: p.title,
       category: p.category,
       slug: p.slug,
-      image: p.cover_image || HERO_DEFAULT_PROJECTS[0].image,
+      image: p.cover_image || "https://images.unsplash.com/photo-1544816155-12df9643f363?auto=format&fit=crop&w=1200&q=80",
     }));
   }, [projects]);
 
