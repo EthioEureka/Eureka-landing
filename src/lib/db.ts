@@ -12,7 +12,8 @@ const memoryProjects: Project[] = [...defaultProjects];
 const memoryServices: Service[] = [...defaultServices];
 const memoryTestimonials: Testimonial[] = [...defaultTestimonials];
 let memorySettings: SiteSettings = { ...defaultSiteSettings };
-const defaultSubmissions: ContactSubmission[] = [
+
+const INITIAL_SUBMISSIONS: ContactSubmission[] = [
   {
     id: "sub-1",
     created_at: new Date().toISOString(),
@@ -24,6 +25,7 @@ const defaultSubmissions: ContactSubmission[] = [
     budget: "$10,000 - $25,000",
     message: "We need a complete web application redesign and tracking portal for our regional fleet.",
     status: "new",
+    read: false,
   },
   {
     id: "sub-2",
@@ -36,8 +38,14 @@ const defaultSubmissions: ContactSubmission[] = [
     budget: "$5,000 - $10,000",
     message: "Looking for visual identity and luxury e-commerce platform for international artisan exports.",
     status: "contacted",
+    read: true,
   },
 ];
+
+if (!(globalThis as unknown as { __memorySubmissions?: ContactSubmission[] }).__memorySubmissions) {
+  (globalThis as unknown as { __memorySubmissions: ContactSubmission[] }).__memorySubmissions = [...INITIAL_SUBMISSIONS];
+}
+const defaultSubmissions: ContactSubmission[] = (globalThis as unknown as { __memorySubmissions: ContactSubmission[] }).__memorySubmissions;
 
 export async function fetchProjects(): Promise<Project[]> {
   if (!isSupabaseConfigured || !supabase) {
@@ -370,15 +378,18 @@ export async function deleteTestimonial(id: string): Promise<{ success: boolean;
   }
 }
 
-// --- CONTACT SUBMISSIONS CRUD ---
 export async function fetchContactSubmissions(): Promise<ContactSubmission[]> {
   if (!isSupabaseConfigured || !supabase) {
     return defaultSubmissions;
   }
   try {
     const { data, error } = await supabase.from("contact_submissions").select("*").order("created_at", { ascending: false });
-    if (error || !data) return defaultSubmissions;
-    return data as ContactSubmission[];
+    if (error || !data || data.length === 0) return defaultSubmissions;
+    
+    // Merge Supabase items with local memory items if not already present
+    const supabaseIds = new Set(data.map((s: ContactSubmission) => s.id));
+    const localOnly = defaultSubmissions.filter((s) => !supabaseIds.has(s.id));
+    return [...data, ...localOnly] as ContactSubmission[];
   } catch {
     return defaultSubmissions;
   }
