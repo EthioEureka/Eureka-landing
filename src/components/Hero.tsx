@@ -50,9 +50,101 @@ interface HeroProps {
   projects?: Project[];
 }
 
+// 3D Animated Logo Showcase Component when no projects are present
+function Logo3DCard() {
+  return (
+    <div className="relative w-full h-[620px] flex items-center justify-center p-6 bg-[#0E0E0E]/80 rounded-2xl border border-white/[0.08] backdrop-blur-md overflow-hidden group">
+      
+      {/* Background Radial Glow */}
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(184,255,61,0.14),transparent_70%)] pointer-events-none" />
+      
+      {/* Animated 3D Floating Rings */}
+      <motion.div
+        animate={{
+          rotate: [0, 360],
+          scale: [1, 1.1, 1],
+        }}
+        transition={{
+          duration: 20,
+          repeat: Infinity,
+          ease: "linear",
+        }}
+        className="absolute w-[460px] h-[460px] rounded-full border border-eureka-green/20 border-dashed opacity-40 pointer-events-none"
+      />
+
+      <motion.div
+        animate={{
+          rotate: [360, 0],
+          scale: [1.1, 0.95, 1.1],
+        }}
+        transition={{
+          duration: 28,
+          repeat: Infinity,
+          ease: "linear",
+        }}
+        className="absolute w-[340px] h-[340px] rounded-full border border-eureka-green/30 opacity-30 pointer-events-none"
+      />
+
+      {/* 3D Floating Glass Pedestal Card */}
+      <motion.div
+        animate={{
+          y: [0, -14, 0],
+          rotateX: [6, -6, 6],
+          rotateY: [-10, 10, -10],
+        }}
+        transition={{
+          duration: 7,
+          repeat: Infinity,
+          ease: "easeInOut",
+        }}
+        style={{
+          transformStyle: "preserve-3d",
+          perspective: 1000,
+        }}
+        className="relative z-10 w-full max-w-sm bg-gradient-to-b from-[#181818] via-[#121212] to-[#0A0A0A] border border-white/20 rounded-2xl p-8 shadow-[0_30px_70px_-15px_rgba(0,0,0,0.9),0_0_50px_rgba(184,255,61,0.18)] flex flex-col items-center text-center space-y-6 group-hover:border-eureka-green/80 transition-colors duration-500"
+      >
+        {/* Floating 3D Logo Element */}
+        <div
+          style={{ transform: "translateZ(50px)" }}
+          className="relative w-36 h-36 flex items-center justify-center rounded-2xl bg-deep-black border border-eureka-green/60 shadow-[0_0_35px_rgba(184,255,61,0.35)] group-hover:shadow-[0_0_60px_rgba(184,255,61,0.6)] transition-shadow duration-500"
+        >
+          <div className="relative w-24 h-24 filter drop-shadow-[0_12px_24px_rgba(184,255,61,0.5)]">
+            <Image src="/logo.svg" alt="Ethio-Eureka 3D Logo" fill className="object-contain animate-pulse" />
+          </div>
+
+          <div className="absolute top-2.5 left-2.5 w-1.5 h-1.5 rounded-full bg-eureka-green" />
+          <div className="absolute top-2.5 right-2.5 w-1.5 h-1.5 rounded-full bg-eureka-green" />
+          <div className="absolute bottom-2.5 left-2.5 w-1.5 h-1.5 rounded-full bg-eureka-green" />
+          <div className="absolute bottom-2.5 right-2.5 w-1.5 h-1.5 rounded-full bg-eureka-green" />
+        </div>
+
+        {/* 3D Typography */}
+        <div style={{ transform: "translateZ(30px)" }} className="space-y-2 font-mono">
+          <span className="text-[10px] text-eureka-green tracking-[0.25em] uppercase block font-semibold">
+            ETHIO-EUREKA // 3D BRAND SYSTEM
+          </span>
+          <h3 className="text-xl font-sans font-bold text-off-white tracking-tight">
+            Creative Technology Studio
+          </h3>
+          <p className="text-xs text-soft-gray max-w-xs leading-relaxed font-sans">
+            Independent design & digital engineering agency crafting high-performance web products.
+          </p>
+        </div>
+
+        {/* Status Badge */}
+        <div style={{ transform: "translateZ(20px)" }}>
+          <span className="inline-flex items-center gap-2 bg-eureka-green/10 text-eureka-green border border-eureka-green/40 px-4 py-1.5 rounded-full text-[10px] font-mono uppercase tracking-wider font-semibold">
+            <span className="w-2 h-2 rounded-full bg-eureka-green animate-ping" />
+            3D DIGITAL EXPERIENCE
+          </span>
+        </div>
+      </motion.div>
+    </div>
+  );
+}
+
 export default function Hero({ projects }: HeroProps) {
   const heroRef = useRef<HTMLElement>(null);
-  const [isHoveredMarquee, setIsHoveredMarquee] = useState(false);
 
   // Map real CMS projects to showcase card array
   const displayCards = React.useMemo(() => {
@@ -160,7 +252,7 @@ export default function Hero({ projects }: HeroProps) {
             </span>
           </motion.div>
 
-          {/* Main Headline with Kinetic "fast." Animation */}
+          {/* Main Headline */}
           <motion.h1
             initial={{ opacity: 0, y: 35 }}
             animate={{ opacity: 1, y: 0 }}
@@ -242,84 +334,74 @@ export default function Hero({ projects }: HeroProps) {
 
         </div>
 
-        {/* RIGHT COLUMN: INFINITE VERTICAL SCROLLING MARQUEE SHOWCASE (MATCHING REFERENCE VIDEO) */}
+        {/* RIGHT COLUMN: SHOWCASE OR 3D LOGO FALLBACK */}
         <div className="lg:col-span-6 xl:col-span-6 relative h-[650px] w-full hidden lg:block overflow-hidden rounded-2xl border border-white/[0.06] bg-[#0E0E0E]/60 backdrop-blur-sm">
           
-          {/* Top & Bottom Fade Gradients */}
-          <div className="absolute top-0 inset-x-0 h-24 bg-gradient-to-b from-[#0A0A0A] via-[#0A0A0A]/70 to-transparent z-20 pointer-events-none" />
-          <div className="absolute bottom-0 inset-x-0 h-24 bg-gradient-to-t from-[#0A0A0A] via-[#0A0A0A]/70 to-transparent z-20 pointer-events-none" />
+          {displayCards.length === 0 ? (
+            <Logo3DCard />
+          ) : (
+            <>
+              {/* Top & Bottom Fade Gradients */}
+              <div className="absolute top-0 inset-x-0 h-24 bg-gradient-to-b from-[#0A0A0A] via-[#0A0A0A]/70 to-transparent z-20 pointer-events-none" />
+              <div className="absolute bottom-0 inset-x-0 h-24 bg-gradient-to-t from-[#0A0A0A] via-[#0A0A0A]/70 to-transparent z-20 pointer-events-none" />
 
-          {/* Vertical Marquee Container */}
-          <div
-            onMouseEnter={() => setIsHoveredMarquee(true)}
-            onMouseLeave={() => setIsHoveredMarquee(false)}
-            className="w-full h-full p-4 overflow-hidden"
-          >
-            <motion.div
-              animate={{
-                y: isHoveredMarquee ? undefined : ["0%", "-50%"],
-              }}
-              transition={{
-                y: {
-                  duration: 25,
-                  repeat: Infinity,
-                  ease: "linear",
-                },
-              }}
-              className="flex flex-col gap-6"
-            >
-              {marqueeCards.map((card, idx) => (
-                <Link
-                  key={`${card.id}-${idx}`}
-                  href={card.slug ? `/work/${card.slug}` : "/work"}
-                  className="group relative bg-[#141414] border border-white/10 rounded-2xl p-3.5 transition-all duration-300 hover:border-eureka-green hover:scale-[1.01] hover:shadow-2xl hover:shadow-eureka-green/10 cursor-pointer block"
-                >
-                  {/* Card macOS Window Bar */}
-                  <div className="bg-[#0B0B0B] border border-white/[0.06] rounded-xl p-2.5 space-y-2.5">
-                    
-                    <div className="flex items-center justify-between font-mono text-[10px] text-soft-gray border-b border-white/[0.06] pb-2">
-                      <div className="flex items-center gap-1.5">
-                        <span className="w-2.5 h-2.5 rounded-full bg-[#FF5F56]" />
-                        <span className="w-2.5 h-2.5 rounded-full bg-[#FFBD2E]" />
-                        <span className="w-2.5 h-2.5 rounded-full bg-[#27C93F]" />
+              {/* Vertical Continuous Marquee Container */}
+              <div className="w-full h-full p-4 overflow-hidden">
+                <div className="animate-marquee-vertical flex flex-col gap-6">
+                  {marqueeCards.map((card, idx) => (
+                    <Link
+                      key={`${card.id}-${idx}`}
+                      href={card.slug ? `/work/${card.slug}` : "/work"}
+                      className="group relative bg-[#141414] border border-white/10 rounded-2xl p-3.5 transition-all duration-300 hover:border-eureka-green hover:scale-[1.01] hover:shadow-2xl hover:shadow-eureka-green/10 cursor-pointer block"
+                    >
+                      {/* Card macOS Window Bar */}
+                      <div className="bg-[#0B0B0B] border border-white/[0.06] rounded-xl p-2.5 space-y-2.5">
+                        
+                        <div className="flex items-center justify-between font-mono text-[10px] text-soft-gray border-b border-white/[0.06] pb-2">
+                          <div className="flex items-center gap-1.5">
+                            <span className="w-2.5 h-2.5 rounded-full bg-[#FF5F56]" />
+                            <span className="w-2.5 h-2.5 rounded-full bg-[#FFBD2E]" />
+                            <span className="w-2.5 h-2.5 rounded-full bg-[#27C93F]" />
+                          </div>
+                          <span className="text-white/40 truncate max-w-[160px] font-mono">{card.category}</span>
+                        </div>
+
+                        {/* Screenshot Preview */}
+                        <div className="relative aspect-[16/10] w-full rounded-lg overflow-hidden bg-black/60">
+                          <Image
+                            src={card.image}
+                            alt={card.title}
+                            fill
+                            className="object-cover group-hover:scale-105 transition-transform duration-700 ease-out opacity-90 group-hover:opacity-100"
+                            sizes="(max-width: 768px) 100vw, 500px"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60" />
+
+                          {/* Hover Action Pill */}
+                          <div className="absolute bottom-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-eureka-green text-deep-black font-semibold font-mono text-[10px] uppercase px-3 py-1.5 rounded shadow-xl flex items-center gap-1.5">
+                            <span>VIEW PROJECT</span>
+                            <ExternalLink size={10} />
+                          </div>
+                        </div>
+
+                        {/* Card Title Bar */}
+                        <div className="flex items-center justify-between pt-1.5 px-1 font-mono text-xs">
+                          <div>
+                            <h4 className="font-semibold text-off-white group-hover:text-eureka-green transition-colors">
+                              {card.title}
+                            </h4>
+                            <p className="text-[10px] text-soft-gray">{card.category}</p>
+                          </div>
+                          <ExternalLink size={14} className="text-soft-gray group-hover:text-eureka-green transition-colors" />
+                        </div>
+
                       </div>
-                      <span className="text-white/40 truncate max-w-[160px] font-mono">{card.category}</span>
-                    </div>
-
-                    {/* Screenshot Preview */}
-                    <div className="relative aspect-[16/10] w-full rounded-lg overflow-hidden bg-black/60">
-                      <Image
-                        src={card.image}
-                        alt={card.title}
-                        fill
-                        className="object-cover group-hover:scale-105 transition-transform duration-700 ease-out opacity-90 group-hover:opacity-100"
-                        sizes="(max-width: 768px) 100vw, 500px"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60" />
-
-                      {/* Hover Action Pill */}
-                      <div className="absolute bottom-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-eureka-green text-deep-black font-semibold font-mono text-[10px] uppercase px-3 py-1.5 rounded shadow-xl flex items-center gap-1.5">
-                        <span>VIEW PROJECT</span>
-                        <ExternalLink size={10} />
-                      </div>
-                    </div>
-
-                    {/* Card Title Bar */}
-                    <div className="flex items-center justify-between pt-1.5 px-1 font-mono text-xs">
-                      <div>
-                        <h4 className="font-semibold text-off-white group-hover:text-eureka-green transition-colors">
-                          {card.title}
-                        </h4>
-                        <p className="text-[10px] text-soft-gray">{card.category}</p>
-                      </div>
-                      <ExternalLink size={14} className="text-soft-gray group-hover:text-eureka-green transition-colors" />
-                    </div>
-
-                  </div>
-                </Link>
-              ))}
-            </motion.div>
-          </div>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            </>
+          )}
 
         </div>
 

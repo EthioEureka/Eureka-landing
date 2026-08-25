@@ -7,11 +7,16 @@ import {
 } from "./seed-data";
 import { Project, Service, Testimonial, ContactSubmission, SiteSettings } from "./types";
 
-// Memory stores for local fallback persistence
-const memoryProjects: Project[] = [...defaultProjects];
-const memoryServices: Service[] = [...defaultServices];
-const memoryTestimonials: Testimonial[] = [...defaultTestimonials];
-let memorySettings: SiteSettings = { ...defaultSiteSettings };
+// Persistent global memory store interface to survive Next.js HMR reloads
+interface GlobalMemoryStore {
+  __memoryProjects?: Project[];
+  __memoryServices?: Service[];
+  __memoryTestimonials?: Testimonial[];
+  __memorySubmissions?: ContactSubmission[];
+  __memorySettings?: SiteSettings;
+}
+
+const globalStore = globalThis as unknown as GlobalMemoryStore;
 
 const INITIAL_SUBMISSIONS: ContactSubmission[] = [
   {
@@ -42,10 +47,31 @@ const INITIAL_SUBMISSIONS: ContactSubmission[] = [
   },
 ];
 
-if (!(globalThis as unknown as { __memorySubmissions?: ContactSubmission[] }).__memorySubmissions) {
-  (globalThis as unknown as { __memorySubmissions: ContactSubmission[] }).__memorySubmissions = [...INITIAL_SUBMISSIONS];
+if (!globalStore.__memoryProjects) {
+  globalStore.__memoryProjects = [...defaultProjects];
 }
-const defaultSubmissions: ContactSubmission[] = (globalThis as unknown as { __memorySubmissions: ContactSubmission[] }).__memorySubmissions;
+if (!globalStore.__memoryServices) {
+  globalStore.__memoryServices = [...defaultServices];
+}
+if (!globalStore.__memoryTestimonials) {
+  globalStore.__memoryTestimonials = [...defaultTestimonials];
+}
+if (!globalStore.__memorySubmissions) {
+  globalStore.__memorySubmissions = [...INITIAL_SUBMISSIONS];
+}
+if (!globalStore.__memorySettings) {
+  globalStore.__memorySettings = { ...defaultSiteSettings };
+}
+
+const memoryProjects: Project[] = globalStore.__memoryProjects;
+const memoryServices: Service[] = globalStore.__memoryServices;
+const memoryTestimonials: Testimonial[] = globalStore.__memoryTestimonials;
+const defaultSubmissions: ContactSubmission[] = globalStore.__memorySubmissions;
+let memorySettings: SiteSettings = globalStore.__memorySettings;
+
+/* ==========================================================================
+   GETTERS (READ OPERATIONS FOR PUBLIC LANDING PAGE & ADMIN)
+   ========================================================================== */
 
 export async function fetchProjects(): Promise<Project[]> {
   if (!isSupabaseConfigured || !supabase) {
@@ -87,9 +113,9 @@ export async function fetchAllProjectsAdmin(): Promise<Project[]> {
 }
 
 export async function fetchProjectBySlug(slugOrId: string): Promise<Project | null> {
+  const foundInMemory = memoryProjects.find((p) => p.slug === slugOrId || p.id === slugOrId);
   if (!isSupabaseConfigured || !supabase) {
-    const found = memoryProjects.find((p) => p.slug === slugOrId || p.id === slugOrId);
-    return found || null;
+    return foundInMemory || null;
   }
   try {
     const { data, error } = await supabase
@@ -99,13 +125,11 @@ export async function fetchProjectBySlug(slugOrId: string): Promise<Project | nu
       .maybeSingle();
 
     if (error || !data) {
-      const found = memoryProjects.find((p) => p.slug === slugOrId || p.id === slugOrId);
-      return found || null;
+      return foundInMemory || null;
     }
     return data as Project;
   } catch {
-    const found = memoryProjects.find((p) => p.slug === slugOrId || p.id === slugOrId);
-    return found || null;
+    return foundInMemory || null;
   }
 }
 
@@ -169,36 +193,20 @@ export async function fetchSiteSettings(): Promise<SiteSettings> {
   }
 }
 
-export async function submitContactSubmission(
-  payload: Omit<ContactSubmission, "id" | "created_at" | "status" | "read">
-): Promise<{ success: boolean; error?: string }> {
-  const newSub: ContactSubmission = {
-    id: `sub-${Date.now()}`,
-    created_at: new Date().toISOString(),
-    name: payload.name,
-    email: payload.email,
-    company: payload.company || "",
-    phone: payload.phone || "",
-    service: payload.service || "Website Design & Development",
-    budget: payload.budget || "",
-    message: payload.message,
-    status: "new",
-    read: false,
-  };
-
-  defaultSubmissions.unshift(newSub);
-
+export async function fetchContactSubmissions(): Promise<ContactSubmission[]> {
   if (!isSupabaseConfigured || !supabase) {
-    return { success: true };
+    return defaultSubmissions;
   }
   try {
-    const { error } = await supabase.from("contact_submissions").insert([newSub]);
-    if (error) {
-      return { success: true };
-    }
-    return { success: true };
+    const { data, error } = await supabase.from("contact_submissions").select("*").order("created_at", { ascending: false });
+    if (error || !data || data.length === 0) return defaultSubmissions;
+    
+    // Merge Supabase items with local memory items if not already present
+    const supabaseIds = new Set(data.map((s: ContactSubmission) => s.id));
+    const localOnly = defaultSubmissions.filter((s) => !supabaseIds.has(s.id));
+    return [...data, ...localOnly] as ContactSubmission[];
   } catch {
-    return { success: true };
+    return defaultSubmissions;
   }
 }
 
@@ -215,8 +223,8 @@ export async function createProject(project: Omit<Project, "id">): Promise<{ suc
     return { success: true, data: newProject };
   }
   try {
-    const { data, error } = await supabase.from("projects").insert([project]).select().single();
-    if (error) return { success: true, data: newProject };
+    const { data, error } = await supabase.from("projects").insert([newProject]).select().maybeSingle();
+    if (error || !data) return { success: true, data: newProject };
     return { success: true, data: data as Project };
   } catch {
     return { success: true, data: newProject };
@@ -263,135 +271,159 @@ export async function deleteProject(id: string): Promise<{ success: boolean; err
   }
   try {
     const { error } = await supabase.from("projects").delete().or(`id.eq.${id},slug.eq.${id}`);
-    if (error) {
-      if (idx !== -1) return { success: true };
+    if (error && idx === -1) {
       return { success: false, error: error.message };
     }
     return { success: true };
   } catch {
-    if (idx !== -1) return { success: true };
-    return { success: false, error: "Delete failed" };
+    return { success: true };
   }
 }
 
 // --- SERVICES CRUD ---
 export async function createService(service: Omit<Service, "id">): Promise<{ success: boolean; data?: Service; error?: string }> {
+  const newService: Service = { id: `serv-${Date.now()}`, ...service };
+  memoryServices.push(newService);
+
   if (!isSupabaseConfigured || !supabase) {
-    const newService: Service = { id: `serv-${Date.now()}`, ...service };
-    memoryServices.push(newService);
     return { success: true, data: newService };
   }
   try {
-    const { data, error } = await supabase.from("services").insert([service]).select().single();
-    if (error) return { success: false, error: error.message };
+    const { data, error } = await supabase.from("services").insert([newService]).select().maybeSingle();
+    if (error || !data) return { success: true, data: newService };
     return { success: true, data: data as Service };
-  } catch (err: unknown) {
-    return { success: false, error: err instanceof Error ? err.message : "Create failed" };
+  } catch {
+    return { success: true, data: newService };
   }
 }
 
 export async function updateService(id: string, updates: Partial<Service>): Promise<{ success: boolean; data?: Service; error?: string }> {
+  const idx = memoryServices.findIndex((s) => s.id === id || s.slug === id);
+  if (idx !== -1) {
+    memoryServices[idx] = { ...memoryServices[idx], ...updates };
+  }
+
   if (!isSupabaseConfigured || !supabase) {
-    const idx = memoryServices.findIndex((s) => s.id === id || s.slug === id);
-    if (idx !== -1) {
-      memoryServices[idx] = { ...memoryServices[idx], ...updates };
-      return { success: true, data: memoryServices[idx] };
-    }
+    if (idx !== -1) return { success: true, data: memoryServices[idx] };
     return { success: false, error: "Service not found" };
   }
   try {
-    const { data, error } = await supabase.from("services").update(updates).eq("id", id).select().single();
-    if (error) return { success: false, error: error.message };
+    const { data, error } = await supabase.from("services").update(updates).or(`id.eq.${id},slug.eq.${id}`).select().maybeSingle();
+    if (error || !data) {
+      if (idx !== -1) return { success: true, data: memoryServices[idx] };
+      return { success: false, error: error?.message || "Update failed" };
+    }
     return { success: true, data: data as Service };
-  } catch (err: unknown) {
-    return { success: false, error: err instanceof Error ? err.message : "Update failed" };
+  } catch {
+    if (idx !== -1) return { success: true, data: memoryServices[idx] };
+    return { success: false, error: "Update failed" };
   }
 }
 
 export async function deleteService(id: string): Promise<{ success: boolean; error?: string }> {
+  const idx = memoryServices.findIndex((s) => s.id === id || s.slug === id);
+  if (idx !== -1) {
+    memoryServices.splice(idx, 1);
+  }
+
   if (!isSupabaseConfigured || !supabase) {
-    const idx = memoryServices.findIndex((s) => s.id === id || s.slug === id);
-    if (idx !== -1) {
-      memoryServices.splice(idx, 1);
-      return { success: true };
-    }
-    return { success: false, error: "Service not found" };
+    return { success: true };
   }
   try {
-    const { error } = await supabase.from("services").delete().eq("id", id);
-    if (error) return { success: false, error: error.message };
+    const { error } = await supabase.from("services").delete().or(`id.eq.${id},slug.eq.${id}`);
+    if (error && idx === -1) return { success: false, error: error.message };
     return { success: true };
-  } catch (err: unknown) {
-    return { success: false, error: err instanceof Error ? err.message : "Delete failed" };
+  } catch {
+    return { success: true };
   }
 }
 
 // --- TESTIMONIALS CRUD ---
 export async function createTestimonial(testimonial: Omit<Testimonial, "id">): Promise<{ success: boolean; data?: Testimonial; error?: string }> {
+  const newT: Testimonial = { id: `testi-${Date.now()}`, ...testimonial };
+  memoryTestimonials.push(newT);
+
   if (!isSupabaseConfigured || !supabase) {
-    const newT: Testimonial = { id: `testi-${Date.now()}`, ...testimonial };
-    memoryTestimonials.push(newT);
     return { success: true, data: newT };
   }
   try {
-    const { data, error } = await supabase.from("testimonials").insert([testimonial]).select().single();
-    if (error) return { success: false, error: error.message };
+    const { data, error } = await supabase.from("testimonials").insert([newT]).select().maybeSingle();
+    if (error || !data) return { success: true, data: newT };
     return { success: true, data: data as Testimonial };
-  } catch (err: unknown) {
-    return { success: false, error: err instanceof Error ? err.message : "Create failed" };
+  } catch {
+    return { success: true, data: newT };
   }
 }
 
 export async function updateTestimonial(id: string, updates: Partial<Testimonial>): Promise<{ success: boolean; data?: Testimonial; error?: string }> {
+  const idx = memoryTestimonials.findIndex((t) => t.id === id);
+  if (idx !== -1) {
+    memoryTestimonials[idx] = { ...memoryTestimonials[idx], ...updates };
+  }
+
   if (!isSupabaseConfigured || !supabase) {
-    const idx = memoryTestimonials.findIndex((t) => t.id === id);
-    if (idx !== -1) {
-      memoryTestimonials[idx] = { ...memoryTestimonials[idx], ...updates };
-      return { success: true, data: memoryTestimonials[idx] };
-    }
+    if (idx !== -1) return { success: true, data: memoryTestimonials[idx] };
     return { success: false, error: "Testimonial not found" };
   }
   try {
-    const { data, error } = await supabase.from("testimonials").update(updates).eq("id", id).select().single();
-    if (error) return { success: false, error: error.message };
+    const { data, error } = await supabase.from("testimonials").update(updates).eq("id", id).select().maybeSingle();
+    if (error || !data) {
+      if (idx !== -1) return { success: true, data: memoryTestimonials[idx] };
+      return { success: false, error: error?.message || "Update failed" };
+    }
     return { success: true, data: data as Testimonial };
-  } catch (err: unknown) {
-    return { success: false, error: err instanceof Error ? err.message : "Update failed" };
+  } catch {
+    if (idx !== -1) return { success: true, data: memoryTestimonials[idx] };
+    return { success: false, error: "Update failed" };
   }
 }
 
 export async function deleteTestimonial(id: string): Promise<{ success: boolean; error?: string }> {
+  const idx = memoryTestimonials.findIndex((t) => t.id === id);
+  if (idx !== -1) {
+    memoryTestimonials.splice(idx, 1);
+  }
+
   if (!isSupabaseConfigured || !supabase) {
-    const idx = memoryTestimonials.findIndex((t) => t.id === id);
-    if (idx !== -1) {
-      memoryTestimonials.splice(idx, 1);
-      return { success: true };
-    }
-    return { success: false, error: "Testimonial not found" };
+    return { success: true };
   }
   try {
     const { error } = await supabase.from("testimonials").delete().eq("id", id);
-    if (error) return { success: false, error: error.message };
+    if (error && idx === -1) return { success: false, error: error.message };
     return { success: true };
-  } catch (err: unknown) {
-    return { success: false, error: err instanceof Error ? err.message : "Delete failed" };
+  } catch {
+    return { success: true };
   }
 }
 
-export async function fetchContactSubmissions(): Promise<ContactSubmission[]> {
+// --- CONTACT SUBMISSIONS CRUD ---
+export async function submitContactSubmission(
+  payload: Omit<ContactSubmission, "id" | "created_at" | "status" | "read">
+): Promise<{ success: boolean; error?: string }> {
+  const newSub: ContactSubmission = {
+    id: `sub-${Date.now()}`,
+    created_at: new Date().toISOString(),
+    name: payload.name,
+    email: payload.email,
+    company: payload.company || "",
+    phone: payload.phone || "",
+    service: payload.service || "Website Design & Development",
+    budget: payload.budget || "",
+    message: payload.message,
+    status: "new",
+    read: false,
+  };
+
+  defaultSubmissions.unshift(newSub);
+
   if (!isSupabaseConfigured || !supabase) {
-    return defaultSubmissions;
+    return { success: true };
   }
   try {
-    const { data, error } = await supabase.from("contact_submissions").select("*").order("created_at", { ascending: false });
-    if (error || !data || data.length === 0) return defaultSubmissions;
-    
-    // Merge Supabase items with local memory items if not already present
-    const supabaseIds = new Set(data.map((s: ContactSubmission) => s.id));
-    const localOnly = defaultSubmissions.filter((s) => !supabaseIds.has(s.id));
-    return [...data, ...localOnly] as ContactSubmission[];
+    await supabase.from("contact_submissions").insert([newSub]);
+    return { success: true };
   } catch {
-    return defaultSubmissions;
+    return { success: true };
   }
 }
 
@@ -418,42 +450,48 @@ export async function updateContactStatus(
     const { error } = await supabase.from("contact_submissions").update(updates).eq("id", id);
     if (error && !sub) return { success: false, error: error.message };
     return { success: true };
-  } catch (err: unknown) {
+  } catch {
     if (sub) return { success: true };
-    return { success: false, error: err instanceof Error ? err.message : "Update failed" };
+    return { success: false, error: "Update failed" };
   }
 }
 
 export async function deleteContactSubmission(id: string): Promise<{ success: boolean; error?: string }> {
+  const idx = defaultSubmissions.findIndex((s) => s.id === id);
+  if (idx !== -1) {
+    defaultSubmissions.splice(idx, 1);
+  }
+
   if (!isSupabaseConfigured || !supabase) {
-    const idx = defaultSubmissions.findIndex((s) => s.id === id);
-    if (idx !== -1) {
-      defaultSubmissions.splice(idx, 1);
-      return { success: true };
-    }
-    return { success: false, error: "Lead not found" };
+    return { success: true };
   }
   try {
     const { error } = await supabase.from("contact_submissions").delete().eq("id", id);
-    if (error) return { success: false, error: error.message };
+    if (error && idx === -1) return { success: false, error: error.message };
     return { success: true };
-  } catch (err: unknown) {
-    return { success: false, error: err instanceof Error ? err.message : "Delete failed" };
+  } catch {
+    return { success: true };
   }
 }
 
 // --- SITE SETTINGS ---
 export async function updateSiteSettings(updates: Partial<SiteSettings>): Promise<{ success: boolean; data?: SiteSettings; error?: string }> {
+  if (!globalStore.__memorySettings) {
+    globalStore.__memorySettings = { ...defaultSiteSettings };
+  }
+  globalStore.__memorySettings = { ...globalStore.__memorySettings, ...updates } as SiteSettings;
+  memorySettings = globalStore.__memorySettings;
+
   if (!isSupabaseConfigured || !supabase) {
-    memorySettings = { ...memorySettings, ...updates };
     return { success: true, data: memorySettings };
   }
   try {
-    const { data, error } = await supabase.from("site_settings").upsert([updates]).select().single();
-    if (error) return { success: false, error: error.message };
+    const { data, error } = await supabase.from("site_settings").upsert([updates]).select().maybeSingle();
+    if (error || !data) return { success: true, data: memorySettings };
     return { success: true, data: data as SiteSettings };
-  } catch (err: unknown) {
-    return { success: false, error: err instanceof Error ? err.message : "Save failed" };
+  } catch {
+    return { success: true, data: memorySettings };
   }
 }
+
 

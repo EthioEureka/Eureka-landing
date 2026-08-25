@@ -98,3 +98,18 @@ html {
     opacity: 0;
   }
 }
+
+/* Vertical Smooth Infinite Marquee */
+@keyframes marquee-vertical {
+  0% { transform: translateY(0%); }
+  100% { transform: translateY(-50%); }
+}
+
+.animate-marquee-vertical {
+  animation: marquee-vertical 32s linear infinite;
+  will-change: transform;
+}
+
+.animate-marquee-vertical:hover {
+  animation-play-state: paused !important;
+}

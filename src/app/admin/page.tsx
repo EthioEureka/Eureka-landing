@@ -1,33 +1,12 @@
 import Link from "next/link";
 import { FolderKanban, Star, Inbox, MessageSquareQuote, ArrowUpRight, Plus } from "lucide-react";
-import { fetchAllProjectsAdmin, fetchTestimonials } from "@/lib/db";
-import { supabase, isSupabaseConfigured } from "@/lib/supabase";
+import { fetchAllProjectsAdmin, fetchTestimonials, fetchContactSubmissions } from "@/lib/db";
 
 export default async function AdminDashboardPage() {
   const projects = await fetchAllProjectsAdmin();
   const testimonials = await fetchTestimonials();
-
-  let submissions: Array<{
-    id: string;
-    created_at?: string;
-    name: string;
-    email: string;
-    service?: string;
-    status?: string;
-  }> = [];
-
-  if (isSupabaseConfigured && supabase) {
-    try {
-      const { data } = await supabase
-        .from("contact_submissions")
-        .select("*")
-        .order("created_at", { ascending: false })
-        .limit(5);
-      if (data) submissions = data;
-    } catch {
-      submissions = [];
-    }
-  }
+  const allSubmissions = await fetchContactSubmissions();
+  const submissions = allSubmissions.slice(0, 5);
 
   const featuredCount = projects.filter((p) => p.featured).length;
   const newSubmissionsCount = submissions.filter((s) => s.status === "new" || !s.status).length;
