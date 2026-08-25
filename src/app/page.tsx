@@ -10,7 +10,8 @@ import TestimonialSection from "@/components/TestimonialSection";
 import ContactSection from "@/components/ContactSection";
 import { fetchProjects, fetchServices, fetchTestimonials } from "@/lib/db";
 
-export const revalidate = 60; // Refresh dynamic CMS data every minute
+export const dynamic = "force-dynamic";
+export const revalidate = 0; // Always fetch real-time dynamic CMS data from Supabase
 
 export default async function HomePage() {
   const [projects, services, testimonials] = await Promise.all([

@@ -84,10 +84,11 @@ export async function fetchProjects(): Promise<Project[]> {
       .eq("published", true)
       .order("sort_order", { ascending: true });
 
-    if (error || !data || data.length === 0) {
+    if (error) {
+      console.warn("Supabase fetchProjects error:", error.message);
       return memoryProjects.filter((p) => p.published !== false);
     }
-    return data as Project[];
+    return (data || []) as Project[];
   } catch {
     return memoryProjects.filter((p) => p.published !== false);
   }
@@ -103,10 +104,11 @@ export async function fetchAllProjectsAdmin(): Promise<Project[]> {
       .select("*")
       .order("created_at", { ascending: false });
 
-    if (error || !data || data.length === 0) {
+    if (error) {
+      console.warn("Supabase fetchAllProjectsAdmin error:", error.message);
       return memoryProjects;
     }
-    return data as Project[];
+    return (data || []) as Project[];
   } catch {
     return memoryProjects;
   }
@@ -144,10 +146,11 @@ export async function fetchServices(): Promise<Service[]> {
       .eq("published", true)
       .order("sort_order", { ascending: true });
 
-    if (error || !data || data.length === 0) {
+    if (error) {
+      console.warn("Supabase fetchServices error:", error.message);
       return memoryServices.filter((s) => s.published !== false);
     }
-    return data as Service[];
+    return (data || []) as Service[];
   } catch {
     return memoryServices.filter((s) => s.published !== false);
   }
@@ -164,10 +167,11 @@ export async function fetchTestimonials(): Promise<Testimonial[]> {
       .eq("published", true)
       .order("sort_order", { ascending: true });
 
-    if (error || !data || data.length === 0) {
+    if (error) {
+      console.warn("Supabase fetchTestimonials error:", error.message);
       return memoryTestimonials.filter((t) => t.published !== false);
     }
-    return data as Testimonial[];
+    return (data || []) as Testimonial[];
   } catch {
     return memoryTestimonials.filter((t) => t.published !== false);
   }
@@ -206,12 +210,8 @@ export async function fetchContactSubmissions(): Promise<ContactSubmission[]> {
   }
   try {
     const { data, error } = await supabase.from("contact_submissions").select("*").order("created_at", { ascending: false });
-    if (error || !data || data.length === 0) return defaultSubmissions;
-    
-    // Merge Supabase items with local memory items if not already present
-    const supabaseIds = new Set(data.map((s: ContactSubmission) => s.id));
-    const localOnly = defaultSubmissions.filter((s) => !supabaseIds.has(s.id));
-    return [...data, ...localOnly] as ContactSubmission[];
+    if (error) return defaultSubmissions;
+    return (data || []) as ContactSubmission[];
   } catch {
     return defaultSubmissions;
   }

@@ -2,6 +2,9 @@ import Link from "next/link";
 import ProjectCard from "@/components/ProjectCard";
 import { fetchProjects } from "@/lib/db";
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 export const metadata = {
   title: "Selected Work — Ethio-Eureka Digital Studio",
   description: "Explore selected brand identities, web applications, design systems, and digital platforms built by Ethio-Eureka.",
