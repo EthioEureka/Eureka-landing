@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import {
   LayoutDashboard,
@@ -37,8 +38,8 @@ export default function AdminSidebar() {
       <div>
         {/* Brand Header */}
         <div className="p-4 border-b border-border-gray/60 flex items-center gap-3 mb-6">
-          <div className="w-8 h-8 rounded bg-eureka-green text-deep-black font-bold flex items-center justify-center font-mono">
-            E
+          <div className="relative w-8 h-8 shrink-0">
+            <Image src="/logo.svg" alt="Logo" fill className="object-contain" />
           </div>
           <div>
             <h1 className="text-sm font-bold text-off-white font-mono">ETHIO-EUREKA</h1>

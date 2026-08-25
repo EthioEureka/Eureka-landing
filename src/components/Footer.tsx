@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { ArrowUpRight } from "lucide-react";
 import Marquee from "./Marquee";
@@ -47,9 +48,14 @@ export default function Footer() {
           
           {/* Brand info */}
           <div className="space-y-4">
-            <span className="text-off-white font-bold tracking-widest text-base block font-sans">
-              ETHIO-EUREKA
-            </span>
+            <div className="flex items-center gap-2.5">
+              <div className="relative w-6 h-6 shrink-0">
+                <Image src="/logo.svg" alt="Ethio-Eureka Logo" fill className="object-contain" />
+              </div>
+              <span className="text-off-white font-bold tracking-widest text-base font-sans">
+                ETHIO-EUREKA
+              </span>
+            </div>
             <p className="leading-relaxed text-[11px] text-soft-gray">
               Independent creative technology & digital design studio based in Addis Ababa, Ethiopia.
             </p>

@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { ArrowUpRight, Menu } from "lucide-react";
 import MobileMenu from "./MobileMenu";
@@ -45,9 +46,11 @@ export default function Navbar() {
           {/* Logo / Wordmark */}
           <Link
             href="/"
-            className="group flex items-center gap-2.5 text-lg md:text-xl font-bold tracking-tight text-off-white hover:text-eureka-green transition-colors"
+            className="group flex items-center gap-3 text-lg md:text-xl font-bold tracking-tight text-off-white hover:text-eureka-green transition-colors"
           >
-            <span className="w-2.5 h-2.5 bg-eureka-green rounded-full group-hover:scale-125 transition-transform" />
+            <div className="relative w-7 h-7 shrink-0 transition-transform group-hover:scale-110">
+              <Image src="/logo.svg" alt="Ethio-Eureka Logo" fill className="object-contain" />
+            </div>
             <span className="font-mono tracking-widest text-sm md:text-base">ETHIO-EUREKA</span>
           </Link>
 
