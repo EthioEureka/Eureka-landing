@@ -136,10 +136,10 @@ export default function Hero({ projects }: HeroProps) {
       />
 
       {/* 2. HERO MAIN CONTENT CANVAS */}
-      <div className="relative z-10 max-w-[1440px] mx-auto px-6 md:px-12 w-full my-auto pt-28 pb-12 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+      <div className="relative z-10 max-w-[1440px] mx-auto px-6 md:px-12 w-full my-auto pt-20 lg:pt-24 pb-12 grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-start">
         
         {/* LEFT COLUMN: EDITORIAL COPY & BRANDING */}
-        <div className="lg:col-span-6 xl:col-span-6 flex flex-col justify-center z-20">
+        <div className="lg:col-span-6 xl:col-span-6 flex flex-col justify-center z-20 pt-2">
           
           {/* Eyebrow with Brand Logo Icon */}
           <motion.div
@@ -152,7 +152,7 @@ export default function Hero({ projects }: HeroProps) {
               <Image src="/logo.svg" alt="Ethio-Eureka Icon" fill className="object-contain" />
             </div>
             <span className="text-xs font-mono tracking-[0.2em] text-eureka-green uppercase font-semibold">
-              ETHIOPIA → THE WORLD
+              Eureka cerative
             </span>
             <span className="text-xs font-mono text-white/20">/</span>
             <span className="text-xs font-mono text-soft-gray uppercase tracking-widest">
@@ -160,14 +160,18 @@ export default function Hero({ projects }: HeroProps) {
             </span>
           </motion.div>
 
-          {/* Main Headline */}
+          {/* Main Headline with Kinetic "fast." Animation */}
           <motion.h1
             initial={{ opacity: 0, y: 35 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
-            className="text-hero-headline font-normal text-off-white mb-8 tracking-tight max-w-[700px] leading-[0.98]"
+            className="text-hero-headline font-normal text-off-white mb-8 tracking-tight max-w-[650px] leading-[1.04]"
           >
-            Your product moves fast. <br />
+            Your product moves{" "}
+              <span className="italic font-serif text-eureka-green decoration-2 underline-offset-8">
+              fast
+            </span>
+            <br />
             Your website <br />
             <span className="italic font-serif text-soft-gray underline decoration-eureka-green decoration-2 underline-offset-8">
               should too.
@@ -329,7 +333,7 @@ export default function Hero({ projects }: HeroProps) {
           <span className="text-white/20 hidden sm:inline">/</span>
           <span className="text-eureka-green flex items-center gap-2">
             <span className="w-1.5 h-1.5 bg-eureka-green rounded-full animate-pulse" />
-            BUILDING FROM ETHIOPIA → GLOBAL
+           Contact us now
           </span>
         </div>
 
