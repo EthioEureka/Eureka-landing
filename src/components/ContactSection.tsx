@@ -301,29 +301,26 @@ export default function ContactSection() {
                     <img
                       src="/map.png"
                       alt={`Studio Map Location - ${settings.address || "Addis Ababa, Ethiopia"}`}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-75 group-hover:opacity-90"
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-80 group-hover:opacity-95"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-deep-black via-deep-black/40 to-deep-black/20" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-deep-black via-deep-black/30 to-deep-black/10" />
                     
                     {/* Top-Left Status Badge */}
-                    <div className="absolute top-3 left-3 bg-deep-black/80 backdrop-blur-md px-3 py-1 border border-border-gray/80 text-[10px] font-mono text-eureka-green flex items-center gap-2">
+                    <div className="absolute top-3 left-3 bg-deep-black/90 backdrop-blur-md px-3 py-1 border border-border-gray/80 text-[10px] font-mono text-eureka-green flex items-center gap-2">
                       <span className="w-1.5 h-1.5 rounded-full bg-eureka-green animate-pulse" />
-                      <span>STUDIO LOCATION</span>
+                      <span>{settings.address ? settings.address.toUpperCase() : "ADDIS ABABA, ETHIOPIA"}</span>
                     </div>
 
-                    {/* Centered Location & Address Overlay */}
-                    <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-4 z-10">
+                    {/* Centered Pin, Location Title & Subtitle Overlay */}
+                    <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-4 z-10 pointer-events-none">
                       <div className="relative mb-2 group-hover:scale-110 transition-transform duration-300">
-                        <MapPin size={28} className="text-eureka-green drop-shadow-[0_0_12px_rgba(0,255,102,0.8)]" />
+                        <MapPin size={30} className="text-eureka-green drop-shadow-[0_0_14px_rgba(0,255,102,0.9)]" />
                       </div>
 
-                      <h4 className="text-eureka-green font-bold text-sm sm:text-base tracking-widest font-mono uppercase drop-shadow-[0_0_10px_rgba(0,255,102,0.4)] px-2">
-                        {settings.location || "BOLE MEDHANIALEM, EXECUTIVE TOWER 4TH FLOOR"}
+                      <h4 className="text-soft-gray font-mono text-xs mt-0.5 tracking-wider hover:scale-110 transition-transform duration-300">
+                        {settings.location ? settings.location.toUpperCase() : "BOLE MEDHANIALEM"}
                       </h4>
 
-                      <p className="text-soft-gray font-mono text-xs mt-1 bg-deep-black/80 backdrop-blur-md px-3 py-1 border border-border-gray/60 tracking-wide">
-                        {settings.address || "Addis Ababa, Ethiopia"}
-                      </p>
                     </div>
                   </div>
 
