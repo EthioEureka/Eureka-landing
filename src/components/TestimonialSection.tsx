@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { Quote } from "lucide-react";
 import { Testimonial } from "@/lib/types";
+import { siteData } from "@/lib/data";
 
 interface TestimonialSectionProps {
   testimonials: Testimonial[];
@@ -18,10 +19,10 @@ export default function TestimonialSection({ testimonials }: TestimonialSectionP
         <div className="mb-16">
           <span className="text-xs font-mono tracking-[0.2em] text-eureka-blue font-semibold uppercase flex items-center gap-2 mb-4">
             <span className="w-2 h-2 bg-eureka-blue rounded-full" />
-            07 // CLIENT TESTIMONIALS
+            {siteData.testimonials.sectionTag}
           </span>
           <h2 className="text-section-headline font-extrabold text-eureka-dark tracking-tight">
-            Words from our partners.
+            {siteData.testimonials.headline}
           </h2>
         </div>
 

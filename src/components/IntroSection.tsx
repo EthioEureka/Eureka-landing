@@ -2,31 +2,12 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
+import { siteData } from "@/lib/data";
 
 export default function IntroSection() {
   const [hoveredWord, setHoveredWord] = useState<string | null>(null);
 
-  const words = [
-    { text: "Ethio-Eureka", highlight: false },
-    { text: "is", highlight: false },
-    { text: "a", highlight: false },
-    { text: "creative", highlight: false },
-    { text: "digital", highlight: false },
-    { text: "studio", highlight: false },
-    { text: "helping", highlight: false },
-    { text: "ambitious", highlight: false },
-    { text: "businesses", highlight: false },
-    { text: "turn", highlight: false },
-    { text: "ideas", highlight: false },
-    { text: "into", highlight: false },
-    { text: "brands,", highlight: true, key: "brands" },
-    { text: "websites,", highlight: true, key: "websites" },
-    { text: "and", highlight: false },
-    { text: "digital", highlight: true, key: "digital experiences" },
-    { text: "experiences", highlight: true, key: "digital experiences" },
-    { text: "people", highlight: false },
-    { text: "remember.", highlight: true, key: "remember" },
-  ];
+  const words = siteData.intro.words;
 
   return (
     <section id="about" className="py-24 md:py-36 bg-slate-50 border-b border-eureka-border relative overflow-hidden">
@@ -37,10 +18,10 @@ export default function IntroSection() {
           <div className="lg:col-span-3">
             <span className="text-xs font-mono tracking-[0.2em] text-eureka-blue uppercase font-semibold flex items-center gap-2">
               <span className="w-2 h-2 bg-eureka-blue rounded-full" />
-              01 // POSITIONING
+              {siteData.intro.sectionTag}
             </span>
             <p className="mt-4 text-xs font-sans text-eureka-slate leading-relaxed max-w-xs">
-              Studio philosophy centered around strategic clarity, visual restraint, and structural longevity.
+              {siteData.intro.tagline}
             </p>
           </div>
 
@@ -73,8 +54,8 @@ export default function IntroSection() {
 
             {/* Bottom highlight footnote indicator */}
             <div className="mt-12 pt-8 border-t border-eureka-border flex flex-wrap justify-between items-center text-xs font-mono text-eureka-slate">
-              <span className="font-medium">BASED IN ADDIS ABABA & WORKING GLOBALLY</span>
-              <span className="text-eureka-blue font-bold">ETHIO-EUREKA DIGITAL STUDIO</span>
+              <span className="font-medium">{siteData.intro.footnote.left}</span>
+              <span className="text-eureka-blue font-bold">{siteData.intro.footnote.right}</span>
             </div>
           </div>
         </div>
@@ -82,4 +63,3 @@ export default function IntroSection() {
     </section>
   );
 }
-

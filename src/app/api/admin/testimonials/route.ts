@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { fetchTestimonials, createTestimonial, updateTestimonial, deleteTestimonial } from "@/lib/db";
+import { fetchAllTestimonialsAdmin, createTestimonial, updateTestimonial, deleteTestimonial } from "@/lib/db";
 import { isAdminAuthenticated } from "@/lib/admin-auth";
 
 export async function GET() {
@@ -8,7 +8,7 @@ export async function GET() {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const testimonials = await fetchTestimonials();
+  const testimonials = await fetchAllTestimonialsAdmin();
   return NextResponse.json({ testimonials });
 }
 

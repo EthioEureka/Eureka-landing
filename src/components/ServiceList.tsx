@@ -2,6 +2,7 @@
 
 import ServiceItem from "./ServiceItem";
 import { Service } from "@/lib/types";
+import { siteData } from "@/lib/data";
 
 interface ServiceListProps {
   services: Service[];
@@ -15,15 +16,15 @@ export default function ServiceList({ services }: ServiceListProps) {
           <div className="lg:col-span-8">
             <span className="text-xs font-mono tracking-[0.2em] text-eureka-blue font-semibold uppercase flex items-center gap-2 mb-4">
               <span className="w-2 h-2 bg-eureka-blue rounded-full" />
-              02 // SERVICES & CAPABILITIES
+              {siteData.services.sectionTag}
             </span>
             <h2 className="text-section-headline font-extrabold text-eureka-dark tracking-tight">
-              What we do.
+              {siteData.services.headline}
             </h2>
           </div>
           <div className="lg:col-span-4">
             <p className="text-editorial-sub text-eureka-slate font-normal leading-relaxed">
-              One creative partner. Multiple ways to move your brand and digital presence forward.
+              {siteData.services.subtext}
             </p>
           </div>
         </div>

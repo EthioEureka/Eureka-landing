@@ -95,12 +95,25 @@ CREATE TABLE IF NOT EXISTS public.site_settings (
   updated_at TIMESTAMPTZ DEFAULT now()
 );
 
+-- 6. PARTNERS TABLE
+CREATE TABLE IF NOT EXISTS public.partners (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  created_at TIMESTAMPTZ DEFAULT now(),
+  updated_at TIMESTAMPTZ DEFAULT now(),
+  name TEXT NOT NULL,
+  logo TEXT,
+  website_url TEXT,
+  sort_order INTEGER DEFAULT 0,
+  published BOOLEAN DEFAULT true
+);
+
 -- ROW LEVEL SECURITY (RLS)
 ALTER TABLE public.projects ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.services ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.testimonials ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.contact_submissions ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.site_settings ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.partners ENABLE ROW LEVEL SECURITY;
 
 -- POLICIES FOR PUBLIC READ ACCESS
 CREATE POLICY "Allow public read on published projects" ON public.projects
@@ -110,6 +123,9 @@ CREATE POLICY "Allow public read on published services" ON public.services
   FOR SELECT USING (published = true OR auth.role() = 'authenticated');
 
 CREATE POLICY "Allow public read on published testimonials" ON public.testimonials
+  FOR SELECT USING (published = true OR auth.role() = 'authenticated');
+
+CREATE POLICY "Allow public read on published partners" ON public.partners
   FOR SELECT USING (published = true OR auth.role() = 'authenticated');
 
 CREATE POLICY "Allow public read on site settings" ON public.site_settings
@@ -133,6 +149,9 @@ CREATE POLICY "Admin full access on contact submissions" ON public.contact_submi
   FOR ALL USING (auth.role() = 'authenticated');
 
 CREATE POLICY "Admin full access on site settings" ON public.site_settings
+  FOR ALL USING (auth.role() = 'authenticated');
+
+CREATE POLICY "Admin full access on partners" ON public.partners
   FOR ALL USING (auth.role() = 'authenticated');
 
 -- SEED INITIAL SITE SETTINGS ROW

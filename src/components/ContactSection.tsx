@@ -3,22 +3,17 @@
 import { useState, useEffect } from "react";
 import { ArrowRight, CheckCircle, MapPin, Mail, Phone, ExternalLink } from "lucide-react";
 import { SiteSettings } from "@/lib/types";
+import { siteData } from "@/lib/data";
 
 export default function ContactSection() {
-  const [settings, setSettings] = useState<Partial<SiteSettings>>({
-    location: "Bole Medhanialem, Executive Tower 4th Floor",
-    address: "Addis Ababa, Ethiopia",
-    email: "hello@ethio-eureka.com",
-    phone: "+251 911 234 567",
-    google_maps_url: "https://maps.google.com/?q=Addis+Ababa+Ethiopia",
-  });
+  const [settings, setSettings] = useState<Partial<SiteSettings>>({});
 
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     company: "",
     phone: "",
-    service: "Website Design & Development",
+    service: siteData.contact.form.serviceOptions[0],
     budget: "",
     message: "",
   });
@@ -70,7 +65,7 @@ export default function ContactSection() {
           email: "",
           company: "",
           phone: "",
-          service: "Website Design & Development",
+          service: siteData.contact.form.serviceOptions[0],
           budget: "",
           message: "",
         });
@@ -92,13 +87,13 @@ export default function ContactSection() {
         <div className="mb-16">
           <span className="text-xs font-mono tracking-[0.2em] text-eureka-blue font-semibold uppercase flex items-center gap-2 mb-4">
             <span className="w-2 h-2 bg-eureka-blue rounded-full" />
-            08 // START A PROJECT
+            {siteData.contact.sectionTag}
           </span>
           <h2 className="text-section-headline font-extrabold text-eureka-dark max-w-4xl tracking-tight">
-            Have something worth building?
+            {siteData.contact.headline}
           </h2>
           <p className="text-editorial-sub text-eureka-slate font-normal mt-4 max-w-2xl">
-            Tell us what you&apos;re working on. Let&apos;s turn the idea into something people remember.
+            {siteData.contact.subtext}
           </p>
         </div>
 
@@ -109,15 +104,15 @@ export default function ContactSection() {
             {submitted ? (
               <div className="py-12 flex flex-col items-center text-center space-y-4">
                 <CheckCircle size={56} className="text-eureka-blue" />
-                <h3 className="text-2xl font-extrabold text-eureka-dark">Inquiry Received</h3>
+                <h3 className="text-2xl font-extrabold text-eureka-dark">{siteData.contact.success.title}</h3>
                 <p className="text-sm font-sans text-eureka-slate max-w-md">
-                  Thank you for reaching out to Ethio-Eureka. Our team will review your details and respond within 24 hours.
+                  {siteData.contact.success.message}
                 </p>
                 <button
                   onClick={() => setSubmitted(false)}
                   className="mt-6 font-mono text-xs text-eureka-blue font-bold uppercase tracking-wider hover:underline"
                 >
-                  Send another inquiry →
+                  {siteData.contact.success.resetButton}
                 </button>
               </div>
             ) : (
@@ -131,12 +126,12 @@ export default function ContactSection() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                   <div>
                     <label className="block text-xs font-mono text-eureka-slate uppercase font-semibold mb-2">
-                      Your Name *
+                      {siteData.contact.form.nameLabel}
                     </label>
                     <input
                       type="text"
                       required
-                      placeholder="e.g. Abebe Bikila"
+                      placeholder={siteData.contact.form.namePlaceholder}
                       value={formData.name}
                       onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                       className="w-full bg-white border border-eureka-border rounded-xl text-eureka-dark px-4 py-3 text-sm focus:border-eureka-blue focus:ring-2 focus:ring-eureka-blue/20 focus:outline-none transition-all shadow-sm"
@@ -145,12 +140,12 @@ export default function ContactSection() {
 
                   <div>
                     <label className="block text-xs font-mono text-eureka-slate uppercase font-semibold mb-2">
-                      Email Address *
+                      {siteData.contact.form.emailLabel}
                     </label>
                     <input
                       type="email"
                       required
-                      placeholder="name@company.com"
+                      placeholder={siteData.contact.form.emailPlaceholder}
                       value={formData.email}
                       onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                       className="w-full bg-white border border-eureka-border rounded-xl text-eureka-dark px-4 py-3 text-sm focus:border-eureka-blue focus:ring-2 focus:ring-eureka-blue/20 focus:outline-none transition-all shadow-sm"
@@ -161,11 +156,11 @@ export default function ContactSection() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                   <div>
                     <label className="block text-xs font-mono text-eureka-slate uppercase font-semibold mb-2">
-                      Company / Organization
+                      {siteData.contact.form.companyLabel}
                     </label>
                     <input
                       type="text"
-                      placeholder="Company Name"
+                      placeholder={siteData.contact.form.companyPlaceholder}
                       value={formData.company}
                       onChange={(e) => setFormData({ ...formData, company: e.target.value })}
                       className="w-full bg-white border border-eureka-border rounded-xl text-eureka-dark px-4 py-3 text-sm focus:border-eureka-blue focus:ring-2 focus:ring-eureka-blue/20 focus:outline-none transition-all shadow-sm"
@@ -174,11 +169,11 @@ export default function ContactSection() {
 
                   <div>
                     <label className="block text-xs font-mono text-eureka-slate uppercase font-semibold mb-2">
-                      Phone Number (Optional)
+                      {siteData.contact.form.phoneLabel}
                     </label>
                     <input
                       type="tel"
-                      placeholder="+251 911 ..."
+                      placeholder={siteData.contact.form.phonePlaceholder}
                       value={formData.phone}
                       onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                       className="w-full bg-white border border-eureka-border rounded-xl text-eureka-dark px-4 py-3 text-sm focus:border-eureka-blue focus:ring-2 focus:ring-eureka-blue/20 focus:outline-none transition-all shadow-sm"
@@ -189,49 +184,43 @@ export default function ContactSection() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                   <div>
                     <label className="block text-xs font-mono text-eureka-slate uppercase font-semibold mb-2">
-                      Requested Service
+                      {siteData.contact.form.serviceLabel}
                     </label>
                     <select
                       value={formData.service}
                       onChange={(e) => setFormData({ ...formData, service: e.target.value })}
                       className="w-full bg-white border border-eureka-border rounded-xl text-eureka-dark px-4 py-3 text-sm focus:border-eureka-blue focus:ring-2 focus:ring-eureka-blue/20 focus:outline-none transition-all shadow-sm"
                     >
-                      <option value="Website Design & Development">Website Design & Development</option>
-                      <option value="Branding & Identity">Branding & Identity</option>
-                      <option value="Content Management">Content Management</option>
-                      <option value="Social Media Management">Social Media Management</option>
-                      <option value="Graphic Design">Graphic Design</option>
-                      <option value="Multiple Services">Multiple Services</option>
-                      <option value="Other">Other</option>
+                      {siteData.contact.form.serviceOptions.map((option) => (
+                        <option key={option} value={option}>{option}</option>
+                      ))}
                     </select>
                   </div>
 
                   <div>
                     <label className="block text-xs font-mono text-eureka-slate uppercase font-semibold mb-2">
-                      Project Budget (Optional)
+                      {siteData.contact.form.budgetLabel}
                     </label>
                     <select
                       value={formData.budget}
                       onChange={(e) => setFormData({ ...formData, budget: e.target.value })}
                       className="w-full bg-white border border-eureka-border rounded-xl text-eureka-dark px-4 py-3 text-sm focus:border-eureka-blue focus:ring-2 focus:ring-eureka-blue/20 focus:outline-none transition-all shadow-sm"
                     >
-                      <option value="">Select Range</option>
-                      <option value="$2,000 - $5,000">$2,000 - $5,000</option>
-                      <option value="$5,000 - $10,000">$5,000 - $10,000</option>
-                      <option value="$10,000 - $25,000">$10,000 - $25,000</option>
-                      <option value="$25,000+">$25,000+</option>
+                      {siteData.contact.form.budgetOptions.map((option) => (
+                        <option key={option.value} value={option.value}>{option.label}</option>
+                      ))}
                     </select>
                   </div>
                 </div>
 
                 <div>
                   <label className="block text-xs font-mono text-eureka-slate uppercase font-semibold mb-2">
-                    Project Message *
+                    {siteData.contact.form.messageLabel}
                   </label>
                   <textarea
                     required
                     rows={5}
-                    placeholder="Tell us about your goals, timelines, and ideas..."
+                    placeholder={siteData.contact.form.messagePlaceholder}
                     value={formData.message}
                     onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                     className="w-full bg-white border border-eureka-border rounded-xl text-eureka-dark px-4 py-3 text-sm focus:border-eureka-blue focus:ring-2 focus:ring-eureka-blue/20 focus:outline-none transition-all shadow-sm"
@@ -243,7 +232,7 @@ export default function ContactSection() {
                   disabled={loading}
                   className="w-full bg-eureka-blue text-white font-bold text-sm uppercase tracking-wider py-4 px-8 rounded-xl hover:bg-eureka-indigo transition-all flex items-center justify-center gap-3 disabled:opacity-50 shadow-eureka-sm"
                 >
-                  <span>{loading ? "Sending..." : "Send inquiry →"}</span>
+                  <span>{loading ? siteData.contact.form.sendingButton : siteData.contact.form.submitButton}</span>
                   {!loading && <ArrowRight size={18} />}
                 </button>
               </form>
@@ -254,83 +243,91 @@ export default function ContactSection() {
           <div className="lg:col-span-5 flex flex-col justify-between h-full space-y-8">
             <div className="bg-slate-50 border border-eureka-border rounded-3xl p-8 shadow-eureka-sm">
               <span className="text-xs font-mono text-eureka-blue font-bold uppercase tracking-wider block mb-4">
-                LOCATION & POSITIONING
+                {siteData.contact.locationLabel}
               </span>
               <p className="text-sm text-eureka-slate leading-relaxed mb-6 font-normal">
-                Based in Ethiopia. Working with ambitious businesses anywhere.
+                {siteData.contact.locationSubtext}
               </p>
 
               <div className="space-y-4 font-sans text-xs text-eureka-slate pt-4 border-t border-eureka-border">
-                <div className="flex items-start gap-3">
-                  <MapPin size={18} className="text-eureka-blue shrink-0 mt-0.5" />
-                  <div>
-                    <p className="text-eureka-dark font-extrabold">Studio Address</p>
-                    <p>{settings.location || "Bole Medhanialem, Executive Tower 4th Floor"}</p>
-                    <p>{settings.address || "Addis Ababa, Ethiopia"}</p>
+                {(settings.location || settings.address) && (
+                  <div className="flex items-start gap-3">
+                    <MapPin size={18} className="text-eureka-blue shrink-0 mt-0.5" />
+                    <div>
+                      <p className="text-eureka-dark font-extrabold">{siteData.contact.addressLabel}</p>
+                      {settings.location && <p>{settings.location}</p>}
+                      {settings.address && <p>{settings.address}</p>}
+                    </div>
                   </div>
-                </div>
+                )}
 
-                <div className="flex items-center gap-3">
-                  <Mail size={18} className="text-eureka-blue shrink-0" />
-                  <div>
-                    <p className="text-eureka-dark font-extrabold">General Inquiries</p>
-                    <a href={`mailto:${settings.email || "hello@ethio-eureka.com"}`} className="hover:text-eureka-blue font-medium">
-                      {settings.email || "hello@ethio-eureka.com"}
-                    </a>
+                {settings.email && (
+                  <div className="flex items-center gap-3">
+                    <Mail size={18} className="text-eureka-blue shrink-0" />
+                    <div>
+                      <p className="text-eureka-dark font-extrabold">{siteData.contact.emailLabel}</p>
+                      <a href={`mailto:${settings.email}`} className="hover:text-eureka-blue font-medium">
+                        {settings.email}
+                      </a>
+                    </div>
                   </div>
-                </div>
+                )}
 
-                <div className="flex items-center gap-3">
-                  <Phone size={18} className="text-eureka-blue shrink-0" />
-                  <div>
-                    <p className="text-eureka-dark font-extrabold">Direct Phone</p>
-                    <p>{settings.phone || "+251 911 234 567"}</p>
+                {settings.phone && (
+                  <div className="flex items-center gap-3">
+                    <Phone size={18} className="text-eureka-blue shrink-0" />
+                    <div>
+                      <p className="text-eureka-dark font-extrabold">{siteData.contact.phoneLabel}</p>
+                      <p>{settings.phone}</p>
+                    </div>
                   </div>
-                </div>
+                )}
               </div>
 
               {/* Map Preview Box */}
-              <div className="mt-6 pt-6 border-t border-eureka-border">
-                <a
-                  href={settings.google_maps_url || "https://maps.google.com/?q=Addis+Ababa+Ethiopia"}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group block relative overflow-hidden rounded-2xl border border-eureka-border bg-white hover:border-eureka-blue transition-all shadow-sm"
-                >
-                  <div className="relative aspect-video w-full overflow-hidden flex items-center justify-center">
-                    <img
-                      src="/map.png"
-                      alt={`Studio Map Location - ${settings.address || "Addis Ababa, Ethiopia"}`}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-90"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-slate-900/10 to-transparent" />
-                    
-                    {/* Top-Left Status Badge */}
-                    <div className="absolute top-3 left-3 bg-white/90 backdrop-blur-md px-3 py-1 rounded-full border border-slate-200 text-[10px] font-mono text-eureka-blue font-bold flex items-center gap-2 shadow-sm">
-                      <span className="w-2 h-2 rounded-full bg-eureka-blue animate-pulse" />
-                      <span>{settings.address ? settings.address.toUpperCase() : "ADDIS ABABA, ETHIOPIA"}</span>
-                    </div>
+              {settings.google_maps_url && (
+                <div className="mt-6 pt-6 border-t border-eureka-border">
+                  <a
+                    href={settings.google_maps_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group block relative overflow-hidden rounded-2xl border border-eureka-border bg-white hover:border-eureka-blue transition-all shadow-sm"
+                  >
+                    <div className="relative aspect-video w-full overflow-hidden flex items-center justify-center">
+                      <img
+                        src="/map.png"
+                        alt="Studio Map Location"
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-90"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-slate-900/10 to-transparent" />
+                      
+                      {settings.address && (
+                        <div className="absolute top-3 left-3 bg-white/90 backdrop-blur-md px-3 py-1 rounded-full border border-slate-200 text-[10px] font-mono text-eureka-blue font-bold flex items-center gap-2 shadow-sm">
+                          <span className="w-2 h-2 rounded-full bg-eureka-blue animate-pulse" />
+                          <span>{settings.address.toUpperCase()}</span>
+                        </div>
+                      )}
 
-                    {/* Centered Pin, Location Title & Subtitle Overlay */}
-                    <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-4 z-10 pointer-events-none">
-                      <div className="relative mb-2 group-hover:scale-110 transition-transform duration-300">
-                        <MapPin size={32} className="text-white drop-shadow-[0_4px_12px_rgba(37,99,235,0.8)]" />
+                      <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-4 z-10 pointer-events-none">
+                        <div className="relative mb-2 group-hover:scale-110 transition-transform duration-300">
+                          <MapPin size={32} className="text-white drop-shadow-[0_4px_12px_rgba(37,99,235,0.8)]" />
+                        </div>
+
+                        {settings.location && (
+                          <h4 className="text-white font-mono text-xs font-bold mt-0.5 tracking-wider drop-shadow-md">
+                            {settings.location.toUpperCase()}
+                          </h4>
+                        )}
                       </div>
-
-                      <h4 className="text-white font-mono text-xs font-bold mt-0.5 tracking-wider drop-shadow-md">
-                        {settings.location ? settings.location.toUpperCase() : "BOLE MEDHANIALEM"}
-                      </h4>
-
                     </div>
-                  </div>
 
-                  {/* Action Link Footer */}
-                  <div className="p-3 bg-white flex items-center justify-between font-mono text-xs text-eureka-slate group-hover:text-eureka-blue transition-colors">
-                    <span className="uppercase tracking-wider text-[10px] font-bold">Open Google Maps</span>
-                    <ExternalLink size={14} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-                  </div>
-                </a>
-              </div>
+                    <div className="p-3 bg-white flex items-center justify-between font-mono text-xs text-eureka-slate group-hover:text-eureka-blue transition-colors">
+                      <span className="uppercase tracking-wider text-[10px] font-bold">{siteData.contact.mapsLabel}</span>
+                      <ExternalLink size={14} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                    </div>
+                  </a>
+                </div>
+              )}
             </div>
           </div>
 
@@ -340,4 +337,3 @@ export default function ContactSection() {
     </section>
   );
 }
-

@@ -1,25 +1,10 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { siteData } from "@/lib/data";
 
 export default function MissionSection() {
-  const principles = [
-    {
-      num: "01",
-      title: "Creative Thinking",
-      desc: "Every project starts with deep inquiry, challenging defaults and uncovering brand truth.",
-    },
-    {
-      num: "02",
-      title: "Digital Execution",
-      desc: "Immaculate front-end engineering, modern typography grids, and ultra-fast responsive platforms.",
-    },
-    {
-      num: "03",
-      title: "Long-term Partnerships",
-      desc: "We build digital identities designed to adapt, scale, and thrive for years to come.",
-    },
-  ];
+  const { mission } = siteData;
 
   return (
     <section id="mission" className="py-24 md:py-36 bg-white border-b border-eureka-border relative overflow-hidden">
@@ -29,17 +14,14 @@ export default function MissionSection() {
         <div className="mb-12">
           <span className="text-xs font-mono tracking-[0.2em] text-eureka-blue font-semibold uppercase flex items-center gap-2">
             <span className="w-2 h-2 bg-eureka-blue rounded-full" />
-            04 // MISSION & PHILOSOPHY
+            {mission.sectionTag}
           </span>
         </div>
 
         {/* Large Narrative Headline */}
         <div className="max-w-5xl mb-16">
           <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-eureka-dark leading-[1.2]">
-            We believe good digital work should do more than look good.{" "}
-            <span className="text-eureka-slate font-medium">
-              It must build clarity, command authority, and move businesses forward.
-            </span>
+            {mission.headline}
           </h2>
         </div>
 
@@ -48,17 +30,14 @@ export default function MissionSection() {
           
           <div className="lg:col-span-5 text-editorial-sub text-eureka-slate leading-relaxed space-y-6">
             <p className="font-medium text-eureka-dark">
-              Ethio-Eureka exists to help businesses communicate better, look more credible, and compete in a digital-first world.
-            </p>
-            <p className="text-sm font-sans text-eureka-slate">
-              Operating out of Addis Ababa with a global aesthetic standard, we craft digital platforms that balance creative courage with technical precision.
+              {mission.description}
             </p>
           </div>
 
           <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-3 gap-8">
-            {principles.map((item, idx) => (
+            {mission.pillars.map((item, idx) => (
               <motion.div
-                key={item.num}
+                key={item.number}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
@@ -66,9 +45,9 @@ export default function MissionSection() {
                 className="bg-slate-50 p-6 rounded-2xl border border-eureka-border flex flex-col justify-between shadow-eureka-sm"
               >
                 <div>
-                  <span className="text-xs font-mono font-bold text-eureka-blue mb-3 block">{item.num}</span>
+                  <span className="text-xs font-mono font-bold text-eureka-blue mb-3 block">{item.number}</span>
                   <h3 className="text-lg font-bold text-eureka-dark mb-2">{item.title}</h3>
-                  <p className="text-xs text-eureka-slate leading-relaxed font-normal">{item.desc}</p>
+                  <p className="text-xs text-eureka-slate leading-relaxed font-normal">{item.description}</p>
                 </div>
               </motion.div>
             ))}

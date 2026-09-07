@@ -12,6 +12,7 @@ export default function Navbar() {
   const pathname = usePathname();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [companyName, setCompanyName] = useState("");
 
   useEffect(() => {
     const handleScroll = () => {
@@ -20,6 +21,17 @@ export default function Navbar() {
 
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  useEffect(() => {
+    fetch("/api/settings")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.settings?.company_name) {
+          setCompanyName(data.settings.company_name);
+        }
+      })
+      .catch(() => {});
   }, []);
 
   if (pathname?.startsWith("/admin")) {
@@ -74,7 +86,7 @@ export default function Navbar() {
 
             <div className="flex flex-col">
               <span className="font-sans font-extrabold tracking-tight text-base md:text-lg leading-none text-eureka-dark group-hover:text-eureka-blue transition-colors">
-                ETHIO-EUREKA
+                {companyName || "ETHIO-EUREKA"}
               </span>
               <span className="font-mono text-[10px] text-eureka-muted tracking-widest uppercase mt-0.5">
                 Digital Solution

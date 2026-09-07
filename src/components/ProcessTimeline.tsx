@@ -3,60 +3,13 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { CheckCircle2 } from "lucide-react";
+import { siteData } from "@/lib/data";
 
 export default function ProcessTimeline() {
   const [activeStage, setActiveStage] = useState(0);
+  const { process } = siteData;
 
-  const stages = [
-    {
-      num: "01",
-      name: "Discover",
-      title: "Discovery & Alignment",
-      desc: "Understand the business, audience, goals, competitive landscape, and key opportunities.",
-      deliverables: [
-        "Brand Audit & Discovery Workshop",
-        "Target Audience Persona",
-        "Competitive Landscape Analysis",
-        "Core Project Goals",
-      ],
-    },
-    {
-      num: "02",
-      name: "Define",
-      title: "Strategy & Architecture",
-      desc: "Build the strategy, visual direction, content structure, UX wireframes, and technical roadmap.",
-      deliverables: [
-        "Visual Moodboards & Art Direction",
-        "Information Architecture & Sitemap",
-        "UX Wireframes",
-        "Technical Stack Specification",
-      ],
-    },
-    {
-      num: "03",
-      name: "Create",
-      title: "Design & Development",
-      desc: "Design, develop, write, refine, and test the final digital experience with pixel perfection.",
-      deliverables: [
-        "High-Fidelity UI Design System",
-        "Responsive Code Execution",
-        "Micro-Animations & Interaction",
-        "CMS Integration & Optimization",
-      ],
-    },
-    {
-      num: "04",
-      name: "Launch & Grow",
-      title: "Deployment & Optimization",
-      desc: "Launch the project securely and continue improving and scaling your brand presence.",
-      deliverables: [
-        "Production Domain & SSL Setup",
-        "SEO Metadata & Performance Audit",
-        "Admin Training & Documentation",
-        "Ongoing Growth & Support",
-      ],
-    },
-  ];
+  const stages = process.stages;
 
   return (
     <section id="process" className="py-24 md:py-36 bg-white border-b border-eureka-border relative">
@@ -66,10 +19,10 @@ export default function ProcessTimeline() {
         <div className="mb-16">
           <span className="text-xs font-mono tracking-[0.2em] text-eureka-blue font-semibold uppercase flex items-center gap-2 mb-4">
             <span className="w-2 h-2 bg-eureka-blue rounded-full" />
-            06 // THE CREATIVE PROCESS
+            {process.sectionTag}
           </span>
           <h2 className="text-section-headline font-extrabold text-eureka-dark tracking-tight">
-            From idea to impact.
+            {process.headline}
           </h2>
         </div>
 
@@ -130,12 +83,12 @@ export default function ProcessTimeline() {
               </h3>
 
               <p className="text-base text-eureka-slate leading-relaxed mb-8 font-normal">
-                {stages[activeStage].desc}
+                {stages[activeStage].description}
               </p>
 
               <div className="border-t border-eureka-border pt-6">
                 <h4 className="font-mono text-xs text-eureka-dark font-extrabold uppercase tracking-wider mb-4">
-                  KEY DELIVERABLES & OUTCOMES
+                  {process.deliverablesLabel}
                 </h4>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   {stages[activeStage].deliverables.map((item, dIdx) => (
@@ -155,4 +108,3 @@ export default function ProcessTimeline() {
     </section>
   );
 }
-

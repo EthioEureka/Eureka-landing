@@ -4,6 +4,7 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import ProjectCard from "./ProjectCard";
 import { Project } from "@/lib/types";
+import { siteData } from "@/lib/data";
 
 interface ProjectGridProps {
   projects: Project[];
@@ -23,21 +24,21 @@ export default function ProjectGrid({ projects }: ProjectGridProps) {
           <div className="lg:col-span-8">
             <span className="text-xs font-mono tracking-[0.2em] text-eureka-blue font-semibold uppercase flex items-center gap-2 mb-4">
               <span className="w-2 h-2 bg-eureka-blue rounded-full" />
-              03 // SELECTED WORK
+              {siteData.projects.sectionTag}
             </span>
             <h2 className="text-section-headline font-extrabold text-eureka-dark tracking-tight">
-              Selected work.
+              {siteData.projects.headline}
             </h2>
           </div>
           <div className="lg:col-span-4 flex flex-col items-start lg:items-end justify-end">
             <p className="text-editorial-sub text-eureka-slate font-normal leading-relaxed mb-6">
-              A few things we&apos;ve built, shaped, and brought to life.
+              {siteData.projects.subtext}
             </p>
             <Link
               href="/work"
               className="inline-flex items-center gap-2 font-mono text-xs font-semibold uppercase tracking-wider text-eureka-blue hover:text-eureka-indigo transition-colors group"
             >
-              <span>Explore all projects</span>
+              <span>{siteData.projects.viewAllCta}</span>
               <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
             </Link>
           </div>
@@ -68,4 +69,3 @@ export default function ProjectGrid({ projects }: ProjectGridProps) {
     </section>
   );
 }
-

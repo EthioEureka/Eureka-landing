@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { fetchServices, createService, updateService, deleteService } from "@/lib/db";
+import { fetchAllServicesAdmin, createService, updateService, deleteService } from "@/lib/db";
 import { isAdminAuthenticated } from "@/lib/admin-auth";
 
 export async function GET() {
@@ -8,7 +8,7 @@ export async function GET() {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const services = await fetchServices();
+  const services = await fetchAllServicesAdmin();
   return NextResponse.json({ services });
 }
 

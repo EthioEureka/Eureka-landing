@@ -63,7 +63,7 @@ export default function NewProjectPage() {
       gallery: galleryArray,
       featured: formData.featured,
       published: formData.published,
-      sort_order: Date.now(),
+      sort_order: 1,
     };
 
     try {

@@ -4,9 +4,10 @@ import React, { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { motion, useMotionValue, useSpring } from "framer-motion";
-import { ArrowRight, ArrowDownRight, ExternalLink, Sparkles, PhoneCall, ChevronDown } from "lucide-react";
+import { ArrowRight, ArrowDownRight, ExternalLink, PhoneCall, ChevronDown } from "lucide-react";
 
 import { Project, SiteSettings } from "@/lib/types";
+import { siteData } from "@/lib/data";
 
 interface HeroProps {
   projects?: Project[];
@@ -77,13 +78,13 @@ function Logo3DCard() {
         {/* 3D Typography */}
         <div style={{ transform: "translateZ(25px)" }} className="space-y-2 font-sans">
           <span className="text-[11px] font-mono text-eureka-blue tracking-[0.2em] uppercase block font-semibold">
-            ETHIO-EUREKA // DIGITAL STUDIO
+            {siteData.hero.logo3DCard.studioLabel}
           </span>
           <h3 className="text-xl font-extrabold text-eureka-dark tracking-tight">
-            Creative Technology Partner
+            {siteData.hero.logo3DCard.title}
           </h3>
           <p className="text-xs text-eureka-slate max-w-xs leading-relaxed">
-            Crafting world-class visual identities, web products, and dynamic CMS engines for growing brands.
+            {siteData.hero.logo3DCard.description}
           </p>
         </div>
 
@@ -91,7 +92,7 @@ function Logo3DCard() {
         <div style={{ transform: "translateZ(15px)" }}>
           <span className="inline-flex items-center gap-2 bg-blue-50 text-eureka-blue border border-blue-200 px-4 py-1.5 rounded-full text-xs font-mono uppercase tracking-wider font-semibold">
             <span className="w-2 h-2 rounded-full bg-eureka-blue blue-dot-pulse" />
-            Taking New Projects
+            {siteData.hero.logo3DCard.statusBadge}
           </span>
         </div>
       </motion.div>
@@ -213,7 +214,7 @@ export default function Hero({ projects }: HeroProps) {
             </div>
             <span>{settings.company_name || "ETHIO-EUREKA"}</span>
             <span className="text-blue-300">•</span>
-            <span className="text-eureka-slate font-sans text-[11px] font-medium"> Digital CREATIVE AGENCY</span>
+            <span className="text-eureka-slate font-sans text-[11px] font-medium">{siteData.hero.badge.agencyLabel}</span>
           </motion.div>
 
           {/* Main Headline */}
@@ -223,14 +224,14 @@ export default function Hero({ projects }: HeroProps) {
             transition={{ duration: 0.7, delay: 0.2 }}
             className="text-hero-headline font-extrabold text-eureka-dark mb-6 sm:mb-8 tracking-tight max-w-[660px]"
           >
-            If your business moves{" "}
+            {siteData.hero.headline.line1}{" "}
             <span className="bg-gradient-to-r from-eureka-blue to-eureka-indigo bg-clip-text text-transparent italic font-serif">
-              fast
+              {siteData.hero.headline.highlightWord}
             </span>
             ,<br />
-            Your website <br />
+            {siteData.hero.headline.line2} <br />
             <span className="underline underline-offset-8 decoration-eureka-blue decoration-4 text-eureka-dark">
-              should lead.
+              {siteData.hero.headline.line3}
             </span>
           </motion.h1>
 
@@ -241,7 +242,7 @@ export default function Hero({ projects }: HeroProps) {
             transition={{ duration: 0.7, delay: 0.35 }}
             className="text-base sm:text-xl text-eureka-slate max-w-[540px] mb-8 sm:mb-10 leading-relaxed font-normal"
           >
-            Ethio-Eureka is an independent studio crafting bespoke brand identities, ultra-smooth web applications, and dynamic CMS engines.
+            {siteData.hero.subtext}
           </motion.p>
 
           {/* Action CTAs */}
@@ -255,7 +256,7 @@ export default function Hero({ projects }: HeroProps) {
               href="/contact"
               className="inline-flex items-center justify-center gap-3 bg-gradient-to-r from-eureka-blue to-eureka-indigo text-white font-semibold text-sm rounded-full px-8 py-4 hover:shadow-eureka-lg transition-all duration-300 group text-center"
             >
-              <span>Start a Project</span>
+              <span>{siteData.hero.cta.primary}</span>
               <ArrowRight size={17} className="group-hover:translate-x-1.5 transition-transform" />
             </Link>
 
@@ -263,7 +264,7 @@ export default function Hero({ projects }: HeroProps) {
               href="/#work"
               className="inline-flex items-center justify-center gap-3 bg-slate-50 border border-eureka-border text-eureka-dark font-semibold text-sm rounded-full px-8 py-4 hover:border-eureka-blue hover:text-eureka-blue hover:bg-white transition-all duration-300 group text-center shadow-sm"
             >
-              <span>Explore Portfolio</span>
+              <span>{siteData.hero.cta.secondary}</span>
               <ArrowDownRight size={17} className="group-hover:translate-x-0.5 group-hover:translate-y-0.5 transition-transform" />
             </Link>
           </motion.div>
@@ -340,7 +341,7 @@ export default function Hero({ projects }: HeroProps) {
       {/* Hero Bottom Bar */}
       <footer className="relative z-20 max-w-7xl mx-auto px-6 md:px-12 w-full pt-4 flex flex-row items-center justify-between text-xs font-mono text-eureka-slate border-t border-eureka-border gap-3">
         <div className="flex items-center gap-4">
-          <span className="hidden sm:inline font-semibold">Web-dev · Brand-creation · Engineering</span>
+          <span className="hidden sm:inline font-semibold">{siteData.hero.bottomBar.disciplines}</span>
           <span className="text-slate-300 hidden sm:inline">/</span>
           {settings.phone ? (
             <a
@@ -348,12 +349,12 @@ export default function Hero({ projects }: HeroProps) {
               className="text-eureka-blue flex items-center gap-2 text-xs font-semibold hover:underline group"
             >
               <PhoneCall className="w-3.5 h-3.5 animate-pulse text-eureka-blue" />
-              <span>Call Us Now: {settings.phone}</span>
+              <span>{siteData.hero.bottomBar.callPrefix} {settings.phone}</span>
             </a>
           ) : (
             <span className="text-eureka-blue flex items-center gap-2 text-xs font-semibold">
               <span className="w-2 h-2 bg-eureka-blue rounded-full blue-dot-pulse shrink-0" />
-              Taking New Clients
+              {siteData.hero.bottomBar.takingClients}
             </span>
           )}
         </div>
@@ -363,7 +364,7 @@ export default function Hero({ projects }: HeroProps) {
           className="flex items-center gap-2 text-xs uppercase tracking-widest text-eureka-slate font-semibold hover:text-eureka-blue transition-colors group cursor-pointer"
           title="Scroll to Services"
         >
-          <span>(SCROLL)</span>
+          <span>{siteData.hero.bottomBar.scrollLabel}</span>
           <ChevronDown size={14} className="group-hover:translate-y-1 transition-transform text-eureka-blue" />
           <div className="w-px h-6 bg-slate-300 relative overflow-hidden ml-1">
             <motion.div
@@ -375,11 +376,9 @@ export default function Hero({ projects }: HeroProps) {
         </button>
 
         <div className="hidden md:block">
-          <span>Available for global partnerships</span>
+          <span>{siteData.hero.bottomBar.availability}</span>
         </div>
       </footer>
     </section>
   );
 }
-
-

@@ -1,13 +1,14 @@
 import Link from "next/link";
 import ProjectCard from "@/components/ProjectCard";
 import { fetchProjects } from "@/lib/db";
+import { siteData } from "@/lib/data";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
 export const metadata = {
-  title: "Selected Work — Ethio-Eureka Digital Studio",
-  description: "Explore selected brand identities, web applications, design systems, and digital platforms built by Ethio-Eureka.",
+  title: siteData.workPage.metaTitle,
+  description: siteData.workPage.metaDescription,
 };
 
 export default async function WorkPage() {
@@ -18,13 +19,13 @@ export default async function WorkPage() {
       <div className="max-w-7xl mx-auto px-6 md:px-12 mb-16">
         <span className="text-xs font-mono tracking-[0.2em] text-eureka-green uppercase flex items-center gap-2 mb-4">
           <span className="w-1.5 h-1.5 bg-eureka-green rounded-full" />
-          WORK ARCHIVE // 2025–2026
+          {siteData.workPage.sectionTag}
         </span>
         <h1 className="text-section-headline font-semibold text-off-white mb-6">
-          Selected work.
+          {siteData.workPage.headline}
         </h1>
         <p className="text-editorial-sub text-soft-gray max-w-2xl font-light">
-          A showcase of digital identities, web applications, and editorial design platforms engineered for ambitious enterprises.
+          {siteData.workPage.subtext}
         </p>
       </div>
 
