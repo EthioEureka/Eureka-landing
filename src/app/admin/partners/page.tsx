@@ -3,7 +3,7 @@
 import { useEffect, useState, FormEvent } from "react";
 import Image from "next/image";
 import { Partner } from "@/lib/types";
-import { Plus, Edit2, Trash2, CheckCircle, Eye, EyeOff, Building2, Sparkles, RefreshCw } from "lucide-react";
+import { Plus, Edit2, Trash2, CheckCircle, Eye, EyeOff, Building2, RefreshCw, Search, SlidersHorizontal } from "lucide-react";
 
 export default function AdminPartnersPage() {
   const [partners, setPartners] = useState<Partner[]>([]);
@@ -18,6 +18,11 @@ export default function AdminPartnersPage() {
   const [sortOrder, setSortOrder] = useState(1);
   const [published, setPublished] = useState(true);
   const [statusMsg, setStatusMsg] = useState("");
+
+  // Toolbar state (prefixed to avoid collision with form "published" state)
+  const [search, setSearch] = useState("");
+  const [partnerFilter, setPartnerFilter] = useState("All");
+  const [partnerSort, setPartnerSort] = useState("Sort Order");
 
   const loadPartners = async () => {
     setLoading(true);
@@ -126,6 +131,18 @@ export default function AdminPartnersPage() {
       console.error("Delete partner error:", err);
     }
   };
+
+  // Computed filtered/sorted partners list
+  let displayedPartners = [...partners];
+  if (partnerFilter === "Visible") displayedPartners = displayedPartners.filter((p) => p.published !== false);
+  else if (partnerFilter === "Hidden") displayedPartners = displayedPartners.filter((p) => p.published === false);
+  if (search.trim()) {
+    const q = search.toLowerCase();
+    displayedPartners = displayedPartners.filter((p) => p.name.toLowerCase().includes(q));
+  }
+  if (partnerSort === "A–Z") displayedPartners.sort((a, b) => a.name.localeCompare(b.name));
+  else if (partnerSort === "Z–A") displayedPartners.sort((a, b) => b.name.localeCompare(a.name));
+  else displayedPartners.sort((a, b) => (a.sort_order || 0) - (b.sort_order || 0));
 
   return (
     <div className="space-y-8">
@@ -287,6 +304,47 @@ export default function AdminPartnersPage() {
             </span>
           </div>
 
+          {/* Search, Filter, Sort Toolbar */}
+          <div className="flex flex-col sm:flex-row gap-3 bg-white border border-eureka-border rounded-2xl p-4 shadow-eureka-sm">
+            {/* Search */}
+            <div className="relative flex-1">
+              <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-eureka-slate" />
+              <input
+                type="text"
+                placeholder="Search..."
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                className="w-full pl-9 pr-4 py-2.5 text-sm border border-eureka-border rounded-xl focus:border-eureka-blue focus:ring-1 focus:ring-eureka-blue/20 focus:outline-none font-sans text-eureka-dark bg-slate-50"
+              />
+            </div>
+            {/* Filter */}
+            <div className="relative">
+              <SlidersHorizontal size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-eureka-slate pointer-events-none" />
+              <select
+                value={partnerFilter}
+                onChange={(e) => setPartnerFilter(e.target.value)}
+                className="pl-9 pr-4 py-2.5 text-sm border border-eureka-border rounded-xl focus:border-eureka-blue focus:outline-none font-mono text-eureka-dark bg-slate-50 cursor-pointer"
+              >
+                <option value="All">All</option>
+                <option value="Visible">Visible</option>
+                <option value="Hidden">Hidden</option>
+              </select>
+            </div>
+            {/* Sort */}
+            <div className="relative">
+              <SlidersHorizontal size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-eureka-slate pointer-events-none" />
+              <select
+                value={partnerSort}
+                onChange={(e) => setPartnerSort(e.target.value)}
+                className="pl-9 pr-4 py-2.5 text-sm border border-eureka-border rounded-xl focus:border-eureka-blue focus:outline-none font-mono text-eureka-dark bg-slate-50 cursor-pointer"
+              >
+                <option value="Sort Order">Sort Order</option>
+                <option value="A–Z">A–Z</option>
+                <option value="Z–A">Z–A</option>
+              </select>
+            </div>
+          </div>
+
           {loading ? (
             <div className="py-12 text-center text-eureka-slate text-xs font-mono flex items-center justify-center gap-2">
               <RefreshCw size={16} className="animate-spin text-eureka-blue" />
@@ -298,7 +356,7 @@ export default function AdminPartnersPage() {
             </div>
           ) : (
             <div className="space-y-3">
-              {partners.map((partner) => (
+              {displayedPartners.map((partner) => (
                 <div
                   key={partner.id}
                   className="flex items-center justify-between p-4 rounded-2xl border border-eureka-border hover:border-eureka-blue/40 bg-slate-50/50 transition-all gap-4"
