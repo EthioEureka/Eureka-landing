@@ -156,6 +156,46 @@ export async function fetchServices(): Promise<Service[]> {
   }
 }
 
+export async function fetchAllServicesAdmin(): Promise<Service[]> {
+  if (!isSupabaseConfigured || !supabase) {
+    return memoryServices;
+  }
+  try {
+    const { data, error } = await supabase
+      .from("services")
+      .select("*")
+      .order("created_at", { ascending: false });
+
+    if (error) {
+      return memoryServices;
+    }
+    return (data || []) as Service[];
+  } catch {
+    return memoryServices;
+  }
+}
+
+export async function fetchServiceById(idOrSlug: string): Promise<Service | null> {
+  const foundInMemory = memoryServices.find((s) => s.id === idOrSlug || s.slug === idOrSlug);
+  if (!isSupabaseConfigured || !supabase) {
+    return foundInMemory || null;
+  }
+  try {
+    const { data, error } = await supabase
+      .from("services")
+      .select("*")
+      .or(`id.eq.${idOrSlug},slug.eq.${idOrSlug}`)
+      .maybeSingle();
+
+    if (error || !data) {
+      return foundInMemory || null;
+    }
+    return data as Service;
+  } catch {
+    return foundInMemory || null;
+  }
+}
+
 export async function fetchTestimonials(): Promise<Testimonial[]> {
   if (!isSupabaseConfigured || !supabase) {
     return memoryTestimonials.filter((t) => t.published !== false);
@@ -176,6 +216,47 @@ export async function fetchTestimonials(): Promise<Testimonial[]> {
     return memoryTestimonials.filter((t) => t.published !== false);
   }
 }
+
+export async function fetchAllTestimonialsAdmin(): Promise<Testimonial[]> {
+  if (!isSupabaseConfigured || !supabase) {
+    return memoryTestimonials;
+  }
+  try {
+    const { data, error } = await supabase
+      .from("testimonials")
+      .select("*")
+      .order("created_at", { ascending: false });
+
+    if (error) {
+      return memoryTestimonials;
+    }
+    return (data || []) as Testimonial[];
+  } catch {
+    return memoryTestimonials;
+  }
+}
+
+export async function fetchTestimonialById(id: string): Promise<Testimonial | null> {
+  const foundInMemory = memoryTestimonials.find((t) => t.id === id);
+  if (!isSupabaseConfigured || !supabase) {
+    return foundInMemory || null;
+  }
+  try {
+    const { data, error } = await supabase
+      .from("testimonials")
+      .select("*")
+      .eq("id", id)
+      .maybeSingle();
+
+    if (error || !data) {
+      return foundInMemory || null;
+    }
+    return data as Testimonial;
+  } catch {
+    return foundInMemory || null;
+  }
+}
+
 
 export async function fetchSiteSettings(): Promise<SiteSettings> {
   const currentMemory = globalStore.__memorySettings || memorySettings || defaultSiteSettings;

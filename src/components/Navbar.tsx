@@ -56,8 +56,8 @@ export default function Navbar() {
               <span className="font-sans font-extrabold tracking-tight text-base md:text-lg leading-none text-eureka-dark group-hover:text-eureka-blue transition-colors">
                 ETHIO-EUREKA
               </span>
-              <span className="font-mono text-[10px] text-eureka-muted tracking-widest uppercase mt-0.5">
-                Digital Studio
+              <span className="font-mono text-[10px] text-eureka-muted tracking-widest uppercase ">
+                Digital Solution
               </span>
             </div>
           </Link>

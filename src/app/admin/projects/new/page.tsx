@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft, Save, Loader2, Sparkles } from "lucide-react";
+import { ArrowLeft, Save, Loader2, Sparkles, FolderPlus } from "lucide-react";
 
 export default function NewProjectPage() {
   const router = useRouter();
@@ -43,7 +43,6 @@ export default function NewProjectPage() {
     setLoading(true);
     setError("");
 
-    // Process gallery comma-separated URLs into array
     const galleryArray = formData.gallery_raw
       ? formData.gallery_raw.split(",").map((s) => s.trim()).filter(Boolean)
       : [];
@@ -94,17 +93,17 @@ export default function NewProjectPage() {
   return (
     <div className="space-y-8 max-w-4xl">
       {/* Header */}
-      <div className="flex items-center justify-between border-b border-border-gray pb-6">
+      <div className="flex items-center justify-between border-b border-eureka-border pb-6">
         <div className="flex items-center gap-4">
           <Link
             href="/admin/projects"
-            className="p-2 border border-border-gray text-soft-gray hover:text-eureka-green transition-colors"
+            className="p-2.5 border border-eureka-border bg-white text-eureka-slate hover:text-eureka-dark hover:bg-slate-100 rounded-xl transition-all shadow-eureka-sm"
           >
-            <ArrowLeft size={16} />
+            <ArrowLeft size={18} />
           </Link>
           <div>
-            <h1 className="text-2xl font-light text-off-white">Create New Project</h1>
-            <p className="text-xs font-mono text-soft-gray mt-1">
+            <h1 className="text-2xl md:text-3xl font-extrabold text-eureka-dark tracking-tight">Create New Project</h1>
+            <p className="text-xs font-mono text-eureka-slate mt-1 font-semibold">
               Add a new portfolio case study to Ethio-Eureka database & landing page
             </p>
           </div>
@@ -112,23 +111,23 @@ export default function NewProjectPage() {
       </div>
 
       {error && (
-        <div className="p-4 bg-red-950/60 border border-red-800 text-red-400 font-mono text-xs">
+        <div className="p-4 bg-red-50 border border-red-200 text-red-700 font-mono text-xs rounded-xl font-bold">
           {error}
         </div>
       )}
 
       {success && (
-        <div className="p-4 bg-emerald-950/60 border border-emerald-800 text-emerald-300 font-mono text-xs flex items-center gap-2">
-          <Sparkles size={16} /> Project saved successfully. Redirecting to projects list...
+        <div className="p-4 bg-emerald-50 border border-emerald-200 text-emerald-800 font-mono text-xs flex items-center gap-2 rounded-xl font-bold">
+          <Sparkles size={16} className="text-emerald-600" /> Project saved successfully. Redirecting to projects list...
         </div>
       )}
 
-      <form onSubmit={handleSubmit} className="space-y-6 bg-dark-gray border border-border-gray p-8">
+      <form onSubmit={handleSubmit} className="space-y-6 bg-white border border-eureka-border rounded-3xl p-6 md:p-8 shadow-eureka-lg font-sans text-xs">
         
         {/* Title & Slug */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
           <div>
-            <label className="block text-xs font-mono text-soft-gray uppercase mb-2">
+            <label className="block text-xs font-mono text-eureka-slate uppercase font-bold mb-2 tracking-wider">
               Project Title *
             </label>
             <input
@@ -137,13 +136,13 @@ export default function NewProjectPage() {
               placeholder="e.g. Abyssinia Craft"
               value={formData.title}
               onChange={(e) => handleTitleChange(e.target.value)}
-              className="w-full bg-deep-black border border-border-gray text-off-white px-4 py-3 text-sm focus:border-eureka-green focus:outline-none"
+              className="w-full bg-slate-50 border border-eureka-border text-eureka-dark px-4 py-3 text-sm focus:border-eureka-blue focus:ring-2 focus:ring-eureka-blue/20 focus:outline-none rounded-xl font-sans transition-all"
             />
           </div>
 
           <div>
             <div className="flex items-center justify-between mb-2">
-              <label className="block text-xs font-mono text-soft-gray uppercase">
+              <label className="block text-xs font-mono text-eureka-slate uppercase font-bold tracking-wider">
                 URL Slug *
               </label>
               <button
@@ -156,9 +155,9 @@ export default function NewProjectPage() {
                     .replace(/(^-|-$)+/g, "");
                   setFormData({ ...formData, slug: autoSlug });
                 }}
-                className="text-[10px] font-mono text-eureka-green hover:underline flex items-center gap-1"
+                className="text-xs font-mono text-eureka-blue font-bold hover:underline flex items-center gap-1.5 bg-blue-50 px-2.5 py-1 rounded-lg border border-blue-100"
               >
-                <Sparkles size={10} /> Auto-Generate
+                <Sparkles size={11} /> Auto-Generate
               </button>
             </div>
             <input
@@ -167,7 +166,7 @@ export default function NewProjectPage() {
               placeholder="e.g. abyssinia-craft"
               value={formData.slug}
               onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
-              className="w-full bg-deep-black border border-border-gray text-soft-gray px-4 py-3 text-sm font-mono focus:border-eureka-green focus:outline-none"
+              className="w-full bg-slate-50 border border-eureka-border text-eureka-dark px-4 py-3 text-sm font-mono focus:border-eureka-blue focus:ring-2 focus:ring-eureka-blue/20 focus:outline-none rounded-xl transition-all"
             />
           </div>
         </div>
@@ -175,13 +174,13 @@ export default function NewProjectPage() {
         {/* Category, Client, Year */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
           <div>
-            <label className="block text-xs font-mono text-soft-gray uppercase mb-2">
+            <label className="block text-xs font-mono text-eureka-slate uppercase font-bold mb-2 tracking-wider">
               Category *
             </label>
             <select
               value={formData.category}
               onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-              className="w-full bg-deep-black border border-border-gray text-off-white px-4 py-3 text-sm focus:border-eureka-green focus:outline-none"
+              className="w-full bg-slate-50 border border-eureka-border text-eureka-dark px-4 py-3 text-sm focus:border-eureka-blue focus:ring-2 focus:ring-eureka-blue/20 focus:outline-none rounded-xl font-sans transition-all"
             >
               <option value="Website Design & Development">Website Design & Development</option>
               <option value="Branding & Identity">Branding & Identity</option>
@@ -192,7 +191,7 @@ export default function NewProjectPage() {
           </div>
 
           <div>
-            <label className="block text-xs font-mono text-soft-gray uppercase mb-2">
+            <label className="block text-xs font-mono text-eureka-slate uppercase font-bold mb-2 tracking-wider">
               Client Name
             </label>
             <input
@@ -200,12 +199,12 @@ export default function NewProjectPage() {
               placeholder="e.g. Abyssinia Artisan Group"
               value={formData.client}
               onChange={(e) => setFormData({ ...formData, client: e.target.value })}
-              className="w-full bg-deep-black border border-border-gray text-off-white px-4 py-3 text-sm focus:border-eureka-green focus:outline-none"
+              className="w-full bg-slate-50 border border-eureka-border text-eureka-dark px-4 py-3 text-sm focus:border-eureka-blue focus:ring-2 focus:ring-eureka-blue/20 focus:outline-none rounded-xl font-sans transition-all"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-mono text-soft-gray uppercase mb-2">
+            <label className="block text-xs font-mono text-eureka-slate uppercase font-bold mb-2 tracking-wider">
               Year *
             </label>
             <input
@@ -213,7 +212,7 @@ export default function NewProjectPage() {
               required
               value={formData.year}
               onChange={(e) => setFormData({ ...formData, year: Number(e.target.value) })}
-              className="w-full bg-deep-black border border-border-gray text-off-white px-4 py-3 text-sm font-mono focus:border-eureka-green focus:outline-none"
+              className="w-full bg-slate-50 border border-eureka-border text-eureka-dark px-4 py-3 text-sm font-mono focus:border-eureka-blue focus:ring-2 focus:ring-eureka-blue/20 focus:outline-none rounded-xl transition-all"
             />
           </div>
         </div>
@@ -221,7 +220,7 @@ export default function NewProjectPage() {
         {/* Cover Image & Website Link */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
           <div>
-            <label className="block text-xs font-mono text-soft-gray uppercase mb-2">
+            <label className="block text-xs font-mono text-eureka-slate uppercase font-bold mb-2 tracking-wider">
               Cover Image URL *
             </label>
             <input
@@ -230,12 +229,12 @@ export default function NewProjectPage() {
               placeholder="https://images.unsplash.com/photo-..."
               value={formData.cover_image}
               onChange={(e) => setFormData({ ...formData, cover_image: e.target.value })}
-              className="w-full bg-deep-black border border-border-gray text-off-white px-4 py-3 text-sm font-mono focus:border-eureka-green focus:outline-none"
+              className="w-full bg-slate-50 border border-eureka-border text-eureka-dark px-4 py-3 text-sm font-mono focus:border-eureka-blue focus:ring-2 focus:ring-eureka-blue/20 focus:outline-none rounded-xl transition-all"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-mono text-soft-gray uppercase mb-2">
+            <label className="block text-xs font-mono text-eureka-slate uppercase font-bold mb-2 tracking-wider">
               Live Website URL (Optional)
             </label>
             <input
@@ -243,14 +242,14 @@ export default function NewProjectPage() {
               placeholder="https://example.com"
               value={formData.website_url}
               onChange={(e) => setFormData({ ...formData, website_url: e.target.value })}
-              className="w-full bg-deep-black border border-border-gray text-off-white px-4 py-3 text-sm font-mono focus:border-eureka-green focus:outline-none"
+              className="w-full bg-slate-50 border border-eureka-border text-eureka-dark px-4 py-3 text-sm font-mono focus:border-eureka-blue focus:ring-2 focus:ring-eureka-blue/20 focus:outline-none rounded-xl transition-all"
             />
           </div>
         </div>
 
         {/* Short Description */}
         <div>
-          <label className="block text-xs font-mono text-soft-gray uppercase mb-2">
+          <label className="block text-xs font-mono text-eureka-slate uppercase font-bold mb-2 tracking-wider">
             Short Summary (Card Preview) *
           </label>
           <input
@@ -259,13 +258,13 @@ export default function NewProjectPage() {
             placeholder="Brief 1-2 sentence overview shown on project cards..."
             value={formData.short_description}
             onChange={(e) => setFormData({ ...formData, short_description: e.target.value })}
-            className="w-full bg-deep-black border border-border-gray text-off-white px-4 py-3 text-sm focus:border-eureka-green focus:outline-none"
+            className="w-full bg-slate-50 border border-eureka-border text-eureka-dark px-4 py-3 text-sm focus:border-eureka-blue focus:ring-2 focus:ring-eureka-blue/20 focus:outline-none rounded-xl font-sans transition-all"
           />
         </div>
 
         {/* Full Overview */}
         <div>
-          <label className="block text-xs font-mono text-soft-gray uppercase mb-2">
+          <label className="block text-xs font-mono text-eureka-slate uppercase font-bold mb-2 tracking-wider">
             Full Description (Overview & The Vision) *
           </label>
           <textarea
@@ -274,14 +273,14 @@ export default function NewProjectPage() {
             placeholder="Detailed project summary explaining the project concept and scope..."
             value={formData.description}
             onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-            className="w-full bg-deep-black border border-border-gray text-off-white px-4 py-3 text-sm focus:border-eureka-green focus:outline-none"
+            className="w-full bg-slate-50 border border-eureka-border text-eureka-dark px-4 py-3 text-sm focus:border-eureka-blue focus:ring-2 focus:ring-eureka-blue/20 focus:outline-none rounded-xl font-sans transition-all"
           />
         </div>
 
         {/* Challenge & Approach */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
           <div>
-            <label className="block text-xs font-mono text-soft-gray uppercase mb-2">
+            <label className="block text-xs font-mono text-eureka-slate uppercase font-bold mb-2 tracking-wider">
               The Challenge (Problem Statement)
             </label>
             <textarea
@@ -289,12 +288,12 @@ export default function NewProjectPage() {
               placeholder="What obstacle or market gap did the client face..."
               value={formData.challenge}
               onChange={(e) => setFormData({ ...formData, challenge: e.target.value })}
-              className="w-full bg-deep-black border border-border-gray text-off-white px-4 py-3 text-sm focus:border-eureka-green focus:outline-none"
+              className="w-full bg-slate-50 border border-eureka-border text-eureka-dark px-4 py-3 text-sm focus:border-eureka-blue focus:ring-2 focus:ring-eureka-blue/20 focus:outline-none rounded-xl font-sans transition-all"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-mono text-soft-gray uppercase mb-2">
+            <label className="block text-xs font-mono text-eureka-slate uppercase font-bold mb-2 tracking-wider">
               Our Approach (Strategy & Execution)
             </label>
             <textarea
@@ -302,14 +301,14 @@ export default function NewProjectPage() {
               placeholder="How Ethio-Eureka designed and engineered the solution..."
               value={formData.approach}
               onChange={(e) => setFormData({ ...formData, approach: e.target.value })}
-              className="w-full bg-deep-black border border-border-gray text-off-white px-4 py-3 text-sm focus:border-eureka-green focus:outline-none"
+              className="w-full bg-slate-50 border border-eureka-border text-eureka-dark px-4 py-3 text-sm focus:border-eureka-blue focus:ring-2 focus:ring-eureka-blue/20 focus:outline-none rounded-xl font-sans transition-all"
             />
           </div>
         </div>
 
         {/* Business Outcome / Result */}
         <div>
-          <label className="block text-xs font-mono text-soft-gray uppercase mb-2">
+          <label className="block text-xs font-mono text-eureka-slate uppercase font-bold mb-2 tracking-wider">
             Result & Outcome (Business Impact)
           </label>
           <textarea
@@ -317,13 +316,13 @@ export default function NewProjectPage() {
             placeholder="Key results, metrics, or client impact achieved..."
             value={formData.result}
             onChange={(e) => setFormData({ ...formData, result: e.target.value })}
-            className="w-full bg-deep-black border border-border-gray text-off-white px-4 py-3 text-sm focus:border-eureka-green focus:outline-none"
+            className="w-full bg-slate-50 border border-eureka-border text-eureka-dark px-4 py-3 text-sm focus:border-eureka-blue focus:ring-2 focus:ring-eureka-blue/20 focus:outline-none rounded-xl font-sans transition-all"
           />
         </div>
 
         {/* Visual Gallery Image URLs */}
         <div>
-          <label className="block text-xs font-mono text-soft-gray uppercase mb-2">
+          <label className="block text-xs font-mono text-eureka-slate uppercase font-bold mb-2 tracking-wider">
             Visual Gallery Image URLs (Comma-separated)
           </label>
           <textarea
@@ -331,41 +330,41 @@ export default function NewProjectPage() {
             placeholder="https://images.unsplash.com/photo-1..., https://images.unsplash.com/photo-2..."
             value={formData.gallery_raw}
             onChange={(e) => setFormData({ ...formData, gallery_raw: e.target.value })}
-            className="w-full bg-deep-black border border-border-gray text-off-white px-4 py-3 text-sm font-mono focus:border-eureka-green focus:outline-none"
+            className="w-full bg-slate-50 border border-eureka-border text-eureka-dark px-4 py-3 text-sm font-mono focus:border-eureka-blue focus:ring-2 focus:ring-eureka-blue/20 focus:outline-none rounded-xl transition-all"
           />
-          <p className="text-[11px] font-mono text-soft-gray/70 mt-1">
+          <p className="text-[11px] font-mono text-eureka-slate/80 mt-1">
             Separate multiple image URLs with commas to display a gallery on the project case study page.
           </p>
         </div>
 
         {/* Feature Checkboxes */}
-        <div className="flex items-center gap-8 pt-4 border-t border-border-gray/40">
-          <label className="flex items-center gap-3 cursor-pointer text-xs font-mono text-soft-gray">
+        <div className="flex items-center gap-8 pt-4 border-t border-eureka-border">
+          <label className="flex items-center gap-3 cursor-pointer text-xs font-sans text-eureka-dark font-bold">
             <input
               type="checkbox"
               checked={formData.featured}
               onChange={(e) => setFormData({ ...formData, featured: e.target.checked })}
-              className="w-4 h-4 accent-eureka-green"
+              className="w-4 h-4 rounded text-eureka-blue focus:ring-eureka-blue accent-eureka-blue"
             />
-            <span className="text-off-white">Feature on Homepage</span>
+            <span>Feature on Homepage</span>
           </label>
 
-          <label className="flex items-center gap-3 cursor-pointer text-xs font-mono text-soft-gray">
+          <label className="flex items-center gap-3 cursor-pointer text-xs font-sans text-eureka-dark font-bold">
             <input
               type="checkbox"
               checked={formData.published}
               onChange={(e) => setFormData({ ...formData, published: e.target.checked })}
-              className="w-4 h-4 accent-eureka-green"
+              className="w-4 h-4 rounded text-eureka-blue focus:ring-eureka-blue accent-eureka-blue"
             />
-            <span className="text-off-white">Publish Immediately</span>
+            <span>Publish Immediately</span>
           </label>
         </div>
 
         {/* Submit Bar */}
-        <div className="pt-6 border-t border-border-gray/50 flex justify-end gap-4">
+        <div className="pt-6 border-t border-eureka-border flex justify-end gap-4">
           <Link
             href="/admin/projects"
-            className="px-6 py-3 border border-border-gray text-soft-gray hover:text-off-white font-mono text-xs uppercase"
+            className="px-6 py-3 border border-eureka-border text-eureka-slate hover:text-eureka-dark hover:bg-slate-100 rounded-xl transition-all font-mono text-xs uppercase font-bold"
           >
             Cancel
           </Link>
@@ -373,7 +372,7 @@ export default function NewProjectPage() {
           <button
             type="submit"
             disabled={loading}
-            className="px-8 py-3 bg-eureka-green text-deep-black font-semibold font-mono text-xs uppercase tracking-widest hover:bg-white transition-colors flex items-center gap-2"
+            className="px-8 py-3 bg-eureka-blue text-white font-bold font-mono text-xs uppercase tracking-wider rounded-xl hover:bg-eureka-indigo transition-all flex items-center gap-2 shadow-eureka-sm disabled:opacity-50"
           >
             {loading ? <Loader2 size={16} className="animate-spin" /> : <Save size={16} />}
             <span>{loading ? "Saving..." : "Save Project"}</span>
@@ -384,3 +383,4 @@ export default function NewProjectPage() {
     </div>
   );
 }
+
