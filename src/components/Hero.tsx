@@ -67,7 +67,7 @@ function Logo3DCard() {
         {/* Floating Logo Badge */}
         <div
           style={{ transform: "translateZ(40px)" }}
-          className="relative w-36 h-36 flex items-center justify-center rounded-2xl bg-slate-50 border border-eureka-border shadow-eureka-md group-hover:shadow-eureka-glow transition-shadow duration-500 overflow-hidden"
+          className="relative w-36 h-36 flex items-center justify-center rounded-2xl bg-slate-50 border border-eureka-border shadow-eureka-md group-hover:shadow-eureka-glow transition-all duration-500 overflow-hidden"
         >
           <div className="relative w-28 h-28 filter drop-shadow-[0_10px_20px_rgba(37,99,235,0.25)]">
             <Image src="/Eureka-logo.png" alt="Ethio-Eureka Logo Badge" fill className="object-contain" />

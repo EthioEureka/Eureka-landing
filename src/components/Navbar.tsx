@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { ArrowUpRight, Menu } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 import MobileMenu from "./MobileMenu";
 
 export default function Navbar() {
@@ -14,7 +15,7 @@ export default function Navbar() {
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 15);
+      setIsScrolled(window.scrollY > 20);
     };
 
     window.addEventListener("scroll", handleScroll);
@@ -37,26 +38,45 @@ export default function Navbar() {
   return (
     <>
       <header
-        className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${
+        className={`fixed top-0 left-0 right-0 z-40 transition-all duration-500 ${
           isScrolled
             ? "bg-white/90 backdrop-blur-md py-3.5 border-b border-eureka-border shadow-eureka-md"
             : "bg-transparent py-5 md:py-6"
         }`}
       >
         <div className="max-w-7xl mx-auto px-6 md:px-12 flex items-center justify-between">
-          {/* Brand Logo & Title */}
+          {/* Brand Logo & Title with Flying Logo Animation */}
           <Link
             href="/"
-            className="group flex items-center gap-3 text-lg md:text-xl font-bold tracking-tight text-eureka-dark hover:text-eureka-blue transition-colors"
+            className="group flex items-center text-lg md:text-xl font-bold tracking-tight text-eureka-dark hover:text-eureka-blue transition-colors"
           >
-            <div className="relative w-9 h-9 shrink-0 transition-transform group-hover:scale-105 rounded-xl overflow-hidden shadow-sm border border-slate-200">
-              <Image src="/Eureka-logo.png" alt="Ethio-Eureka Logo" fill className="object-cover" priority />
-            </div>
+            {/* Flying Logo Badge - Animates in smoothly on scroll */}
+            <AnimatePresence>
+              {isScrolled && (
+                <motion.div
+                  initial={{ width: 0, opacity: 0, scale: 0.4, x: -25, rotate: -15 }}
+                  animate={{ width: "auto", opacity: 1, scale: 1, x: 0, rotate: 0 }}
+                  exit={{ width: 0, opacity: 0, scale: 0.4, x: -25, rotate: -15 }}
+                  transition={{
+                    type: "spring",
+                    stiffness: 400,
+                    damping: 28,
+                    mass: 0.8,
+                  }}
+                  className="overflow-hidden shrink-0 mr-3"
+                >
+                  <div className="relative w-9 h-9 shrink-0 transition-transform group-hover:scale-105 rounded-xl overflow-hidden shadow-eureka-glow border border-eureka-blue/30 bg-white">
+                    <Image src="/Eureka-logo.png" alt="Ethio-Eureka Logo" fill className="object-cover" priority />
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+
             <div className="flex flex-col">
               <span className="font-sans font-extrabold tracking-tight text-base md:text-lg leading-none text-eureka-dark group-hover:text-eureka-blue transition-colors">
                 ETHIO-EUREKA
               </span>
-              <span className="font-mono text-[10px] text-eureka-muted tracking-widest uppercase ">
+              <span className="font-mono text-[10px] text-eureka-muted tracking-widest uppercase mt-0.5">
                 Digital Solution
               </span>
             </div>
