@@ -400,8 +400,7 @@ export async function createPartner(partner: Omit<Partner, "id">): Promise<{ suc
     const insertPayload = {
       id: newPartner.id,
       name: newPartner.name,
-      logo: logoValue,
-      logo_url: logoValue,
+      logo: logoValue,              // DB column is "logo", not "logo_url"
       website_url: newPartner.website_url || "",
       sort_order: Number(newPartner.sort_order) || 1,
       published: newPartner.published !== false,
@@ -409,9 +408,6 @@ export async function createPartner(partner: Omit<Partner, "id">): Promise<{ suc
     const { data, error } = await db.from("partners").insert([insertPayload]).select().maybeSingle();
     if (error) {
       console.error("Supabase createPartner error:", error.message);
-      if (error.message?.includes("table") || error.code === "PGRST204") {
-        return { success: true, data: newPartner };
-      }
       return { success: false, error: error.message };
     }
     if (data) {
@@ -440,17 +436,18 @@ export async function updatePartner(id: string, updates: Partial<Partner>): Prom
   try {
     const db = getDb();
     if (!db) return { success: false, error: "Database client unavailable" };
-    const updatePayload: any = { ...updates };
-    if (updates.logo_url !== undefined) {
-      updatePayload.logo = updates.logo_url;
-      updatePayload.logo_url = updates.logo_url;
-    }
+    // Build DB payload mapping app field names to actual DB column names
+    const updatePayload: Record<string, unknown> = {};
+    if (updates.name !== undefined) updatePayload.name = updates.name;
+    if (updates.logo_url !== undefined) updatePayload.logo = updates.logo_url; // DB column is "logo"
+    if (updates.website_url !== undefined) updatePayload.website_url = updates.website_url;
+    if (updates.sort_order !== undefined) updatePayload.sort_order = updates.sort_order;
+    if (updates.published !== undefined) updatePayload.published = updates.published;
+    // Do NOT include logo_url in updatePayload — that column doesn't exist in DB
+
     const { data, error } = await db.from("partners").update(updatePayload).eq("id", id).select().maybeSingle();
     if (error) {
       console.error("Supabase updatePartner error:", error.message);
-      if (error.message?.includes("table") || error.code === "PGRST204") {
-        return { success: true, data: memoryPartners[idx] };
-      }
       return { success: false, error: error.message };
     }
     if (data) {
@@ -480,9 +477,6 @@ export async function deletePartner(id: string): Promise<{ success: boolean; err
     const { error } = await db.from("partners").delete().eq("id", id);
     if (error) {
       console.error("Supabase deletePartner error:", error.message);
-      if (error.message?.includes("table") || error.code === "PGRST204") {
-        return { success: true };
-      }
       return { success: false, error: error.message };
     }
     return { success: true };

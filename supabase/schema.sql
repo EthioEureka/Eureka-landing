@@ -108,6 +108,8 @@ CREATE TABLE IF NOT EXISTS public.site_settings (
 );
 
 -- 6. PARTNERS TABLE
+-- NOTE: The logo column is named "logo" (not "logo_url"). The application maps
+-- between the Partner type's logo_url field and this DB column internally.
 CREATE TABLE IF NOT EXISTS public.partners (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   created_at TIMESTAMPTZ DEFAULT now(),
@@ -118,6 +120,10 @@ CREATE TABLE IF NOT EXISTS public.partners (
   sort_order INTEGER DEFAULT 0,
   published BOOLEAN DEFAULT true
 );
+
+-- MIGRATION: If you want logo_url as an alias column (optional):
+-- ALTER TABLE public.partners ADD COLUMN IF NOT EXISTS logo_url TEXT;
+-- UPDATE public.partners SET logo_url = logo WHERE logo_url IS NULL;
 
 -- ROW LEVEL SECURITY (RLS)
 ALTER TABLE public.projects ENABLE ROW LEVEL SECURITY;
