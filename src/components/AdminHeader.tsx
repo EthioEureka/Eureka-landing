@@ -20,11 +20,7 @@ export default function AdminHeader() {
           <span>View Live Site</span>
           <ExternalLink size={12} />
         </Link>
-
-        <div className="flex items-center gap-2 border-l border-eureka-border pl-6 text-eureka-dark font-semibold">
-          <User size={14} className="text-eureka-blue" />
-          <span>admin@ethio-eureka.com</span>
-        </div>
+        
       </div>
     </header>
   );
