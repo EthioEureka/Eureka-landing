@@ -11,8 +11,12 @@ interface ProjectGridProps {
 }
 
 export default function ProjectGrid({ projects }: ProjectGridProps) {
-  const featured = projects.filter((p) => p.featured);
-  const displayProjects = featured.length > 0 ? featured : projects;
+  // Only display projects marked as "featured on homepage" in the landing page Selected Work section
+  const displayProjects = projects.filter((p) => p.featured === true);
+
+  if (displayProjects.length === 0) {
+    return null; // Don't render the section if no projects are featured
+  }
 
   const firstProject = displayProjects[0];
   const remainingProjects = displayProjects.slice(1);
