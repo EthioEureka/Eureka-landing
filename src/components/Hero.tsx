@@ -1,12 +1,12 @@
 "use client";
 
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { motion, useMotionValue, useSpring } from "framer-motion";
-import { ArrowRight, ArrowDownRight, ExternalLink, Sparkles } from "lucide-react";
+import { ArrowRight, ArrowDownRight, ExternalLink, Sparkles, PhoneCall, ChevronDown } from "lucide-react";
 
-import { Project } from "@/lib/types";
+import { Project, SiteSettings } from "@/lib/types";
 
 interface HeroProps {
   projects?: Project[];
@@ -132,6 +132,37 @@ export default function Hero({ projects }: HeroProps) {
     mouseY.set(y);
   };
 
+  const [settings, setSettings] = useState<Partial<SiteSettings>>({
+    company_name: "Ethio-Eureka",
+    phone: "+251 911 234 567",
+  });
+
+  useEffect(() => {
+    async function loadSettings() {
+      try {
+        const res = await fetch("/api/settings");
+        if (res.ok) {
+          const data = await res.json();
+          if (data.settings) {
+            setSettings(data.settings);
+          }
+        }
+      } catch (err: unknown) {
+        console.error("Failed to load settings in HeroSection", err);
+      }
+    }
+    loadSettings();
+  }, []);
+
+  const scrollToNextSection = () => {
+    const servicesElement = document.getElementById("services");
+    if (servicesElement) {
+      servicesElement.scrollIntoView({ behavior: "smooth" });
+    } else {
+      window.scrollTo({ top: window.innerHeight, behavior: "smooth" });
+    }
+  };
+
   return (
     <section
       ref={heroRef}
@@ -180,9 +211,9 @@ export default function Hero({ projects }: HeroProps) {
             <div className="relative w-4 h-4 rounded-full overflow-hidden border border-blue-300">
               <Image src="/Eureka-logo.png" alt="Ethio-Eureka Icon" fill className="object-cover" />
             </div>
-            <span>EUREKA DIGITAL STUDIO</span>
+            <span>{settings.company_name || "ETHIO-EUREKA"}</span>
             <span className="text-blue-300">•</span>
-            <span className="text-eureka-slate font-sans text-[11px]">GLOBAL CREATIVE AGENCY</span>
+            <span className="text-eureka-slate font-sans text-[11px] font-medium"> Digital CREATIVE AGENCY</span>
           </motion.div>
 
           {/* Main Headline */}
@@ -235,34 +266,6 @@ export default function Hero({ projects }: HeroProps) {
               <span>Explore Portfolio</span>
               <ArrowDownRight size={17} className="group-hover:translate-x-0.5 group-hover:translate-y-0.5 transition-transform" />
             </Link>
-          </motion.div>
-
-          {/* Feature Highlights Grid */}
-          <motion.div
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.65 }}
-            className="grid grid-cols-2 gap-3 pt-6 border-t border-eureka-border max-w-[540px] w-full"
-          >
-            <div className="flex items-center gap-2 bg-slate-50 border border-eureka-border px-3.5 py-2.5 rounded-xl text-xs text-eureka-slate font-medium shadow-sm">
-              <Sparkles size={14} className="text-eureka-blue shrink-0" />
-              <span className="truncate">Rapid 4-Week Delivery</span>
-            </div>
-
-            <div className="flex items-center gap-2 bg-slate-50 border border-eureka-border px-3.5 py-2.5 rounded-xl text-xs text-eureka-slate font-medium shadow-sm">
-              <Sparkles size={14} className="text-eureka-indigo shrink-0" />
-              <span className="truncate">Full Supabase CMS Engine</span>
-            </div>
-
-            <div className="flex items-center gap-2 bg-slate-50 border border-eureka-border px-3.5 py-2.5 rounded-xl text-xs text-eureka-slate font-medium shadow-sm">
-              <Sparkles size={14} className="text-eureka-blue shrink-0" />
-              <span className="truncate">Brand Strategy & Design</span>
-            </div>
-
-            <div className="flex items-center gap-2 bg-slate-50 border border-eureka-border px-3.5 py-2.5 rounded-xl text-xs text-eureka-slate font-medium shadow-sm">
-              <Sparkles size={14} className="text-eureka-indigo shrink-0" />
-              <span className="truncate">Global Performance SEO</span>
-            </div>
           </motion.div>
 
         </div>
@@ -337,24 +340,39 @@ export default function Hero({ projects }: HeroProps) {
       {/* Hero Bottom Bar */}
       <footer className="relative z-20 max-w-7xl mx-auto px-6 md:px-12 w-full pt-4 flex flex-row items-center justify-between text-xs font-mono text-eureka-slate border-t border-eureka-border gap-3">
         <div className="flex items-center gap-4">
-          <span className="hidden sm:inline font-semibold">Web · Brand · CMS · Engineering</span>
+          <span className="hidden sm:inline font-semibold">Web-dev · Brand-creation · Engineering</span>
           <span className="text-slate-300 hidden sm:inline">/</span>
-          <span className="text-eureka-blue flex items-center gap-2 text-xs font-semibold">
-            <span className="w-2 h-2 bg-eureka-blue rounded-full blue-dot-pulse shrink-0" />
-            Taking New Clients
-          </span>
+          {settings.phone ? (
+            <a
+              href={`tel:${settings.phone.replace(/\s+/g, "")}`}
+              className="text-eureka-blue flex items-center gap-2 text-xs font-semibold hover:underline group"
+            >
+              <PhoneCall className="w-3.5 h-3.5 animate-pulse text-eureka-blue" />
+              <span>Call Us Now: {settings.phone}</span>
+            </a>
+          ) : (
+            <span className="text-eureka-blue flex items-center gap-2 text-xs font-semibold">
+              <span className="w-2 h-2 bg-eureka-blue rounded-full blue-dot-pulse shrink-0" />
+              Taking New Clients
+            </span>
+          )}
         </div>
 
-        <div className="flex items-center gap-3">
-          <span className="text-xs uppercase tracking-widest text-eureka-slate font-semibold">(SCROLL)</span>
-          <div className="w-px h-6 bg-slate-300 relative overflow-hidden">
+        <button
+          onClick={scrollToNextSection}
+          className="flex items-center gap-2 text-xs uppercase tracking-widest text-eureka-slate font-semibold hover:text-eureka-blue transition-colors group cursor-pointer"
+          title="Scroll to Services"
+        >
+          <span>(SCROLL)</span>
+          <ChevronDown size={14} className="group-hover:translate-y-1 transition-transform text-eureka-blue" />
+          <div className="w-px h-6 bg-slate-300 relative overflow-hidden ml-1">
             <motion.div
               className="w-full h-full bg-eureka-blue"
               animate={{ y: ["-100%", "100%"] }}
               transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
             />
           </div>
-        </div>
+        </button>
 
         <div className="hidden md:block">
           <span>Available for global partnerships</span>
@@ -363,4 +381,5 @@ export default function Hero({ projects }: HeroProps) {
     </section>
   );
 }
+
 
