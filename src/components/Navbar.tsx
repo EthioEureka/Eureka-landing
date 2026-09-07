@@ -14,7 +14,7 @@ export default function Navbar() {
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
+      setIsScrolled(window.scrollY > 15);
     };
 
     window.addEventListener("scroll", handleScroll);
@@ -30,6 +30,7 @@ export default function Navbar() {
     { href: "/#work", label: "Work" },
     { href: "/#about", label: "About" },
     { href: "/#process", label: "Process" },
+    { href: "/#testimonials", label: "Testimonials" },
     { href: "/#contact", label: "Contact" },
   ];
 
@@ -38,44 +39,52 @@ export default function Navbar() {
       <header
         className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${
           isScrolled
-            ? "bg-deep-black/90 backdrop-blur-md py-4 border-b border-border-gray/60 shadow-xl"
-            : "bg-transparent py-6 md:py-8"
+            ? "bg-white/90 backdrop-blur-md py-3.5 border-b border-eureka-border shadow-eureka-md"
+            : "bg-transparent py-5 md:py-6"
         }`}
       >
         <div className="max-w-7xl mx-auto px-6 md:px-12 flex items-center justify-between">
-          {/* Logo / Wordmark */}
+          {/* Brand Logo & Title */}
           <Link
             href="/"
-            className="group flex items-center gap-3 text-lg md:text-xl font-bold tracking-tight text-off-white hover:text-eureka-green transition-colors"
+            className="group flex items-center gap-3 text-lg md:text-xl font-bold tracking-tight text-eureka-dark hover:text-eureka-blue transition-colors"
           >
-            <div className="relative w-7 h-7 shrink-0 transition-transform group-hover:scale-110">
-              <Image src="/logo.svg" alt="Ethio-Eureka Logo" fill className="object-contain" />
+            <div className="relative w-9 h-9 shrink-0 transition-transform group-hover:scale-105 rounded-xl overflow-hidden shadow-sm border border-slate-200">
+              <Image src="/Eureka-logo.png" alt="Ethio-Eureka Logo" fill className="object-cover" priority />
             </div>
-            <span className="font-mono tracking-widest text-sm md:text-base">ETHIO-EUREKA</span>
+            <div className="flex flex-col">
+              <span className="font-sans font-extrabold tracking-tight text-base md:text-lg leading-none text-eureka-dark group-hover:text-eureka-blue transition-colors">
+                ETHIO-EUREKA
+              </span>
+              <span className="font-mono text-[10px] text-eureka-muted tracking-widest uppercase mt-0.5">
+                Digital Studio
+              </span>
+            </div>
           </Link>
 
           {/* Desktop Navigation Links */}
-          <nav className="hidden md:flex items-center gap-8 text-sm font-mono tracking-wider text-soft-gray">
+          <nav className="hidden md:flex items-center gap-8 text-sm font-medium tracking-wide text-eureka-slate">
             {navLinks.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
-                className="hover:text-off-white hover:underline underline-offset-8 decoration-eureka-green decoration-2 transition-all"
+                className="hover:text-eureka-blue transition-colors relative py-1 group"
               >
-                {link.label}
+                <span>{link.label}</span>
+                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-eureka-blue transition-all duration-300 group-hover:w-full" />
               </Link>
             ))}
           </nav>
 
-          {/* Right CTA Button */}
+          {/* Right Action Button */}
           <div className="flex items-center gap-4">
             <Link
               href="/contact"
-              className="hidden sm:inline-flex items-center gap-2 text-xs font-mono font-semibold uppercase tracking-widest bg-off-white text-deep-black hover:bg-eureka-green hover:text-deep-black px-5 py-2.5 transition-all duration-300 group"
+              className="hidden sm:inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wider bg-eureka-blue text-white hover:bg-eureka-blue-dark px-5 py-2.5 rounded-full transition-all duration-300 shadow-eureka-md hover:shadow-eureka-lg group"
             >
-              <span>Start a project</span>
+              <span>Start a Project</span>
               <ArrowUpRight
-                size={16}
+                size={15}
                 className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform"
               />
             </Link>
@@ -84,7 +93,7 @@ export default function Navbar() {
             <button
               onClick={() => setIsMobileMenuOpen(true)}
               aria-label="Open mobile menu"
-              className="md:hidden p-2 rounded-md text-off-white border border-border-gray hover:border-eureka-green hover:text-eureka-green transition-colors"
+              className="md:hidden p-2 rounded-lg text-eureka-dark border border-eureka-border hover:border-eureka-blue hover:text-eureka-blue bg-white shadow-sm transition-colors"
             >
               <Menu size={22} />
             </button>
@@ -101,3 +110,4 @@ export default function Navbar() {
     </>
   );
 }
+

@@ -12,7 +12,7 @@ export default function MissionSection() {
     {
       num: "02",
       title: "Digital Execution",
-      desc: "Immaculate front-end engineering, Swiss typography grids, and ultra-fast responsive platforms.",
+      desc: "Immaculate front-end engineering, modern typography grids, and ultra-fast responsive platforms.",
     },
     {
       num: "03",
@@ -22,35 +22,35 @@ export default function MissionSection() {
   ];
 
   return (
-    <section id="about" className="py-24 md:py-36 bg-dark-gray/40 border-b border-border-gray/50 relative overflow-hidden">
+    <section id="mission" className="py-24 md:py-36 bg-white border-b border-eureka-border relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-6 md:px-12">
         
         {/* Top Tag */}
         <div className="mb-12">
-          <span className="text-xs font-mono tracking-[0.2em] text-eureka-green uppercase flex items-center gap-2">
-            <span className="w-1.5 h-1.5 bg-eureka-green rounded-full" />
+          <span className="text-xs font-mono tracking-[0.2em] text-eureka-blue font-semibold uppercase flex items-center gap-2">
+            <span className="w-2 h-2 bg-eureka-blue rounded-full" />
             04 // MISSION & PHILOSOPHY
           </span>
         </div>
 
         {/* Large Narrative Headline */}
         <div className="max-w-5xl mb-16">
-          <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-light tracking-tight text-off-white leading-[1.15]">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-eureka-dark leading-[1.2]">
             We believe good digital work should do more than look good.{" "}
-            <span className="text-soft-gray">
+            <span className="text-eureka-slate font-medium">
               It must build clarity, command authority, and move businesses forward.
             </span>
           </h2>
         </div>
 
         {/* Narrative Description & Principles Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start pt-8 border-t border-border-gray/50">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start pt-8 border-t border-eureka-border">
           
-          <div className="lg:col-span-5 text-editorial-sub text-soft-gray leading-relaxed space-y-6">
-            <p>
+          <div className="lg:col-span-5 text-editorial-sub text-eureka-slate leading-relaxed space-y-6">
+            <p className="font-medium text-eureka-dark">
               Ethio-Eureka exists to help businesses communicate better, look more credible, and compete in a digital-first world.
             </p>
-            <p className="text-sm font-mono text-soft-gray/80">
+            <p className="text-sm font-sans text-eureka-slate">
               Operating out of Addis Ababa with a global aesthetic standard, we craft digital platforms that balance creative courage with technical precision.
             </p>
           </div>
@@ -63,12 +63,12 @@ export default function MissionSection() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: idx * 0.1 }}
-                className="bg-deep-black/60 p-6 border border-border-gray/60 flex flex-col justify-between"
+                className="bg-slate-50 p-6 rounded-2xl border border-eureka-border flex flex-col justify-between shadow-eureka-sm"
               >
                 <div>
-                  <span className="text-xs font-mono text-eureka-green mb-3 block">{item.num}</span>
-                  <h3 className="text-lg font-semibold text-off-white mb-2">{item.title}</h3>
-                  <p className="text-xs text-soft-gray leading-relaxed">{item.desc}</p>
+                  <span className="text-xs font-mono font-bold text-eureka-blue mb-3 block">{item.num}</span>
+                  <h3 className="text-lg font-bold text-eureka-dark mb-2">{item.title}</h3>
+                  <p className="text-xs text-eureka-slate leading-relaxed font-normal">{item.desc}</p>
                 </div>
               </motion.div>
             ))}
@@ -79,3 +79,4 @@ export default function MissionSection() {
     </section>
   );
 }
+

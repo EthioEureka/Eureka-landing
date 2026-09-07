@@ -21,7 +21,7 @@ export default function Marquee({
   const marqueeItems = [...items, ...items, ...items, ...items];
 
   return (
-    <div className="relative w-full overflow-hidden border-y border-border-gray/50 py-4 bg-deep-black/60 backdrop-blur-sm select-none">
+    <div className="relative w-full overflow-hidden border-y border-eureka-border py-4 bg-slate-50/90 backdrop-blur-sm select-none">
       <div
         className={`flex whitespace-nowrap gap-8 ${
           speed === "slow" ? "animate-marquee-slow" : "animate-marquee"
@@ -29,13 +29,14 @@ export default function Marquee({
       >
         {marqueeItems.map((text, idx) => (
           <div key={idx} className="flex items-center gap-8">
-            <span className="text-xs md:text-sm uppercase tracking-[0.25em] font-mono text-soft-gray hover:text-eureka-green transition-colors">
+            <span className="text-xs md:text-sm uppercase tracking-[0.25em] font-mono font-semibold text-eureka-slate hover:text-eureka-blue transition-colors">
               {text}
             </span>
-            <span className="w-1.5 h-1.5 rounded-full bg-eureka-green/80" />
+            <span className="w-2 h-2 rounded-full bg-eureka-blue" />
           </div>
         ))}
       </div>
     </div>
   );
 }
+

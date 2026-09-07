@@ -16,27 +16,51 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Ethio-Eureka — Creative Technology & Digital Studio",
+  title: {
+    default: "Ethio-Eureka — Creative Technology & Digital Studio",
+    template: "%s | Ethio-Eureka Digital Studio",
+  },
   description:
-    "Ethio-Eureka is an independent creative studio helping ambitious businesses build brands, websites, and digital experiences that matter globally.",
+    "Ethio-Eureka is an independent creative technology studio helping ambitious businesses build brands, websites, and digital experiences that matter globally.",
   keywords: [
     "Ethio-Eureka",
-    "Creative Agency",
-    "Digital Studio Ethiopia",
-    "Website Design Addis Ababa",
+    "Creative Agency Ethiopia",
+    "Digital Studio Addis Ababa",
+    "Website Design & Development",
     "Branding Agency Africa",
-    "Next.js Development",
-    "Visual Identity Studio",
+    "Next.js Development Studio",
+    "Visual Identity & Software Engineering",
   ],
-  authors: [{ name: "Ethio-Eureka" }],
+  authors: [{ name: "Ethio-Eureka Studio", url: "https://ethio-eureka.com" }],
+  creator: "Ethio-Eureka",
+  themeColor: "#2563EB",
   openGraph: {
-    title: "Ethio-Eureka — Digital identities that make businesses matter.",
+    title: "Ethio-Eureka — Creative Technology & Digital Studio",
     description:
-      "We build brands, websites, and digital experiences that move businesses forward. Independent creative technology studio based in Ethiopia.",
+      "Independent creative technology studio based in Ethiopia. We craft brands, high-performance websites, and digital systems.",
     url: "https://ethio-eureka.com",
     siteName: "Ethio-Eureka",
+    images: [
+      {
+        url: "/Eureka-logo.png",
+        width: 1200,
+        height: 630,
+        alt: "Ethio-Eureka Creative Technology Studio",
+      },
+    ],
     locale: "en_US",
     type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Ethio-Eureka — Creative Technology Studio",
+    description: "Building modern brands, websites, and software systems that move businesses forward.",
+    images: ["/Eureka-logo.png"],
+  },
+  icons: {
+    icon: "/Eureka-logo.png",
+    shortcut: "/Eureka-logo.png",
+    apple: "/Eureka-logo.png",
   },
 };
 
@@ -46,9 +70,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark scroll-smooth">
+    <html lang="en" className="scroll-smooth">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} bg-deep-black text-off-white font-sans antialiased min-h-screen flex flex-col selection:bg-eureka-green selection:text-deep-black`}
+        className={`${geistSans.variable} ${geistMono.variable} bg-white text-eureka-dark font-sans antialiased min-h-screen flex flex-col selection:bg-eureka-blue selection:text-white`}
       >
         <CustomCursor />
         <Navbar />
@@ -58,3 +82,4 @@ export default function RootLayout({
     </html>
   );
 }
+

@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowUpRight, X } from "lucide-react";
 
@@ -19,29 +20,31 @@ export default function MobileMenu({ isOpen, onClose, links }: MobileMenuProps) 
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: "-100%" }}
           transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-          className="fixed inset-0 z-50 bg-deep-black text-off-white flex flex-col justify-between p-6 md:p-12 overflow-y-auto"
+          className="fixed inset-0 z-50 bg-white text-eureka-dark flex flex-col justify-between p-6 md:p-12 overflow-y-auto"
         >
           {/* Top Bar */}
-          <div className="flex items-center justify-between border-b border-border-gray/60 pb-6">
+          <div className="flex items-center justify-between border-b border-eureka-border pb-6">
             <Link
               href="/"
               onClick={onClose}
-              className="text-xl font-bold tracking-tight text-off-white flex items-center gap-2"
+              className="text-xl font-bold tracking-tight text-eureka-dark flex items-center gap-3"
             >
-              <span className="w-2.5 h-2.5 bg-eureka-green rounded-full inline-block" />
-              ETHIO-EUREKA
+              <div className="relative w-8 h-8 rounded-lg overflow-hidden border border-slate-200 shadow-sm">
+                <Image src="/Eureka-logo.png" alt="Ethio-Eureka Logo" fill className="object-cover" />
+              </div>
+              <span className="font-extrabold text-base tracking-tight">ETHIO-EUREKA</span>
             </Link>
             <button
               onClick={onClose}
               aria-label="Close menu"
-              className="w-10 h-10 rounded-full border border-border-gray flex items-center justify-center text-off-white hover:border-eureka-green hover:text-eureka-green transition-colors"
+              className="w-10 h-10 rounded-full border border-eureka-border flex items-center justify-center text-eureka-dark hover:border-eureka-blue hover:text-eureka-blue transition-colors bg-slate-50"
             >
               <X size={20} />
             </button>
           </div>
 
           {/* Navigation Links */}
-          <div className="my-12 flex flex-col gap-6">
+          <div className="my-8 flex flex-col gap-4">
             {links.map((link, idx) => (
               <motion.div
                 key={link.href}
@@ -52,10 +55,10 @@ export default function MobileMenu({ isOpen, onClose, links }: MobileMenuProps) 
                 <Link
                   href={link.href}
                   onClick={onClose}
-                  className="text-4xl sm:text-5xl font-light tracking-tight hover:text-eureka-green transition-colors flex items-center justify-between group border-b border-border-gray/30 pb-4"
+                  className="text-3xl sm:text-4xl font-extrabold tracking-tight text-eureka-dark hover:text-eureka-blue transition-colors flex items-center justify-between group border-b border-eureka-border pb-4"
                 >
                   <span>{link.label}</span>
-                  <span className="text-xs font-mono text-soft-gray group-hover:text-eureka-green">
+                  <span className="text-xs font-mono text-eureka-slate group-hover:text-eureka-blue font-semibold">
                     0{idx + 1}
                   </span>
                 </Link>
@@ -64,41 +67,41 @@ export default function MobileMenu({ isOpen, onClose, links }: MobileMenuProps) 
           </div>
 
           {/* Bottom Info & CTA */}
-          <div className="flex flex-col gap-8 pt-6 border-t border-border-gray/60">
+          <div className="flex flex-col gap-6 pt-6 border-t border-eureka-border">
             <Link
               href="/contact"
               onClick={onClose}
-              className="w-full bg-eureka-green text-deep-black font-semibold text-lg py-4 px-6 rounded-none flex items-center justify-between hover:bg-white transition-colors"
+              className="w-full bg-gradient-to-r from-eureka-blue to-eureka-indigo text-white font-semibold text-base py-4 px-6 rounded-full flex items-center justify-between hover:shadow-eureka-lg transition-all"
             >
-              <span>Start a project</span>
+              <span>Start a Project</span>
               <ArrowUpRight size={22} />
             </Link>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs font-mono text-soft-gray">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs font-sans text-eureka-slate">
               <div>
-                <p className="text-white font-semibold mb-1">Direct Contact</p>
+                <p className="text-eureka-dark font-bold mb-1">Direct Contact</p>
                 <p>hello@ethio-eureka.com</p>
-                <p>+251 911 234 567</p>
+                <p>+251 911 000 000</p>
               </div>
               <div>
-                <p className="text-white font-semibold mb-1">Location</p>
+                <p className="text-eureka-dark font-bold mb-1">Location</p>
                 <p>Addis Ababa, Ethiopia</p>
-                <p>Bole Medhanialem, 4th Floor</p>
+                <p>Bole Road, Digital Studio</p>
               </div>
             </div>
 
-            <div className="flex gap-6 text-xs font-mono text-soft-gray">
-              <a href="https://instagram.com/ethioeureka" target="_blank" rel="noopener noreferrer" className="hover:text-eureka-green">
+            <div className="flex flex-wrap gap-4 text-xs font-mono font-semibold text-eureka-slate">
+              <a href="https://instagram.com/ethioeureka" target="_blank" rel="noopener noreferrer" className="hover:text-eureka-blue">
                 INSTAGRAM
               </a>
-              <a href="https://linkedin.com/company/ethioeureka" target="_blank" rel="noopener noreferrer" className="hover:text-eureka-green">
+              <a href="https://linkedin.com/company/ethioeureka" target="_blank" rel="noopener noreferrer" className="hover:text-eureka-blue">
                 LINKEDIN
               </a>
-              <a href="https://t.me/ethioeureka" target="_blank" rel="noopener noreferrer" className="hover:text-eureka-green">
+              <a href="https://t.me/ethioeureka" target="_blank" rel="noopener noreferrer" className="hover:text-eureka-blue">
                 TELEGRAM
               </a>
-              <a href="https://x.com/ethioeureka" target="_blank" rel="noopener noreferrer" className="hover:text-eureka-green">
-                X / TWITTER
+              <a href="https://x.com/ethioeureka" target="_blank" rel="noopener noreferrer" className="hover:text-eureka-blue">
+                TWITTER
               </a>
             </div>
           </div>
@@ -107,3 +110,4 @@ export default function MobileMenu({ isOpen, onClose, links }: MobileMenuProps) 
     </AnimatePresence>
   );
 }
+

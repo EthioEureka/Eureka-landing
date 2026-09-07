@@ -21,10 +21,10 @@ export default function ProjectCard({ project, variant = "medium", index }: Proj
       transition={{ duration: 0.7, delay: index * 0.1, ease: [0.16, 1, 0.3, 1] }}
       className="group relative"
     >
-      <Link href={`/work/${project.slug}`} data-cursor="VIEW" className="block">
+      <Link href={`/work/${project.slug}`} className="block">
         {/* Cover Image Container */}
         <div
-          className={`relative overflow-hidden bg-dark-gray border border-border-gray/70 transition-all duration-500 group-hover:border-eureka-green/70 ${
+          className={`relative overflow-hidden rounded-2xl bg-white border border-eureka-border shadow-eureka-sm transition-all duration-500 group-hover:border-eureka-blue group-hover:shadow-eureka-md ${
             variant === "large"
               ? "aspect-[16/9] md:aspect-[21/9]"
               : variant === "compact"
@@ -32,8 +32,8 @@ export default function ProjectCard({ project, variant = "medium", index }: Proj
               : "aspect-[16/10]"
           }`}
         >
-          {/* Subtle noise / dark gradient overlay */}
-          <div className="absolute inset-0 bg-gradient-to-t from-deep-black/90 via-deep-black/20 to-transparent z-10 opacity-70 group-hover:opacity-40 transition-opacity" />
+          {/* Subtle light gradient overlay */}
+          <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-slate-900/10 to-transparent z-10 opacity-60 group-hover:opacity-40 transition-opacity" />
 
           {/* Project Cover Image */}
           {project.cover_image ? (
@@ -45,17 +45,17 @@ export default function ProjectCard({ project, variant = "medium", index }: Proj
               className="object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
             />
           ) : (
-            <div className="w-full h-full flex items-center justify-center bg-dark-gray text-soft-gray font-mono text-sm">
+            <div className="w-full h-full flex items-center justify-center bg-slate-100 text-eureka-slate font-mono text-sm">
               [ NO IMAGE ]
             </div>
           )}
 
           {/* Top Metadata Badges */}
-          <div className="absolute top-6 left-6 right-6 z-20 flex justify-between items-center font-mono text-xs text-off-white">
-            <span className="bg-deep-black/80 backdrop-blur-md px-3 py-1 border border-border-gray/60 uppercase tracking-widest text-[11px]">
+          <div className="absolute top-6 left-6 right-6 z-20 flex justify-between items-center font-mono text-xs text-white">
+            <span className="bg-white/90 backdrop-blur-md px-3 py-1 rounded-full border border-slate-200 uppercase tracking-wider text-[11px] text-eureka-dark font-semibold shadow-sm">
               {project.category}
             </span>
-            <span className="bg-deep-black/80 backdrop-blur-md px-3 py-1 border border-border-gray/60 text-[11px]">
+            <span className="bg-white/90 backdrop-blur-md px-3 py-1 rounded-full border border-slate-200 text-[11px] text-eureka-dark font-semibold shadow-sm">
               {project.year}
             </span>
           </div>
@@ -64,27 +64,28 @@ export default function ProjectCard({ project, variant = "medium", index }: Proj
           <div className="absolute bottom-6 left-6 right-6 z-20 flex justify-between items-end">
             <div>
               <div className="flex items-center gap-2 mb-1">
-                <span className="w-1.5 h-1.5 rounded-full bg-eureka-green opacity-0 group-hover:opacity-100 transition-opacity" />
-                <span className="text-xs font-mono text-soft-gray uppercase tracking-wider">
+                <span className="w-2 h-2 rounded-full bg-eureka-blue opacity-0 group-hover:opacity-100 transition-opacity" />
+                <span className="text-xs font-mono text-slate-200 uppercase tracking-wider font-semibold">
                   {project.client || "CLIENT WORK"}
                 </span>
               </div>
-              <h3 className="text-2xl sm:text-3xl font-light text-off-white group-hover:text-eureka-green group-hover:translate-x-1 transition-all">
+              <h3 className="text-2xl sm:text-3xl font-extrabold text-white group-hover:text-blue-300 transition-all drop-shadow-sm">
                 {project.title}
               </h3>
             </div>
 
-            <div className="w-10 h-10 rounded-full border border-border-gray/80 bg-deep-black/80 flex items-center justify-center text-off-white group-hover:border-eureka-green group-hover:text-eureka-green group-hover:bg-eureka-green group-hover:text-deep-black transition-all">
+            <div className="w-10 h-10 rounded-full border border-white/60 bg-white/90 backdrop-blur-md flex items-center justify-center text-eureka-dark group-hover:bg-eureka-blue group-hover:text-white group-hover:border-eureka-blue transition-all shadow-md">
               <ArrowUpRight size={18} />
             </div>
           </div>
         </div>
 
         {/* Supporting Short Description */}
-        <p className="mt-4 text-sm text-soft-gray line-clamp-2 leading-relaxed font-normal">
+        <p className="mt-4 text-sm text-eureka-slate line-clamp-2 leading-relaxed font-normal">
           {project.short_description}
         </p>
       </Link>
     </motion.div>
   );
 }
+

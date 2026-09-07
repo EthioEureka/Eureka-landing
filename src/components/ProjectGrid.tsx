@@ -17,25 +17,25 @@ export default function ProjectGrid({ projects }: ProjectGridProps) {
   const remainingProjects = displayProjects.slice(1);
 
   return (
-    <section id="work" className="py-24 md:py-36 border-b border-border-gray/50 relative">
+    <section id="work" className="py-24 md:py-36 bg-slate-50 border-b border-eureka-border relative">
       <div className="max-w-7xl mx-auto px-6 md:px-12 mb-16">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-end">
           <div className="lg:col-span-8">
-            <span className="text-xs font-mono tracking-[0.2em] text-eureka-green uppercase flex items-center gap-2 mb-4">
-              <span className="w-1.5 h-1.5 bg-eureka-green rounded-full" />
+            <span className="text-xs font-mono tracking-[0.2em] text-eureka-blue font-semibold uppercase flex items-center gap-2 mb-4">
+              <span className="w-2 h-2 bg-eureka-blue rounded-full" />
               03 // SELECTED WORK
             </span>
-            <h2 className="text-section-headline font-semibold text-off-white">
+            <h2 className="text-section-headline font-extrabold text-eureka-dark tracking-tight">
               Selected work.
             </h2>
           </div>
           <div className="lg:col-span-4 flex flex-col items-start lg:items-end justify-end">
-            <p className="text-editorial-sub text-soft-gray font-light leading-snug mb-6">
+            <p className="text-editorial-sub text-eureka-slate font-normal leading-relaxed mb-6">
               A few things we&apos;ve built, shaped, and brought to life.
             </p>
             <Link
               href="/work"
-              className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-widest text-eureka-green hover:underline decoration-eureka-green underline-offset-4 group"
+              className="inline-flex items-center gap-2 font-mono text-xs font-semibold uppercase tracking-wider text-eureka-blue hover:text-eureka-indigo transition-colors group"
             >
               <span>Explore all projects</span>
               <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
@@ -68,3 +68,4 @@ export default function ProjectGrid({ projects }: ProjectGridProps) {
     </section>
   );
 }
+

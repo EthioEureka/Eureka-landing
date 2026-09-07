@@ -3,11 +3,16 @@
 @tailwind utilities;
 
 :root {
-  --bg-black: #0A0A0A;
-  --text-off-white: #F5F3EE;
-  --accent-green: #B8FF3D;
-  --soft-gray: #B7B7B2;
-  --border-gray: #2B2B2B;
+  --bg-white: #FFFFFF;
+  --bg-slate-50: #F8FAFC;
+  --bg-slate-100: #F1F5F9;
+  --text-dark: #0F172A;
+  --text-muted: #475569;
+  --accent-blue: #2563EB;
+  --accent-blue-hover: #1D4ED8;
+  --accent-indigo: #4F46E5;
+  --border-light: #E2E8F0;
+  --border-slate-300: #CBD5E1;
 }
 
 * {
@@ -18,67 +23,72 @@
 
 html {
   scroll-behavior: smooth;
-  background-color: #0A0A0A;
-  color: #F5F3EE;
+  background-color: #FFFFFF;
+  color: #0F172A;
   font-family: var(--font-geist-sans), Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 ::selection {
-  background-color: #B8FF3D;
-  color: #0A0A0A;
+  background-color: #2563EB;
+  color: #FFFFFF;
 }
 
-/* Scrollbar Styling */
+/* Custom Scrollbar Styling for Light Theme */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 8px;
+  height: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #0A0A0A;
+  background: #F8FAFC;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #2B2B2B;
-  border-radius: 3px;
+  background: #CBD5E1;
+  border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #B8FF3D;
+  background: #2563EB;
 }
 
 /* Custom Editorial Typography Clamps */
 .text-hero-headline {
-  font-size: clamp(2.5rem, 4.5vw, 4.85rem);
-  line-height: 1.04;
+  font-size: clamp(2.5rem, 4.75vw, 5rem);
+  line-height: 1.05;
   letter-spacing: -0.035em;
 }
 
 .text-section-headline {
-  font-size: clamp(2.5rem, 5.5vw, 6.5rem);
-  line-height: 1.02;
+  font-size: clamp(2.25rem, 5.25vw, 6rem);
+  line-height: 1.03;
   letter-spacing: -0.03em;
 }
 
 .text-editorial-sub {
   font-size: clamp(1.125rem, 2vw, 1.75rem);
-  line-height: 1.4;
+  line-height: 1.45;
   letter-spacing: -0.01em;
 }
 
-/* Subtle noise background overlay */
-.bg-noise {
-  background-image: radial-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 0);
-  background-size: 24px 24px;
+/* Subtle light noise grid background overlay */
+.bg-light-grid {
+  background-image: radial-gradient(rgba(37, 99, 235, 0.08) 1px, transparent 1px);
+  background-size: 28px 28px;
 }
 
-/* Glowing accent micro-dot */
-.green-dot-pulse {
+.bg-dot-pattern {
+  background-image: radial-gradient(#E2E8F0 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+/* Glowing accent micro-dot (Blue Pulse) */
+.blue-dot-pulse {
   position: relative;
 }
-.green-dot-pulse::after {
+.blue-dot-pulse::after {
   content: '';
   position: absolute;
   top: 50%;
@@ -87,19 +97,19 @@ html {
   width: 100%;
   height: 100%;
   border-radius: 50%;
-  background-color: #B8FF3D;
+  background-color: #2563EB;
   opacity: 0.6;
   animation: ping 2s cubic-bezier(0, 0, 0.2, 1) infinite;
 }
 
 @keyframes ping {
   75%, 100% {
-    transform: translate(-50%, -50%) scale(2);
+    transform: translate(-50%, -50%) scale(2.2);
     opacity: 0;
   }
 }
 
-/* Vertical Smooth Infinite Marquee */
+/* Vertical & Horizontal Infinite Marquee Animations */
 @keyframes marquee-vertical {
   0% { transform: translateY(0%); }
   100% { transform: translateY(-50%); }
@@ -113,3 +123,13 @@ html {
 .animate-marquee-vertical:hover {
   animation-play-state: paused !important;
 }
+
+@keyframes float-gentle {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-10px) rotate(1deg); }
+}
+
+.animate-float {
+  animation: float-gentle 6s ease-in-out infinite;
+}
+

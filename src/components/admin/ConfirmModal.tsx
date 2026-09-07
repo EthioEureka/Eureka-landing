@@ -32,19 +32,19 @@ export default function ConfirmModal({
   const isWarning = variant === "warning";
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in duration-200">
-      <div className="bg-[#121212] border border-border-gray w-full max-w-md p-6 font-mono text-xs space-y-6 shadow-[0_20px_50px_rgba(0,0,0,0.8)] relative">
+    <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in duration-200">
+      <div className="bg-white border border-eureka-border w-full max-w-md p-6 font-mono text-xs space-y-6 rounded-3xl shadow-eureka-lg relative">
         
         {/* Header Icon & Title */}
-        <div className="flex items-start justify-between border-b border-border-gray/60 pb-4">
+        <div className="flex items-start justify-between border-b border-eureka-border pb-4">
           <div className="flex items-center gap-3">
             <div
-              className={`w-10 h-10 rounded flex items-center justify-center border shrink-0 ${
+              className={`w-10 h-10 rounded-xl flex items-center justify-center border shrink-0 ${
                 isDanger
-                  ? "bg-red-950/60 border-red-800 text-red-400"
+                  ? "bg-red-50 border-red-200 text-red-600"
                   : isWarning
-                  ? "bg-amber-950/60 border-amber-800 text-amber-400"
-                  : "bg-emerald-950/60 border-emerald-800 text-eureka-green"
+                  ? "bg-amber-50 border-amber-200 text-amber-600"
+                  : "bg-blue-50 border-blue-200 text-eureka-blue"
               }`}
             >
               {isDanger ? (
@@ -56,10 +56,10 @@ export default function ConfirmModal({
               )}
             </div>
             <div>
-              <h3 className="text-base font-sans font-semibold text-off-white tracking-tight">
+              <h3 className="text-base font-sans font-bold text-eureka-dark tracking-tight">
                 {title}
               </h3>
-              <span className="text-[10px] text-soft-gray uppercase tracking-wider block">
+              <span className="text-[10px] text-eureka-slate uppercase tracking-wider block font-bold">
                 {isDanger ? "PERMANENT ACTION" : "CONFIRMATION REQUIRED"}
               </span>
             </div>
@@ -68,14 +68,14 @@ export default function ConfirmModal({
           <button
             onClick={onCancel}
             disabled={loading}
-            className="text-soft-gray hover:text-white transition-colors"
+            className="text-eureka-slate hover:text-eureka-dark transition-colors p-1"
           >
             <X size={18} />
           </button>
         </div>
 
         {/* Message */}
-        <p className="text-soft-gray leading-relaxed font-sans text-xs bg-deep-black p-4 border border-border-gray/40">
+        <p className="text-eureka-slate leading-relaxed font-sans text-xs bg-slate-50 p-4 border border-eureka-border rounded-xl">
           {message}
         </p>
 
@@ -85,7 +85,7 @@ export default function ConfirmModal({
             type="button"
             onClick={onCancel}
             disabled={loading}
-            className="px-5 py-2.5 border border-border-gray text-soft-gray hover:text-off-white hover:border-white transition-colors font-mono text-xs uppercase"
+            className="px-5 py-2.5 border border-eureka-border text-eureka-slate hover:text-eureka-dark hover:bg-slate-100 rounded-xl transition-all font-mono text-xs uppercase font-bold"
           >
             {cancelText}
           </button>
@@ -94,12 +94,12 @@ export default function ConfirmModal({
             type="button"
             onClick={onConfirm}
             disabled={loading}
-            className={`px-6 py-2.5 font-semibold font-mono text-xs uppercase tracking-wider transition-all flex items-center gap-2 ${
+            className={`px-6 py-2.5 font-bold font-mono text-xs uppercase tracking-wider rounded-xl transition-all flex items-center gap-2 shadow-sm ${
               isDanger
-                ? "bg-red-600 hover:bg-red-500 text-white shadow-[0_0_20px_rgba(239,68,68,0.3)]"
+                ? "bg-red-600 hover:bg-red-700 text-white"
                 : isWarning
-                ? "bg-amber-500 hover:bg-amber-400 text-deep-black"
-                : "bg-eureka-green hover:bg-white text-deep-black"
+                ? "bg-amber-500 hover:bg-amber-600 text-white"
+                : "bg-eureka-blue hover:bg-eureka-indigo text-white"
             }`}
           >
             {loading ? <Loader2 size={14} className="animate-spin" /> : null}
@@ -110,3 +110,4 @@ export default function ConfirmModal({
     </div>
   );
 }
+

@@ -4,7 +4,7 @@ import React, { useState, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { motion, useMotionValue, useSpring } from "framer-motion";
-import { ArrowRight, ArrowDownRight, ExternalLink } from "lucide-react";
+import { ArrowRight, ArrowDownRight, ExternalLink, Sparkles } from "lucide-react";
 
 import { Project } from "@/lib/types";
 
@@ -12,50 +12,49 @@ interface HeroProps {
   projects?: Project[];
 }
 
-// 3D Animated Logo Showcase Component when no projects are present
+// 3D Animated Logo Showcase Card Component
 function Logo3DCard() {
   return (
-    <div className="relative w-full h-[620px] flex items-center justify-center p-6 bg-[#0E0E0E]/80 rounded-2xl border border-white/[0.08] backdrop-blur-md overflow-hidden group">
-      
+    <div className="relative w-full h-[600px] flex items-center justify-center p-6 bg-slate-50/90 rounded-3xl border border-eureka-border shadow-eureka-lg overflow-hidden group">
       {/* Background Radial Glow */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(184,255,61,0.14),transparent_70%)] pointer-events-none" />
-      
-      {/* Animated 3D Floating Rings */}
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(37,99,235,0.12),transparent_70%)] pointer-events-none" />
+
+      {/* Animated Floating Rings */}
       <motion.div
         animate={{
           rotate: [0, 360],
-          scale: [1, 1.1, 1],
+          scale: [1, 1.08, 1],
         }}
         transition={{
-          duration: 20,
+          duration: 22,
           repeat: Infinity,
           ease: "linear",
         }}
-        className="absolute w-[460px] h-[460px] rounded-full border border-eureka-green/20 border-dashed opacity-40 pointer-events-none"
+        className="absolute w-[440px] h-[440px] rounded-full border border-eureka-blue/20 border-dashed opacity-60 pointer-events-none"
       />
 
       <motion.div
         animate={{
           rotate: [360, 0],
-          scale: [1.1, 0.95, 1.1],
+          scale: [1.08, 0.95, 1.08],
         }}
         transition={{
           duration: 28,
           repeat: Infinity,
           ease: "linear",
         }}
-        className="absolute w-[340px] h-[340px] rounded-full border border-eureka-green/30 opacity-30 pointer-events-none"
+        className="absolute w-[320px] h-[320px] rounded-full border border-eureka-indigo/30 opacity-40 pointer-events-none"
       />
 
-      {/* 3D Floating Glass Pedestal Card */}
+      {/* 3D Floating Glass Card */}
       <motion.div
         animate={{
-          y: [0, -14, 0],
-          rotateX: [6, -6, 6],
-          rotateY: [-10, 10, -10],
+          y: [0, -12, 0],
+          rotateX: [4, -4, 4],
+          rotateY: [-8, 8, -8],
         }}
         transition={{
-          duration: 7,
+          duration: 6,
           repeat: Infinity,
           ease: "easeInOut",
         }}
@@ -63,41 +62,36 @@ function Logo3DCard() {
           transformStyle: "preserve-3d",
           perspective: 1000,
         }}
-        className="relative z-10 w-full max-w-sm bg-gradient-to-b from-[#181818] via-[#121212] to-[#0A0A0A] border border-white/20 rounded-2xl p-8 shadow-[0_30px_70px_-15px_rgba(0,0,0,0.9),0_0_50px_rgba(184,255,61,0.18)] flex flex-col items-center text-center space-y-6 group-hover:border-eureka-green/80 transition-colors duration-500"
+        className="relative z-10 w-full max-w-sm bg-white/95 border border-eureka-border rounded-2xl p-8 shadow-eureka-lg flex flex-col items-center text-center space-y-6 group-hover:border-eureka-blue transition-colors duration-500"
       >
-        {/* Floating 3D Logo Element */}
+        {/* Floating Logo Badge */}
         <div
-          style={{ transform: "translateZ(50px)" }}
-          className="relative w-36 h-36 flex items-center justify-center rounded-2xl bg-deep-black border border-eureka-green/60 shadow-[0_0_35px_rgba(184,255,61,0.35)] group-hover:shadow-[0_0_60px_rgba(184,255,61,0.6)] transition-shadow duration-500"
+          style={{ transform: "translateZ(40px)" }}
+          className="relative w-36 h-36 flex items-center justify-center rounded-2xl bg-slate-50 border border-eureka-border shadow-eureka-md group-hover:shadow-eureka-glow transition-shadow duration-500 overflow-hidden"
         >
-          <div className="relative w-24 h-24 filter drop-shadow-[0_12px_24px_rgba(184,255,61,0.5)]">
-            <Image src="/logo.svg" alt="Ethio-Eureka 3D Logo" fill className="object-contain animate-pulse" />
+          <div className="relative w-28 h-28 filter drop-shadow-[0_10px_20px_rgba(37,99,235,0.25)]">
+            <Image src="/Eureka-logo.png" alt="Ethio-Eureka Logo Badge" fill className="object-contain" />
           </div>
-
-          <div className="absolute top-2.5 left-2.5 w-1.5 h-1.5 rounded-full bg-eureka-green" />
-          <div className="absolute top-2.5 right-2.5 w-1.5 h-1.5 rounded-full bg-eureka-green" />
-          <div className="absolute bottom-2.5 left-2.5 w-1.5 h-1.5 rounded-full bg-eureka-green" />
-          <div className="absolute bottom-2.5 right-2.5 w-1.5 h-1.5 rounded-full bg-eureka-green" />
         </div>
 
         {/* 3D Typography */}
-        <div style={{ transform: "translateZ(30px)" }} className="space-y-2 font-mono">
-          <span className="text-[10px] text-eureka-green tracking-[0.25em] uppercase block font-semibold">
-            ETHIO-EUREKA // Creative Digital Studio
+        <div style={{ transform: "translateZ(25px)" }} className="space-y-2 font-sans">
+          <span className="text-[11px] font-mono text-eureka-blue tracking-[0.2em] uppercase block font-semibold">
+            ETHIO-EUREKA // DIGITAL STUDIO
           </span>
-          <h3 className="text-xl font-sans font-bold text-off-white tracking-tight">
-            Creative Technology Studio
+          <h3 className="text-xl font-extrabold text-eureka-dark tracking-tight">
+            Creative Technology Partner
           </h3>
-          <p className="text-xs text-soft-gray max-w-xs leading-relaxed font-sans">
-            Independent design & digital engineering agency crafting high-performance web products.
+          <p className="text-xs text-eureka-slate max-w-xs leading-relaxed">
+            Crafting world-class visual identities, web products, and dynamic CMS engines for growing brands.
           </p>
         </div>
 
         {/* Status Badge */}
-        <div style={{ transform: "translateZ(20px)" }}>
-          <span className="inline-flex items-center gap-2 bg-eureka-green/10 text-eureka-green border border-eureka-green/40 px-4 py-1.5 rounded-full text-[10px] font-mono uppercase tracking-wider font-semibold">
-            <span className="w-2 h-2 rounded-full bg-eureka-green animate-ping" />
-            Contact Us Now
+        <div style={{ transform: "translateZ(15px)" }}>
+          <span className="inline-flex items-center gap-2 bg-blue-50 text-eureka-blue border border-blue-200 px-4 py-1.5 rounded-full text-xs font-mono uppercase tracking-wider font-semibold">
+            <span className="w-2 h-2 rounded-full bg-eureka-blue blue-dot-pulse" />
+            Taking New Projects
           </span>
         </div>
       </motion.div>
@@ -108,7 +102,6 @@ function Logo3DCard() {
 export default function Hero({ projects }: HeroProps) {
   const heroRef = useRef<HTMLElement>(null);
 
-  // Map real CMS projects to showcase card array (empty array if no DB projects exist)
   const displayCards = React.useMemo(() => {
     if (!projects || projects.length === 0) {
       return [];
@@ -122,15 +115,13 @@ export default function Hero({ projects }: HeroProps) {
     }));
   }, [projects]);
 
-  // Duplicate list for seamless infinite loop scroll
   const marqueeCards = [...displayCards, ...displayCards, ...displayCards];
 
-  // Mouse position state for subtle radial glow
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
 
-  const smoothMouseX = useSpring(mouseX, { stiffness: 50, damping: 20 });
-  const smoothMouseY = useSpring(mouseY, { stiffness: 50, damping: 20 });
+  const smoothMouseX = useSpring(mouseX, { stiffness: 45, damping: 18 });
+  const smoothMouseY = useSpring(mouseY, { stiffness: 45, damping: 18 });
 
   const handleMouseMove = (e: React.MouseEvent<HTMLElement>) => {
     if (!heroRef.current) return;
@@ -145,33 +136,17 @@ export default function Hero({ projects }: HeroProps) {
     <section
       ref={heroRef}
       onMouseMove={handleMouseMove}
-      className="relative min-h-screen w-full bg-[#0A0A0A] text-off-white overflow-hidden flex flex-col justify-between pt-6 pb-12"
+      className="relative min-h-screen w-full bg-white text-eureka-dark overflow-hidden flex flex-col justify-between pt-24 pb-12"
       style={{ minHeight: "100svh" }}
     >
-      {/* 1. TECHNICAL BACKGROUND GRID & AMBIENT DEPTH LAYER */}
-      
-      {/* Vertical Grid Column Lines */}
-      <div className="absolute inset-0 max-w-[1440px] mx-auto px-6 md:px-12 pointer-events-none flex justify-between z-0">
-        {[...Array(8)].map((_, i) => (
-          <div
-            key={`v-grid-${i}`}
-            className="w-px h-full bg-white/[0.04] hidden sm:block"
-          />
-        ))}
-      </div>
+      {/* Background Dot Pattern & Ambient Depth */}
+      <div className="absolute inset-0 bg-dot-pattern opacity-60 pointer-events-none z-0" />
 
-      {/* Horizontal Baseline Grid Lines */}
-      <div className="absolute inset-0 pointer-events-none z-0 flex flex-col justify-between opacity-40">
-        <div className="w-full h-px bg-white/[0.04] mt-32" />
-        <div className="w-full h-px bg-white/[0.04] mb-48" />
-        <div className="w-full h-px bg-white/[0.04] mb-20" />
-      </div>
-
-      {/* Radial Depth Lighting */}
+      {/* Radial Soft Light Glow */}
       <div
-        className="absolute top-[20%] right-[10%] w-[650px] h-[650px] rounded-full pointer-events-none z-0"
+        className="absolute top-[15%] right-[5%] w-[600px] h-[600px] rounded-full pointer-events-none z-0"
         style={{
-          background: "radial-gradient(circle at 50% 50%, rgba(184, 255, 61, 0.05), transparent 65%)",
+          background: "radial-gradient(circle at 50% 50%, rgba(37, 99, 235, 0.08), transparent 70%)",
         }}
       />
 
@@ -179,7 +154,7 @@ export default function Hero({ projects }: HeroProps) {
       <motion.div
         className="absolute w-[500px] h-[500px] rounded-full pointer-events-none z-0 hidden lg:block"
         style={{
-          background: "radial-gradient(circle at 50% 50%, rgba(184, 255, 61, 0.03), transparent 65%)",
+          background: "radial-gradient(circle at 50% 50%, rgba(79, 70, 229, 0.06), transparent 70%)",
           x: smoothMouseX,
           y: smoothMouseY,
           top: "50%",
@@ -189,174 +164,165 @@ export default function Hero({ projects }: HeroProps) {
         }}
       />
 
-      {/* 2. HERO MAIN CONTENT CANVAS */}
-      <div className="relative z-10 max-w-[1440px] mx-auto px-6 md:px-12 w-full my-auto pt-16 sm:pt-20 lg:pt-24 pb-8 sm:pb-12 grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-start">
+      {/* Main Hero Container */}
+      <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-12 w-full my-auto pt-6 sm:pt-10 pb-8 grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
         
-        {/* LEFT COLUMN: EDITORIAL COPY & BRANDING */}
-        <div className="lg:col-span-6 xl:col-span-6 flex flex-col justify-center z-20 pt-0 sm:pt-2">
+        {/* Left Column: Editorial Headline & Copy */}
+        <div className="lg:col-span-6 xl:col-span-6 flex flex-col justify-center">
           
-          {/* Eyebrow with Brand Logo Icon */}
+          {/* Eyebrow Pill */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="inline-flex items-center gap-2.5 sm:gap-3 mb-5 sm:mb-6"
+            transition={{ duration: 0.5, delay: 0.1 }}
+            className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-100 text-eureka-blue text-xs font-mono font-semibold uppercase tracking-wider mb-6 w-fit shadow-sm"
           >
-            <div className="relative w-4 h-4 sm:w-5 sm:h-5 shrink-0">
-              <Image src="/logo.svg" alt="Ethio-Eureka Icon" fill className="object-contain" />
+            <div className="relative w-4 h-4 rounded-full overflow-hidden border border-blue-300">
+              <Image src="/Eureka-logo.png" alt="Ethio-Eureka Icon" fill className="object-cover" />
             </div>
-            <span className="text-[11px] sm:text-xs font-mono tracking-[0.15em] sm:tracking-[0.2em] text-eureka-green uppercase font-semibold">
-              EUREKA CREATIVE
-            </span>
-            <span className="text-xs font-mono text-white/20">/</span>
-            <span className="text-[11px] sm:text-xs font-mono text-soft-gray uppercase tracking-widest">
-              DIGITAL STUDIO
-            </span>
+            <span>EUREKA DIGITAL STUDIO</span>
+            <span className="text-blue-300">•</span>
+            <span className="text-eureka-slate font-sans text-[11px]">GLOBAL CREATIVE AGENCY</span>
           </motion.div>
 
           {/* Main Headline */}
           <motion.h1
-            initial={{ opacity: 0, y: 35 }}
+            initial={{ opacity: 0, y: 25 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
-            className="text-hero-headline font-normal text-off-white mb-6 sm:mb-8 tracking-tight max-w-[650px] leading-[1.04]"
+            transition={{ duration: 0.7, delay: 0.2 }}
+            className="text-hero-headline font-extrabold text-eureka-dark mb-6 sm:mb-8 tracking-tight max-w-[660px]"
           >
-           If your product moves{" "}
-            <span className="italic font-serif text-eureka-green decoration-2 underline-offset-8">
+            If your business moves{" "}
+            <span className="bg-gradient-to-r from-eureka-blue to-eureka-indigo bg-clip-text text-transparent italic font-serif">
               fast
             </span>
-            <br />
+            ,<br />
             Your website <br />
-            <span className="italic font-serif text-soft-gray underline decoration-eureka-green decoration-2 underline-offset-8">
-              should too.
+            <span className="underline underline-offset-8 decoration-eureka-blue decoration-4 text-eureka-dark">
+              should lead.
             </span>
           </motion.h1>
 
-          {/* Supporting Description */}
+          {/* Subtitle */}
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.45 }}
-            className="text-sm sm:text-lg text-white/60 max-w-[520px] mb-8 sm:mb-10 leading-relaxed font-normal"
+            transition={{ duration: 0.7, delay: 0.35 }}
+            className="text-base sm:text-xl text-eureka-slate max-w-[540px] mb-8 sm:mb-10 leading-relaxed font-normal"
           >
-            Ethio-Eureka is a partner for ambitious brands helping them build, improve, and grow digital experiences that keep pace with their products.
+            Ethio-Eureka is an independent studio crafting bespoke brand identities, ultra-smooth web applications, and dynamic CMS engines.
           </motion.p>
 
-          {/* CTA Buttons */}
+          {/* Action CTAs */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.6 }}
-            className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5 mb-8 sm:mb-10 w-full sm:w-auto"
+            transition={{ duration: 0.7, delay: 0.5 }}
+            className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 mb-10 w-full sm:w-auto"
           >
             <Link
               href="/contact"
-              className="inline-flex items-center justify-center gap-3 bg-off-white text-deep-black font-semibold text-sm rounded-full px-8 py-3.5 sm:py-4 hover:bg-eureka-green transition-all duration-300 group shadow-xl shadow-white/5 w-full sm:w-auto text-center"
+              className="inline-flex items-center justify-center gap-3 bg-gradient-to-r from-eureka-blue to-eureka-indigo text-white font-semibold text-sm rounded-full px-8 py-4 hover:shadow-eureka-lg transition-all duration-300 group text-center"
             >
-              <span>Start partnership</span>
-              <ArrowRight size={16} className="group-hover:translate-x-1.5 transition-transform" />
+              <span>Start a Project</span>
+              <ArrowRight size={17} className="group-hover:translate-x-1.5 transition-transform" />
             </Link>
 
             <Link
-              href="/work"
-              className="inline-flex items-center justify-center gap-3 bg-[#151515] border border-white/15 text-off-white font-medium text-sm rounded-full px-8 py-3.5 sm:py-4 hover:border-eureka-green hover:text-eureka-green transition-all duration-300 group w-full sm:w-auto text-center"
+              href="/#work"
+              className="inline-flex items-center justify-center gap-3 bg-slate-50 border border-eureka-border text-eureka-dark font-semibold text-sm rounded-full px-8 py-4 hover:border-eureka-blue hover:text-eureka-blue hover:bg-white transition-all duration-300 group text-center shadow-sm"
             >
-              <span>View work</span>
-              <ArrowDownRight size={16} className="group-hover:translate-x-0.5 group-hover:translate-y-0.5 transition-transform" />
+              <span>Explore Portfolio</span>
+              <ArrowDownRight size={17} className="group-hover:translate-x-0.5 group-hover:translate-y-0.5 transition-transform" />
             </Link>
           </motion.div>
 
-          {/* Feature Micro List */}
+          {/* Feature Highlights Grid */}
           <motion.div
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.75 }}
-            className="grid grid-cols-2 sm:grid-cols-2 gap-2.5 pt-6 border-t border-white/[0.08] max-w-[540px] w-full"
+            transition={{ duration: 0.6, delay: 0.65 }}
+            className="grid grid-cols-2 gap-3 pt-6 border-t border-eureka-border max-w-[540px] w-full"
           >
-            <div className="flex items-center gap-2 bg-white/[0.03] border border-white/[0.06] px-3 py-2 rounded-lg text-[11px] text-soft-gray font-mono">
-              <span className="w-1.5 h-1.5 rounded-full bg-eureka-green shrink-0" />
-              <span className="truncate">Launch in 4-6 wks</span>
+            <div className="flex items-center gap-2 bg-slate-50 border border-eureka-border px-3.5 py-2.5 rounded-xl text-xs text-eureka-slate font-medium shadow-sm">
+              <Sparkles size={14} className="text-eureka-blue shrink-0" />
+              <span className="truncate">Rapid 4-Week Delivery</span>
             </div>
 
-            <div className="flex items-center gap-2 bg-white/[0.03] border border-white/[0.06] px-3 py-2 rounded-lg text-[11px] text-soft-gray font-mono">
-              <span className="w-1.5 h-1.5 rounded-full bg-eureka-green shrink-0" />
-              <span className="truncate">Web & App Design</span>
+            <div className="flex items-center gap-2 bg-slate-50 border border-eureka-border px-3.5 py-2.5 rounded-xl text-xs text-eureka-slate font-medium shadow-sm">
+              <Sparkles size={14} className="text-eureka-indigo shrink-0" />
+              <span className="truncate">Full Supabase CMS Engine</span>
             </div>
 
-            <div className="flex items-center gap-2 bg-white/[0.03] border border-white/[0.06] px-3 py-2 rounded-lg text-[11px] text-soft-gray font-mono">
-              <span className="w-1.5 h-1.5 rounded-full bg-eureka-green shrink-0" />
-              <span className="truncate">Brand Systems</span>
+            <div className="flex items-center gap-2 bg-slate-50 border border-eureka-border px-3.5 py-2.5 rounded-xl text-xs text-eureka-slate font-medium shadow-sm">
+              <Sparkles size={14} className="text-eureka-blue shrink-0" />
+              <span className="truncate">Brand Strategy & Design</span>
             </div>
 
-            <div className="flex items-center gap-2 bg-white/[0.03] border border-white/[0.06] px-3 py-2 rounded-lg text-[11px] text-soft-gray font-mono">
-              <span className="w-1.5 h-1.5 rounded-full bg-eureka-green shrink-0" />
-              <span className="truncate">High Growth Tech</span>
+            <div className="flex items-center gap-2 bg-slate-50 border border-eureka-border px-3.5 py-2.5 rounded-xl text-xs text-eureka-slate font-medium shadow-sm">
+              <Sparkles size={14} className="text-eureka-indigo shrink-0" />
+              <span className="truncate">Global Performance SEO</span>
             </div>
           </motion.div>
 
         </div>
 
-        {/* RIGHT COLUMN: SHOWCASE OR 3D LOGO FALLBACK */}
-        <div className="lg:col-span-6 xl:col-span-6 relative h-[650px] w-full hidden lg:block overflow-hidden rounded-2xl border border-white/[0.06] bg-[#0E0E0E]/60 backdrop-blur-sm">
-          
+        {/* Right Column: Showcase Vertical Marquee or 3D Logo Badge */}
+        <div className="lg:col-span-6 xl:col-span-6 relative h-[620px] w-full hidden lg:block overflow-hidden rounded-3xl border border-eureka-border bg-slate-50/80 shadow-eureka-md">
           {displayCards.length === 0 ? (
             <Logo3DCard />
           ) : (
             <>
-              {/* Top & Bottom Fade Gradients */}
-              <div className="absolute top-0 inset-x-0 h-24 bg-gradient-to-b from-[#0A0A0A] via-[#0A0A0A]/70 to-transparent z-20 pointer-events-none" />
-              <div className="absolute bottom-0 inset-x-0 h-24 bg-gradient-to-t from-[#0A0A0A] via-[#0A0A0A]/70 to-transparent z-20 pointer-events-none" />
+              {/* Fade Gradients */}
+              <div className="absolute top-0 inset-x-0 h-20 bg-gradient-to-b from-slate-50 via-slate-50/80 to-transparent z-20 pointer-events-none" />
+              <div className="absolute bottom-0 inset-x-0 h-20 bg-gradient-to-t from-slate-50 via-slate-50/80 to-transparent z-20 pointer-events-none" />
 
-              {/* Vertical Continuous Marquee Container */}
+              {/* Vertical Marquee */}
               <div className="w-full h-full p-4 overflow-hidden">
                 <div className="animate-marquee-vertical flex flex-col gap-6">
                   {marqueeCards.map((card, idx) => (
                     <Link
                       key={`${card.id}-${idx}`}
                       href={card.slug ? `/work/${card.slug}` : "/work"}
-                      className="group relative bg-[#141414] border border-white/10 rounded-2xl p-3.5 transition-all duration-300 hover:border-eureka-green hover:scale-[1.01] hover:shadow-2xl hover:shadow-eureka-green/10 cursor-pointer block"
+                      className="group relative bg-white border border-eureka-border rounded-2xl p-4 transition-all duration-300 hover:border-eureka-blue hover:shadow-eureka-lg cursor-pointer block shadow-sm"
                     >
-                      {/* Card macOS Window Bar */}
-                      <div className="bg-[#0B0B0B] border border-white/[0.06] rounded-xl p-2.5 space-y-2.5">
-                        
-                        <div className="flex items-center justify-between font-mono text-[10px] text-soft-gray border-b border-white/[0.06] pb-2">
+                      <div className="space-y-3">
+                        <div className="flex items-center justify-between font-mono text-xs text-eureka-slate border-b border-eureka-border pb-2.5">
                           <div className="flex items-center gap-1.5">
-                            <span className="w-2.5 h-2.5 rounded-full bg-[#FF5F56]" />
-                            <span className="w-2.5 h-2.5 rounded-full bg-[#FFBD2E]" />
-                            <span className="w-2.5 h-2.5 rounded-full bg-[#27C93F]" />
+                            <span className="w-2.5 h-2.5 rounded-full bg-red-400" />
+                            <span className="w-2.5 h-2.5 rounded-full bg-amber-400" />
+                            <span className="w-2.5 h-2.5 rounded-full bg-emerald-400" />
                           </div>
-                          <span className="text-white/40 truncate max-w-[160px] font-mono">{card.category}</span>
+                          <span className="font-semibold text-eureka-blue truncate max-w-[180px]">{card.category}</span>
                         </div>
 
-                        {/* Screenshot Preview */}
-                        <div className="relative aspect-[16/10] w-full rounded-lg overflow-hidden bg-black/60">
+                        {/* Image Preview */}
+                        <div className="relative aspect-[16/10] w-full rounded-xl overflow-hidden bg-slate-100">
                           <Image
                             src={card.image}
                             alt={card.title}
                             fill
-                            className="object-cover group-hover:scale-105 transition-transform duration-700 ease-out opacity-90 group-hover:opacity-100"
+                            className="object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
                             sizes="(max-width: 768px) 100vw, 500px"
                           />
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60" />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-40 group-hover:opacity-20 transition-opacity" />
 
-                          {/* Hover Action Pill */}
-                          <div className="absolute bottom-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-eureka-green text-deep-black font-semibold font-mono text-[10px] uppercase px-3 py-1.5 rounded shadow-xl flex items-center gap-1.5">
-                            <span>VIEW PROJECT</span>
-                            <ExternalLink size={10} />
+                          {/* Hover Action */}
+                          <div className="absolute bottom-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-eureka-blue text-white font-semibold text-[11px] uppercase px-3 py-1.5 rounded-full shadow-lg flex items-center gap-1">
+                            <span>VIEW</span>
+                            <ExternalLink size={12} />
                           </div>
                         </div>
 
-                        {/* Card Title Bar */}
-                        <div className="flex items-center justify-between pt-1.5 px-1 font-mono text-xs">
+                        <div className="flex items-center justify-between pt-1 font-sans">
                           <div>
-                            <h4 className="font-semibold text-off-white group-hover:text-eureka-green transition-colors">
+                            <h4 className="font-bold text-eureka-dark text-base group-hover:text-eureka-blue transition-colors">
                               {card.title}
                             </h4>
-                            <p className="text-[10px] text-soft-gray">{card.category}</p>
+                            <p className="text-xs text-eureka-slate">{card.category}</p>
                           </div>
-                          <ExternalLink size={14} className="text-soft-gray group-hover:text-eureka-green transition-colors" />
+                          <ExternalLink size={16} className="text-eureka-slate group-hover:text-eureka-blue transition-colors" />
                         </div>
-
                       </div>
                     </Link>
                   ))}
@@ -364,41 +330,37 @@ export default function Hero({ projects }: HeroProps) {
               </div>
             </>
           )}
-
         </div>
 
       </div>
 
-      {/* 3. BOTTOM HERO METADATA & SCROLL INDICATOR */}
-      <footer className="relative z-40 max-w-[1440px] mx-auto px-6 md:px-12 w-full pt-4 sm:pt-6 flex flex-row items-center justify-between text-xs font-mono text-soft-gray border-t border-white/[0.06] gap-3">
-        {/* Left Info */}
+      {/* Hero Bottom Bar */}
+      <footer className="relative z-20 max-w-7xl mx-auto px-6 md:px-12 w-full pt-4 flex flex-row items-center justify-between text-xs font-mono text-eureka-slate border-t border-eureka-border gap-3">
         <div className="flex items-center gap-4">
-          <span className="hidden sm:inline">Web · Brand · Content · Systems</span>
-          <span className="text-white/20 hidden sm:inline">/</span>
-          <span className="text-eureka-green flex items-center gap-2 text-[11px] sm:text-xs">
-            <span className="w-1.5 h-1.5 bg-eureka-green rounded-full animate-pulse shrink-0" />
-            Contact us now
+          <span className="hidden sm:inline font-semibold">Web · Brand · CMS · Engineering</span>
+          <span className="text-slate-300 hidden sm:inline">/</span>
+          <span className="text-eureka-blue flex items-center gap-2 text-xs font-semibold">
+            <span className="w-2 h-2 bg-eureka-blue rounded-full blue-dot-pulse shrink-0" />
+            Taking New Clients
           </span>
         </div>
 
-        {/* Center Scroll Indicator Line */}
-        <div className="flex items-center gap-2 sm:gap-3">
-          <span className="text-[10px] sm:text-[11px] uppercase tracking-widest text-soft-gray/80">(SCROLL)</span>
-          <div className="w-px h-5 sm:h-6 bg-white/20 relative overflow-hidden">
+        <div className="flex items-center gap-3">
+          <span className="text-xs uppercase tracking-widest text-eureka-slate font-semibold">(SCROLL)</span>
+          <div className="w-px h-6 bg-slate-300 relative overflow-hidden">
             <motion.div
-              className="w-full h-full bg-eureka-green"
+              className="w-full h-full bg-eureka-blue"
               animate={{ y: ["-100%", "100%"] }}
               transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
             />
           </div>
         </div>
 
-        {/* Right Info */}
         <div className="hidden md:block">
-          <span>Available for selected partnerships</span>
+          <span>Available for global partnerships</span>
         </div>
       </footer>
-
     </section>
   );
 }
+

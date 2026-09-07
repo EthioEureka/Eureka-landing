@@ -10,12 +10,17 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        "deep-black": "#0A0A0A",
-        "off-white": "#F5F3EE",
-        "soft-gray": "#B7B7B2",
-        "dark-gray": "#181818",
-        "border-gray": "#2B2B2B",
-        "eureka-green": "#B8FF3D",
+        "eureka-blue": "#2563EB",
+        "eureka-blue-dark": "#1D4ED8",
+        "eureka-blue-light": "#60A5FA",
+        "eureka-indigo": "#4F46E5",
+        "eureka-dark": "#0F172A",
+        "eureka-slate": "#475569",
+        "eureka-muted": "#64748B",
+        "eureka-light": "#F8FAFC",
+        "eureka-card": "#FFFFFF",
+        "eureka-border": "#E2E8F0",
+        "eureka-border-hover": "#CBD5E1",
       },
       fontFamily: {
         sans: ["var(--font-geist-sans)", "Inter", "sans-serif"],
@@ -24,6 +29,12 @@ const config: Config = {
       letterSpacing: {
         tightest: "-0.04em",
         tighter: "-0.02em",
+      },
+      boxShadow: {
+        "eureka-sm": "0 1px 3px 0 rgba(15, 23, 42, 0.05)",
+        "eureka-md": "0 4px 12px -2px rgba(15, 23, 42, 0.08)",
+        "eureka-lg": "0 12px 30px -4px rgba(37, 99, 235, 0.12)",
+        "eureka-glow": "0 0 25px 0 rgba(37, 99, 235, 0.25)",
       },
       animation: {
         marquee: "marquee 25s linear infinite",
@@ -42,3 +53,4 @@ const config: Config = {
 };
 
 export default config;
+

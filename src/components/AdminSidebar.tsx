@@ -34,22 +34,22 @@ export default function AdminSidebar() {
   ];
 
   return (
-    <aside className="w-64 bg-dark-gray border-r border-border-gray min-h-screen flex flex-col justify-between p-4 shrink-0">
+    <aside className="w-64 bg-white border-r border-eureka-border min-h-screen flex flex-col justify-between p-4 shrink-0 shadow-sm">
       <div>
         {/* Brand Header */}
-        <div className="p-4 border-b border-border-gray/60 flex items-center gap-3 mb-6">
+        <div className="p-4 border-b border-eureka-border flex items-center gap-3 mb-6">
           <div className="relative w-8 h-8 shrink-0">
-            <Image src="/logo.svg" alt="Logo" fill className="object-contain" />
+            <Image src="/Eureka-logo.png" alt="Ethio-Eureka Logo" fill className="object-contain" />
           </div>
           <div>
-            <h1 className="text-sm font-bold text-off-white font-mono">ETHIO-EUREKA</h1>
-            <p className="text-[10px] font-mono text-eureka-green">CMS DASHBOARD</p>
+            <h1 className="text-sm font-extrabold text-eureka-dark tracking-tight">ETHIO-EUREKA</h1>
+            <p className="text-[10px] font-mono text-eureka-blue font-bold tracking-wider">CMS DASHBOARD</p>
           </div>
         </div>
 
         {/* Navigation Section */}
         <div className="space-y-1">
-          <p className="text-[10px] font-mono text-soft-gray uppercase px-4 mb-2 tracking-wider">
+          <p className="text-[10px] font-mono text-eureka-slate uppercase px-4 mb-3 tracking-wider font-bold">
             Content & Leads
           </p>
           {navItems.map((item) => {
@@ -63,10 +63,10 @@ export default function AdminSidebar() {
               <Link
                 key={item.href}
                 href={item.href}
-                className={`flex items-center gap-3 px-4 py-3 text-xs font-mono rounded transition-colors ${
+                className={`flex items-center gap-3 px-4 py-3 text-xs font-mono rounded-xl transition-all ${
                   isActive
-                    ? "bg-eureka-green text-deep-black font-semibold"
-                    : "text-soft-gray hover:text-off-white hover:bg-deep-black/60"
+                    ? "bg-eureka-blue text-white font-bold shadow-eureka-sm"
+                    : "text-eureka-slate hover:text-eureka-dark hover:bg-slate-100"
                 }`}
               >
                 <Icon size={16} />
@@ -78,17 +78,17 @@ export default function AdminSidebar() {
       </div>
 
       {/* Logout & System info */}
-      <div className="pt-4 border-t border-border-gray/60 space-y-3">
-        <div className="px-4 py-2 bg-deep-black/60 rounded border border-border-gray/40 text-[10px] font-mono text-soft-gray flex items-center justify-between">
-          <span>ENV: PRODUCTION</span>
-          <span className="flex items-center gap-1 text-eureka-green">
-            <Sparkles size={10} /> v1.0
+      <div className="pt-4 border-t border-eureka-border space-y-3">
+        <div className="px-4 py-2.5 bg-slate-50 rounded-xl border border-eureka-border text-[10px] font-mono text-eureka-slate flex items-center justify-between">
+          <span className="font-semibold">ENV: SUPABASE</span>
+          <span className="flex items-center gap-1 text-eureka-blue font-bold">
+            <Sparkles size={10} /> v2.0
           </span>
         </div>
 
         <button
           onClick={handleLogout}
-          className="w-full flex items-center gap-3 px-4 py-2.5 text-xs font-mono text-red-400 hover:bg-red-950/30 rounded transition-colors"
+          className="w-full flex items-center gap-3 px-4 py-2.5 text-xs font-mono font-bold text-red-600 hover:bg-red-50 rounded-xl transition-colors"
         >
           <LogOut size={16} />
           <span>Sign Out</span>
@@ -97,3 +97,4 @@ export default function AdminSidebar() {
     </aside>
   );
 }
+

@@ -62,8 +62,8 @@ export default function CustomCursor() {
     <div className="pointer-events-none fixed inset-0 z-50 overflow-hidden hidden md:block">
       {/* Outer subtle ring */}
       <motion.div
-        className={`fixed top-0 left-0 rounded-full border border-eureka-green/60 flex items-center justify-center transition-opacity duration-300 ${
-          cursorText ? "bg-eureka-green text-deep-black font-semibold text-[10px] tracking-widest px-2" : ""
+        className={`fixed top-0 left-0 rounded-full border border-eureka-blue/60 flex items-center justify-center transition-opacity duration-300 ${
+          cursorText ? "bg-eureka-blue text-white font-bold text-[10px] tracking-widest px-2 shadow-sm" : ""
         }`}
         animate={{
           x: position.x - (cursorText ? 28 : isHovered ? 24 : 12),
@@ -79,7 +79,7 @@ export default function CustomCursor() {
 
       {/* Center sharp dot */}
       <motion.div
-        className="fixed top-0 left-0 w-2 h-2 bg-eureka-green rounded-full"
+        className="fixed top-0 left-0 w-2 h-2 bg-eureka-blue rounded-full"
         animate={{
           x: position.x - 4,
           y: position.y - 4,
@@ -90,3 +90,4 @@ export default function CustomCursor() {
     </div>
   );
 }
+

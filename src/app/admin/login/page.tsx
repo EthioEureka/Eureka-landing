@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Lock, Mail, ArrowRight, ShieldCheck } from "lucide-react";
 
@@ -39,57 +40,57 @@ export default function AdminLoginPage() {
   };
 
   return (
-    <div className="min-h-[80vh] flex items-center justify-center">
-      <div className="w-full max-w-md bg-dark-gray border border-border-gray p-8 shadow-2xl">
+    <div className="min-h-[80vh] flex items-center justify-center py-12">
+      <div className="w-full max-w-md bg-white border border-eureka-border rounded-3xl p-8 md:p-10 shadow-eureka-lg">
         
         {/* Top Header */}
         <div className="text-center mb-8">
-          <div className="w-12 h-12 rounded bg-eureka-green text-deep-black font-bold text-xl flex items-center justify-center font-mono mx-auto mb-4">
-            E
+          <div className="relative w-14 h-14 mx-auto mb-4">
+            <Image src="/Eureka-logo.png" alt="Ethio-Eureka Logo" fill className="object-contain" />
           </div>
-          <h1 className="text-2xl font-light text-off-white">Ethio-Eureka CMS</h1>
-          <p className="text-xs font-mono text-soft-gray mt-1">
+          <h1 className="text-2xl font-extrabold text-eureka-dark tracking-tight">Ethio-Eureka CMS</h1>
+          <p className="text-xs font-mono text-eureka-blue font-bold tracking-wider mt-1">
             AUTHENTICATED CMS CONTROL PORTAL
           </p>
         </div>
 
         <form onSubmit={handleLogin} className="space-y-6">
           {errorMsg && (
-            <div className="p-3 bg-red-950/50 border border-red-800 text-red-300 font-mono text-xs text-center">
+            <div className="p-3 bg-red-50 border border-red-200 text-red-700 font-sans text-xs text-center rounded-xl font-medium">
               {errorMsg}
             </div>
           )}
 
           <div>
-            <label className="block text-xs font-mono text-soft-gray uppercase mb-2">
+            <label className="block text-xs font-mono text-eureka-slate uppercase font-bold mb-2">
               Admin Email
             </label>
             <div className="relative">
-              <Mail size={16} className="absolute left-3 top-3.5 text-soft-gray" />
+              <Mail size={16} className="absolute left-3.5 top-3.5 text-eureka-slate" />
               <input
                 type="email"
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="admin@ethio-eureka.com"
-                className="w-full bg-deep-black border border-border-gray text-off-white pl-10 pr-4 py-3 text-sm focus:border-eureka-green focus:outline-none font-mono"
+                className="w-full bg-slate-50 border border-eureka-border text-eureka-dark pl-10 pr-4 py-3 text-sm focus:border-eureka-blue focus:ring-2 focus:ring-eureka-blue/20 focus:outline-none font-mono rounded-xl transition-all"
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-xs font-mono text-soft-gray uppercase mb-2">
+            <label className="block text-xs font-mono text-eureka-slate uppercase font-bold mb-2">
               Admin Password
             </label>
             <div className="relative">
-              <Lock size={16} className="absolute left-3 top-3.5 text-soft-gray" />
+              <Lock size={16} className="absolute left-3.5 top-3.5 text-eureka-slate" />
               <input
                 type="password"
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••••••"
-                className="w-full bg-deep-black border border-border-gray text-off-white pl-10 pr-4 py-3 text-sm focus:border-eureka-green focus:outline-none font-mono"
+                className="w-full bg-slate-50 border border-eureka-border text-eureka-dark pl-10 pr-4 py-3 text-sm focus:border-eureka-blue focus:ring-2 focus:ring-eureka-blue/20 focus:outline-none font-mono rounded-xl transition-all"
               />
             </div>
           </div>
@@ -97,16 +98,16 @@ export default function AdminLoginPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-eureka-green text-deep-black font-semibold text-xs uppercase tracking-widest py-3 px-6 hover:bg-white transition-colors flex items-center justify-center gap-2 disabled:opacity-50 font-mono"
+            className="w-full bg-eureka-blue text-white font-bold text-xs uppercase tracking-wider py-3.5 px-6 rounded-xl hover:bg-eureka-indigo transition-all flex items-center justify-center gap-2 disabled:opacity-50 font-mono shadow-eureka-sm"
           >
             <span>{loading ? "Authenticating..." : "Access Dashboard"}</span>
             {!loading && <ArrowRight size={16} />}
           </button>
         </form>
 
-        <div className="mt-8 pt-6 border-t border-border-gray/50 flex items-center justify-between text-[10px] font-mono text-soft-gray">
-          <span className="flex items-center gap-1">
-            <ShieldCheck size={12} className="text-eureka-green" /> 256-BIT ENCRYPTION
+        <div className="mt-8 pt-6 border-t border-eureka-border flex items-center justify-between text-[10px] font-mono text-eureka-slate">
+          <span className="flex items-center gap-1 font-bold">
+            <ShieldCheck size={12} className="text-eureka-blue" /> SUPABASE SECURED
           </span>
           <span>ETHIO-EUREKA © 2026</span>
         </div>
@@ -115,3 +116,4 @@ export default function AdminLoginPage() {
     </div>
   );
 }
+

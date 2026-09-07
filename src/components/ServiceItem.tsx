@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Plus, Minus, ArrowUpRight, Layout, Sparkles, FileText, Share2, PenTool } from "lucide-react";
+import { Plus, Minus, ArrowUpRight, Layout, Sparkles, FileText, Share2, PenTool, CheckCircle2 } from "lucide-react";
 import { Service } from "@/lib/types";
 import Link from "next/link";
 
@@ -12,11 +12,11 @@ interface ServiceItemProps {
 }
 
 const iconMap: Record<string, React.ReactNode> = {
-  Layout: <Layout size={24} className="text-eureka-green" />,
-  Sparkles: <Sparkles size={24} className="text-eureka-green" />,
-  FileText: <FileText size={24} className="text-eureka-green" />,
-  Share2: <Share2 size={24} className="text-eureka-green" />,
-  PenTool: <PenTool size={24} className="text-eureka-green" />,
+  Layout: <Layout size={24} className="text-eureka-blue" />,
+  Sparkles: <Sparkles size={24} className="text-eureka-blue" />,
+  FileText: <FileText size={24} className="text-eureka-blue" />,
+  Share2: <Share2 size={24} className="text-eureka-blue" />,
+  PenTool: <PenTool size={24} className="text-eureka-blue" />,
 };
 
 export default function ServiceItem({ service, index }: ServiceItemProps) {
@@ -26,8 +26,8 @@ export default function ServiceItem({ service, index }: ServiceItemProps) {
 
   return (
     <div
-      className={`border-b border-border-gray/70 transition-all duration-300 ${
-        isOpen ? "bg-dark-gray/60" : "hover:bg-dark-gray/30"
+      className={`border-b border-eureka-border transition-all duration-300 ${
+        isOpen ? "bg-slate-50/80" : "hover:bg-slate-50/40"
       }`}
     >
       {/* Header Row */}
@@ -38,12 +38,12 @@ export default function ServiceItem({ service, index }: ServiceItemProps) {
       >
         <div className="flex items-center gap-6 md:gap-12">
           {/* Index Number */}
-          <span className="font-mono text-sm md:text-base text-soft-gray group-hover:text-eureka-green transition-colors">
+          <span className="font-mono text-sm md:text-base font-semibold text-eureka-slate group-hover:text-eureka-blue transition-colors">
             {formatNumber(index + 1)}
           </span>
 
           {/* Title */}
-          <h3 className="text-2xl sm:text-3xl md:text-4xl font-light tracking-tight text-off-white group-hover:text-eureka-green group-hover:translate-x-1 transition-all">
+          <h3 className="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight text-eureka-dark group-hover:text-eureka-blue group-hover:translate-x-1 transition-all">
             {service.title}
           </h3>
         </div>
@@ -56,8 +56,8 @@ export default function ServiceItem({ service, index }: ServiceItemProps) {
 
           {/* Expand/Collapse Toggle */}
           <div
-            className={`w-10 h-10 rounded-full border border-border-gray flex items-center justify-center text-soft-gray group-hover:border-eureka-green group-hover:text-eureka-green transition-all ${
-              isOpen ? "bg-eureka-green text-deep-black border-eureka-green" : ""
+            className={`w-10 h-10 rounded-full border border-eureka-border flex items-center justify-center text-eureka-slate group-hover:border-eureka-blue group-hover:text-eureka-blue transition-all ${
+              isOpen ? "bg-eureka-blue text-white border-eureka-blue shadow-sm" : "bg-white shadow-sm"
             }`}
           >
             {isOpen ? <Minus size={18} /> : <Plus size={18} />}
@@ -75,45 +75,45 @@ export default function ServiceItem({ service, index }: ServiceItemProps) {
             transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
             className="overflow-hidden"
           >
-            <div className="pb-10 px-6 md:px-12 pl-12 md:pl-28 grid grid-cols-1 md:grid-cols-12 gap-8 items-start border-t border-border-gray/30 pt-6">
+            <div className="pb-10 px-6 md:px-12 pl-12 md:pl-28 grid grid-cols-1 md:grid-cols-12 gap-8 items-start border-t border-eureka-border/60 pt-6">
               
               <div className="md:col-span-8">
-                <p className="text-lg md:text-xl font-normal text-off-white mb-4 leading-relaxed">
+                <p className="text-lg md:text-xl font-bold text-eureka-dark mb-4 leading-relaxed">
                   {service.short_description}
                 </p>
-                <p className="text-sm md:text-base text-soft-gray leading-relaxed mb-6">
+                <p className="text-sm md:text-base text-eureka-slate leading-relaxed mb-6">
                   {service.description}
                 </p>
 
                 <Link
                   href={`/contact?service=${encodeURIComponent(service.title)}`}
-                  className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-widest text-eureka-green hover:underline decoration-eureka-green underline-offset-4"
+                  className="inline-flex items-center gap-2 font-mono text-xs font-semibold uppercase tracking-wider text-eureka-blue hover:text-eureka-indigo transition-colors"
                 >
                   <span>Inquire about this service</span>
                   <ArrowUpRight size={14} />
                 </Link>
               </div>
 
-              <div className="md:col-span-4 bg-deep-black/60 p-6 border border-border-gray/50 font-mono text-xs text-soft-gray">
-                <p className="text-off-white font-semibold mb-3 border-b border-border-gray/40 pb-2">
+              <div className="md:col-span-4 bg-white p-6 rounded-2xl border border-eureka-border font-sans text-xs text-eureka-slate shadow-sm">
+                <p className="text-eureka-dark font-extrabold mb-3 border-b border-eureka-border pb-2 uppercase tracking-wider font-mono">
                   DELIVERABLES & PROCESS
                 </p>
-                <ul className="space-y-2">
-                  <li className="flex items-center gap-2">
-                    <span className="w-1 h-1 bg-eureka-green rounded-full" />
-                    <span>Tailored Strategy & Direction</span>
+                <ul className="space-y-2.5">
+                  <li className="flex items-center gap-2.5">
+                    <CheckCircle2 size={14} className="text-eureka-blue shrink-0" />
+                    <span>Tailored Strategy & Brand Direction</span>
                   </li>
-                  <li className="flex items-center gap-2">
-                    <span className="w-1 h-1 bg-eureka-green rounded-full" />
-                    <span>Swiss Editorial Visual Standards</span>
+                  <li className="flex items-center gap-2.5">
+                    <CheckCircle2 size={14} className="text-eureka-blue shrink-0" />
+                    <span>Modern Visual Identity System</span>
                   </li>
-                  <li className="flex items-center gap-2">
-                    <span className="w-1 h-1 bg-eureka-green rounded-full" />
+                  <li className="flex items-center gap-2.5">
+                    <CheckCircle2 size={14} className="text-eureka-blue shrink-0" />
                     <span>High-Performance Code Execution</span>
                   </li>
-                  <li className="flex items-center gap-2">
-                    <span className="w-1 h-1 bg-eureka-green rounded-full" />
-                    <span>Ongoing Support & Evolution</span>
+                  <li className="flex items-center gap-2.5">
+                    <CheckCircle2 size={14} className="text-eureka-blue shrink-0" />
+                    <span>Supabase CMS Integration & Support</span>
                   </li>
                 </ul>
               </div>
@@ -125,3 +125,4 @@ export default function ServiceItem({ service, index }: ServiceItemProps) {
     </div>
   );
 }
+
