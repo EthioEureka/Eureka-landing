@@ -69,7 +69,7 @@ export default function ProjectCard({ project, variant = "medium", index }: Proj
                   {project.client || "CLIENT WORK"}
                 </span>
               </div>
-              <h3 className="text-2xl sm:text-3xl font-extrabold text-white group-hover:text-blue-300 transition-all drop-shadow-sm">
+              <h3 className="text-2xl sm:text-3xl font-extrabold text-white group-hover:text-eureka-blue transition-all drop-shadow-sm">
                 {project.title}
               </h3>
             </div>
