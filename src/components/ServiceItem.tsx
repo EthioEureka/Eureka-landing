@@ -94,29 +94,21 @@ export default function ServiceItem({ service, index }: ServiceItemProps) {
                 </Link>
               </div>
 
-              <div className="md:col-span-4 bg-white p-6 rounded-2xl border border-eureka-border font-sans text-xs text-eureka-slate shadow-sm">
-                <p className="text-eureka-dark font-extrabold mb-3 border-b border-eureka-border pb-2 uppercase tracking-wider font-mono">
-                  DELIVERABLES & PROCESS
-                </p>
-                <ul className="space-y-2.5">
-                  <li className="flex items-center gap-2.5">
-                    <CheckCircle2 size={14} className="text-eureka-blue shrink-0" />
-                    <span>Tailored Strategy & Brand Direction</span>
-                  </li>
-                  <li className="flex items-center gap-2.5">
-                    <CheckCircle2 size={14} className="text-eureka-blue shrink-0" />
-                    <span>Modern Visual Identity System</span>
-                  </li>
-                  <li className="flex items-center gap-2.5">
-                    <CheckCircle2 size={14} className="text-eureka-blue shrink-0" />
-                    <span>High-Performance Code Execution</span>
-                  </li>
-                  <li className="flex items-center gap-2.5">
-                    <CheckCircle2 size={14} className="text-eureka-blue shrink-0" />
-                    <span>Supabase CMS Integration & Support</span>
-                  </li>
-                </ul>
-              </div>
+              {service.deliverables && service.deliverables.length > 0 && (
+                <div className="md:col-span-4 bg-white p-6 rounded-2xl border border-eureka-border font-sans text-xs text-eureka-slate shadow-sm">
+                  <p className="text-eureka-dark font-extrabold mb-3 border-b border-eureka-border pb-2 uppercase tracking-wider font-mono">
+                    DELIVERABLES & PROCESS
+                  </p>
+                  <ul className="space-y-2.5">
+                    {service.deliverables.map((item, i) => (
+                      <li key={i} className="flex items-center gap-2.5">
+                        <CheckCircle2 size={14} className="text-eureka-blue shrink-0" />
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
 
             </div>
           </motion.div>

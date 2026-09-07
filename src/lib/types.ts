@@ -32,6 +32,8 @@ export interface Service {
   sort_order: number;
   featured: boolean;
   published: boolean;
+  deliverables?: string[];      // list of deliverable items shown in ServiceItem card
+  show_in_marquee?: boolean;    // whether this service title shows in hero marquee
 }
 
 export interface Testimonial {

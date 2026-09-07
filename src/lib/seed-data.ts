@@ -35,6 +35,13 @@ export const defaultServices: Service[] = [
     sort_order: 1,
     featured: true,
     published: true,
+    deliverables: [
+      "Discovery & UX Research",
+      "Responsive UI Design System",
+      "Next.js Full-Stack Development",
+      "SEO & Performance Optimisation",
+    ],
+    show_in_marquee: true,
   },
   {
     id: "srv-02",
@@ -48,6 +55,13 @@ export const defaultServices: Service[] = [
     sort_order: 2,
     featured: true,
     published: true,
+    deliverables: [
+      "Logo & Brand Mark Design",
+      "Visual Identity Guidelines",
+      "Typography & Colour Systems",
+      "Brand Collateral & Print Assets",
+    ],
+    show_in_marquee: true,
   },
   {
     id: "srv-03",
@@ -61,6 +75,13 @@ export const defaultServices: Service[] = [
     sort_order: 3,
     featured: true,
     published: true,
+    deliverables: [
+      "CMS Architecture & Setup",
+      "Content Workflow Design",
+      "Editorial Template Library",
+      "Admin Training & Handover",
+    ],
+    show_in_marquee: true,
   },
   {
     id: "srv-04",
@@ -74,6 +95,13 @@ export const defaultServices: Service[] = [
     sort_order: 4,
     featured: true,
     published: true,
+    deliverables: [
+      "Content Strategy & Calendar",
+      "Visual Post Design & Copy",
+      "Platform Growth Management",
+      "Analytics & Monthly Reports",
+    ],
+    show_in_marquee: true,
   },
   {
     id: "srv-05",
@@ -87,6 +115,13 @@ export const defaultServices: Service[] = [
     sort_order: 5,
     featured: true,
     published: true,
+    deliverables: [
+      "Campaign Concept & Art Direction",
+      "Corporate Presentation Design",
+      "Print & Digital Collateral",
+      "Annual Reports & Investor Decks",
+    ],
+    show_in_marquee: true,
   },
 ];
 

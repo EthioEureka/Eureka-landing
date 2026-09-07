@@ -38,8 +38,15 @@ CREATE TABLE IF NOT EXISTS public.services (
   icon TEXT,
   sort_order INTEGER DEFAULT 0,
   featured BOOLEAN DEFAULT true,
-  published BOOLEAN DEFAULT true
+  published BOOLEAN DEFAULT true,
+  deliverables JSONB DEFAULT '[]'::jsonb,
+  show_in_marquee BOOLEAN DEFAULT true
 );
+
+-- MIGRATION: Add deliverables and show_in_marquee to services
+-- Run this in Supabase SQL Editor if services table already exists:
+-- ALTER TABLE public.services ADD COLUMN IF NOT EXISTS deliverables JSONB DEFAULT '[]'::jsonb;
+-- ALTER TABLE public.services ADD COLUMN IF NOT EXISTS show_in_marquee BOOLEAN DEFAULT true;
 
 -- 3. TESTIMONIALS TABLE
 CREATE TABLE IF NOT EXISTS public.testimonials (

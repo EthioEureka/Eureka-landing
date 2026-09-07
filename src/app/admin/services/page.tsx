@@ -101,7 +101,7 @@ export default function AdminServicesPage() {
                   <th className="py-4 px-6 font-bold">Service Title</th>
                   <th className="py-4 px-4 font-bold">Slug</th>
                   <th className="py-4 px-4 font-bold">Order</th>
-                  <th className="py-4 px-4 font-bold">Status</th>
+                  <th className="py-4 px-4 font-bold">Marquee</th>
                   <th className="py-4 px-6 font-bold text-right">Actions</th>
                 </tr>
               </thead>
@@ -119,9 +119,15 @@ export default function AdminServicesPage() {
                     <td className="py-4 px-4 text-eureka-slate">{s.slug}</td>
                     <td className="py-4 px-4 text-eureka-slate">{s.sort_order || idx + 1}</td>
                     <td className="py-4 px-4">
-                      <span className="px-2.5 py-1 bg-emerald-50 text-emerald-700 border border-emerald-200 text-[10px] font-bold rounded-md uppercase">
-                        PUBLISHED
-                      </span>
+                      {s.show_in_marquee !== false ? (
+                        <span className="px-2.5 py-1 bg-eureka-blue/10 text-eureka-blue border border-eureka-blue/20 text-[10px] font-bold rounded-md uppercase">
+                          IN MARQUEE
+                        </span>
+                      ) : (
+                        <span className="px-2.5 py-1 bg-slate-100 text-eureka-slate border border-slate-200 text-[10px] font-bold rounded-md uppercase">
+                          HIDDEN
+                        </span>
+                      )}
                     </td>
                     <td className="py-4 px-6 text-right space-x-3">
                       <Link

@@ -3,12 +3,13 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft, Save, Loader2, Sparkles, Layers } from "lucide-react";
+import { ArrowLeft, Save, Loader2, Sparkles, Plus, X } from "lucide-react";
 
 export default function NewServicePage() {
   const router = useRouter();
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
+  const [deliverableInput, setDeliverableInput] = useState("");
 
   const [formData, setFormData] = useState({
     title: "",
@@ -17,9 +18,30 @@ export default function NewServicePage() {
     description: "",
     icon: "Code",
     sort_order: 1,
-    featured: true,
-    published: true,
+    deliverables: [] as string[],
+    show_in_marquee: true,
   });
+
+  const addDeliverable = () => {
+    const trimmed = deliverableInput.trim();
+    if (!trimmed || formData.deliverables.length >= 6) return;
+    setFormData({ ...formData, deliverables: [...formData.deliverables, trimmed] });
+    setDeliverableInput("");
+  };
+
+  const removeDeliverable = (index: number) => {
+    setFormData({
+      ...formData,
+      deliverables: formData.deliverables.filter((_, i) => i !== index),
+    });
+  };
+
+  const handleDeliverableKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      addDeliverable();
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -27,10 +49,23 @@ export default function NewServicePage() {
     setError("");
 
     try {
+      const payload = {
+        title: formData.title,
+        slug: formData.slug,
+        short_description: formData.short_description,
+        description: formData.description,
+        icon: formData.icon,
+        sort_order: formData.sort_order,
+        deliverables: formData.deliverables,
+        show_in_marquee: formData.show_in_marquee,
+        featured: formData.show_in_marquee,
+        published: true,
+      };
+
       const res = await fetch("/api/admin/services", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(payload),
       });
 
       if (!res.ok) {
@@ -76,7 +111,7 @@ export default function NewServicePage() {
       )}
 
       <form onSubmit={handleSubmit} className="space-y-6 bg-white border border-eureka-border rounded-3xl p-6 md:p-8 shadow-eureka-lg font-sans text-xs">
-        
+
         {/* Title & Slug */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
           <div>
@@ -195,27 +230,70 @@ export default function NewServicePage() {
           />
         </div>
 
-        {/* Feature Checkboxes */}
+        {/* Deliverables Builder */}
+        <div>
+          <label className="block text-xs font-mono text-eureka-slate uppercase font-bold mb-2 tracking-wider">
+            Deliverables & Process Items
+          </label>
+          <div className="flex gap-3 mb-3">
+            <input
+              type="text"
+              value={deliverableInput}
+              onChange={(e) => setDeliverableInput(e.target.value)}
+              onKeyDown={handleDeliverableKeyDown}
+              placeholder="e.g. Discovery & UX Research"
+              disabled={formData.deliverables.length >= 6}
+              className="flex-1 bg-slate-50 border border-eureka-border text-eureka-dark px-4 py-3 text-sm focus:border-eureka-blue focus:ring-2 focus:ring-eureka-blue/20 focus:outline-none rounded-xl font-sans transition-all disabled:opacity-50"
+            />
+            <button
+              type="button"
+              onClick={addDeliverable}
+              disabled={!deliverableInput.trim() || formData.deliverables.length >= 6}
+              className="px-4 py-3 bg-eureka-blue text-white font-bold font-mono text-xs uppercase tracking-wider rounded-xl hover:bg-eureka-indigo transition-all flex items-center gap-2 shadow-eureka-sm disabled:opacity-40"
+            >
+              <Plus size={14} />
+              Add
+            </button>
+          </div>
+          {formData.deliverables.length > 0 && (
+            <ul className="space-y-2 mb-2">
+              {formData.deliverables.map((item, i) => (
+                <li key={i} className="flex items-center justify-between bg-blue-50 border border-blue-100 rounded-lg px-3 py-2">
+                  <span className="font-sans text-xs text-eureka-dark font-medium">
+                    <span className="font-mono text-eureka-slate mr-2">•</span>
+                    {item}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => removeDeliverable(i)}
+                    className="text-eureka-slate hover:text-red-500 transition-colors p-0.5 rounded"
+                  >
+                    <X size={13} />
+                  </button>
+                </li>
+              ))}
+            </ul>
+          )}
+          <p className="text-[11px] font-mono text-eureka-slate">
+            Add up to 6 deliverable items shown on the service card
+            {formData.deliverables.length > 0 && ` — ${formData.deliverables.length}/6 added`}
+          </p>
+        </div>
+
+        {/* Marquee Toggle */}
         <div className="flex items-center gap-8 pt-4 border-t border-eureka-border">
           <label className="flex items-center gap-3 cursor-pointer text-xs font-sans text-eureka-dark font-bold">
             <input
               type="checkbox"
-              checked={formData.featured}
-              onChange={(e) => setFormData({ ...formData, featured: e.target.checked })}
+              checked={formData.show_in_marquee}
+              onChange={(e) => setFormData({ ...formData, show_in_marquee: e.target.checked })}
               className="w-4 h-4 rounded text-eureka-blue focus:ring-eureka-blue accent-eureka-blue"
             />
-            <span>Highlight on Homepage</span>
+            <span>Show in Services Marquee</span>
           </label>
-
-          <label className="flex items-center gap-3 cursor-pointer text-xs font-sans text-eureka-dark font-bold">
-            <input
-              type="checkbox"
-              checked={formData.published}
-              onChange={(e) => setFormData({ ...formData, published: e.target.checked })}
-              className="w-4 h-4 rounded text-eureka-blue focus:ring-eureka-blue accent-eureka-blue"
-            />
-            <span>Publish Immediately</span>
-          </label>
+          <p className="text-[11px] font-mono text-eureka-slate">
+            When enabled, this service title appears in the scrolling marquee below the hero
+          </p>
         </div>
 
         {/* Submit Bar */}

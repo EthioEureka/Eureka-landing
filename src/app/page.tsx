@@ -46,7 +46,10 @@ export default async function HomePage() {
     console.warn("Cookie set warning:", err);
   }
 
-  const serviceSlugs = services.map((s) => (s.slug ? s.slug.toUpperCase() : s.title.toUpperCase()));
+  const filteredMarqueeServices = services.filter((s) => s.show_in_marquee !== false);
+  const serviceSlugs = filteredMarqueeServices.length > 0
+    ? filteredMarqueeServices.map((s) => s.title.toUpperCase())
+    : services.map((s) => s.title.toUpperCase());
 
   return (
     <>
