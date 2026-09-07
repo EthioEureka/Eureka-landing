@@ -12,6 +12,7 @@ import {
   Settings,
   LogOut,
   Sparkles,
+  Building2,
 } from "lucide-react";
 
 export default function AdminSidebar() {
@@ -29,9 +30,11 @@ export default function AdminSidebar() {
     { href: "/admin/projects", label: "Projects", icon: FolderKanban },
     { href: "/admin/services", label: "Services", icon: Wrench },
     { href: "/admin/testimonials", label: "Testimonials", icon: MessageSquareQuote },
+    { href: "/admin/partners", label: "Partners & Marquee", icon: Building2 },
     { href: "/admin/contact-submissions", label: "Contact Leads", icon: Inbox },
     { href: "/admin/settings", label: "Site Settings", icon: Settings },
   ];
+
 
   return (
     <aside className="w-64 bg-white border-r border-eureka-border min-h-screen flex flex-col justify-between p-4 shrink-0 shadow-sm">

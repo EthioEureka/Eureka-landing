@@ -20,11 +20,13 @@ export default async function HomePage() {
     fetchTestimonials(),
   ]);
 
+  const serviceSlugs = services.map((s) => (s.slug ? s.slug.toUpperCase() : s.title.toUpperCase()));
+
   return (
     <>
       <Hero projects={projects} />
+      <Marquee items={serviceSlugs.length > 0 ? serviceSlugs : undefined} />
       <IntroSection />
-      <Marquee />
       <ServiceList services={services} />
       <ProjectGrid projects={projects} />
       <MissionSection />
@@ -35,3 +37,4 @@ export default async function HomePage() {
     </>
   );
 }
+

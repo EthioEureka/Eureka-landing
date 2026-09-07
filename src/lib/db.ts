@@ -4,8 +4,9 @@ import {
   defaultServices,
   defaultTestimonials,
   defaultSiteSettings,
+  defaultPartners,
 } from "./seed-data";
-import { Project, Service, Testimonial, ContactSubmission, SiteSettings } from "./types";
+import { Project, Service, Testimonial, ContactSubmission, SiteSettings, Partner } from "./types";
 
 // Persistent global memory store interface to survive Next.js HMR reloads
 interface GlobalMemoryStore {
@@ -14,6 +15,7 @@ interface GlobalMemoryStore {
   __memoryTestimonials?: Testimonial[];
   __memorySubmissions?: ContactSubmission[];
   __memorySettings?: SiteSettings;
+  __memoryPartners?: Partner[];
 }
 
 const globalStore = globalThis as unknown as GlobalMemoryStore;
@@ -62,12 +64,17 @@ if (!globalStore.__memorySubmissions) {
 if (!globalStore.__memorySettings) {
   globalStore.__memorySettings = { ...defaultSiteSettings };
 }
+if (!globalStore.__memoryPartners) {
+  globalStore.__memoryPartners = [...defaultPartners];
+}
 
 const memoryProjects: Project[] = globalStore.__memoryProjects;
 const memoryServices: Service[] = globalStore.__memoryServices;
 const memoryTestimonials: Testimonial[] = globalStore.__memoryTestimonials;
 const defaultSubmissions: ContactSubmission[] = globalStore.__memorySubmissions;
 let memorySettings: SiteSettings = globalStore.__memorySettings;
+const memoryPartners: Partner[] = globalStore.__memoryPartners;
+
 
 /* ==========================================================================
    GETTERS (READ OPERATIONS FOR PUBLIC LANDING PAGE & ADMIN)
@@ -285,6 +292,103 @@ export async function fetchSiteSettings(): Promise<SiteSettings> {
   }
 }
 
+export async function fetchPartners(): Promise<Partner[]> {
+  if (!isSupabaseConfigured || !supabase) {
+    return memoryPartners.filter((p) => p.published !== false);
+  }
+  try {
+    const { data, error } = await supabase
+      .from("partners")
+      .select("*")
+      .eq("published", true)
+      .order("sort_order", { ascending: true });
+
+    if (error) {
+      console.warn("Supabase fetchPartners error:", error.message);
+      return memoryPartners.filter((p) => p.published !== false);
+    }
+    return (data || []) as Partner[];
+  } catch {
+    return memoryPartners.filter((p) => p.published !== false);
+  }
+}
+
+export async function fetchAllPartnersAdmin(): Promise<Partner[]> {
+  if (!isSupabaseConfigured || !supabase) {
+    return memoryPartners;
+  }
+  try {
+    const { data, error } = await supabase
+      .from("partners")
+      .select("*")
+      .order("sort_order", { ascending: true });
+
+    if (error) {
+      return memoryPartners;
+    }
+    return (data || []) as Partner[];
+  } catch {
+    return memoryPartners;
+  }
+}
+
+export async function createPartner(partner: Omit<Partner, "id">): Promise<{ success: boolean; data?: Partner; error?: string }> {
+  const newPartner: Partner = { id: `prt-${Date.now()}`, ...partner };
+  memoryPartners.push(newPartner);
+
+  if (!isSupabaseConfigured || !supabase) {
+    return { success: true, data: newPartner };
+  }
+  try {
+    const { data, error } = await supabase.from("partners").insert([newPartner]).select().maybeSingle();
+    if (error || !data) return { success: true, data: newPartner };
+    return { success: true, data: data as Partner };
+  } catch {
+    return { success: true, data: newPartner };
+  }
+}
+
+export async function updatePartner(id: string, updates: Partial<Partner>): Promise<{ success: boolean; data?: Partner; error?: string }> {
+  const idx = memoryPartners.findIndex((p) => p.id === id);
+  if (idx !== -1) {
+    memoryPartners[idx] = { ...memoryPartners[idx], ...updates };
+  }
+
+  if (!isSupabaseConfigured || !supabase) {
+    if (idx !== -1) return { success: true, data: memoryPartners[idx] };
+    return { success: false, error: "Partner not found" };
+  }
+  try {
+    const { data, error } = await supabase.from("partners").update(updates).eq("id", id).select().maybeSingle();
+    if (error || !data) {
+      if (idx !== -1) return { success: true, data: memoryPartners[idx] };
+      return { success: false, error: error?.message || "Update failed" };
+    }
+    return { success: true, data: data as Partner };
+  } catch {
+    if (idx !== -1) return { success: true, data: memoryPartners[idx] };
+    return { success: false, error: "Update failed" };
+  }
+}
+
+export async function deletePartner(id: string): Promise<{ success: boolean; error?: string }> {
+  const idx = memoryPartners.findIndex((p) => p.id === id);
+  if (idx !== -1) {
+    memoryPartners.splice(idx, 1);
+  }
+
+  if (!isSupabaseConfigured || !supabase) {
+    return { success: true };
+  }
+  try {
+    const { error } = await supabase.from("partners").delete().eq("id", id);
+    if (error && idx === -1) return { success: false, error: error.message };
+    return { success: true };
+  } catch {
+    return { success: true };
+  }
+}
+
 export async function fetchContactSubmissions(): Promise<ContactSubmission[]> {
   if (!isSupabaseConfigured || !supabase) {
     return defaultSubmissions;
@@ -297,6 +401,7 @@ export async function fetchContactSubmissions(): Promise<ContactSubmission[]> {
     return defaultSubmissions;
   }
 }
+
 
 /* ==========================================================================
    FULL CRUD OPERATIONS (PROJECTS, SERVICES, TESTIMONIALS, LEADS, SETTINGS)

@@ -1,13 +1,25 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { ArrowUpRight, ArrowUp } from "lucide-react";
 import Marquee from "./Marquee";
+import { Partner } from "@/lib/types";
 
 export default function Footer() {
   const pathname = usePathname();
+  const [partners, setPartners] = useState<Partner[]>([]);
+
+  useEffect(() => {
+    fetch("/api/partners")
+      .then((res) => res.json())
+      .then((data) => {
+        if (Array.isArray(data)) setPartners(data);
+      })
+      .catch((err) => console.error("Error loading partners:", err));
+  }, []);
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -20,9 +32,10 @@ export default function Footer() {
   return (
     <footer className="bg-slate-50 text-eureka-dark border-t border-eureka-border pt-10 sm:pt-16 relative overflow-hidden">
       {/* Footer Marquee Banner */}
-      <div className="mb-10 sm:mb-16 border-b border-eureka-border/60 pb-8 bg-white py-6">
-        <Marquee speed="slow" />
+      <div className="mb-10 sm:mb-16 border-b border-eureka-border/60 pb-8 ">
+        <Marquee partners={partners} speed="slow" />
       </div>
+
 
       {/* Main Footer Container */}
       <div className="max-w-7xl mx-auto px-6 md:px-12 pb-12 sm:pb-16">

@@ -1,4 +1,4 @@
-import { Project, Service, Testimonial, SiteSettings } from "./types";
+import { Project, Service, Testimonial, SiteSettings, Partner } from "./types";
 
 export const defaultSiteSettings: SiteSettings = {
   id: "default-settings",
@@ -247,3 +247,40 @@ export const defaultTestimonials: Testimonial[] = [
     sort_order: 3,
   },
 ];
+
+export const defaultPartners: Partner[] = [
+  {
+    id: "prt-01",
+    name: "Abyssinia Craft",
+    logo_url: "/Eureka-logo.png",
+    website_url: "https://abyssiniacraft.example.com",
+    sort_order: 1,
+    published: true,
+  },
+  {
+    id: "prt-02",
+    name: "Kality Logistics",
+    logo_url: "/Eureka-logo.png",
+    website_url: "https://kalityfreight.example.com",
+    sort_order: 2,
+    published: true,
+  },
+  {
+    id: "prt-03",
+    name: "Zoma Sustainable Design Lab",
+    logo_url: "/Eureka-logo.png",
+    website_url: "https://zomaarch.example.com",
+    sort_order: 3,
+    published: true,
+  },
+  {
+    id: "prt-04",
+    name: "Nile Capital Partners",
+    logo_url: "/Eureka-logo.png",
+    website_url: "https://nilecapital.example.com",
+    sort_order: 4,
+    published: true,
+  },
+];
+
+

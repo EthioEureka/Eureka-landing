@@ -85,3 +85,15 @@ export interface SiteSettings {
   og_image?: string;
   updated_at?: string;
 }
+
+export interface Partner {
+  id: string;
+  name: string;
+  logo_url?: string;
+  website_url?: string;
+  sort_order: number;
+  published: boolean;
+  created_at?: string;
+  updated_at?: string;
+}
+
