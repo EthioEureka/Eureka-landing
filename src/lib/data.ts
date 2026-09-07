@@ -270,10 +270,11 @@ export const siteData = {
       ],
       budgetOptions: [
         { label: "Select Range", value: "" },
-        { label: "$2,000 - $5,000", value: "$2,000 - $5,000" },
-        { label: "$5,000 - $10,000", value: "$5,000 - $10,000" },
-        { label: "$10,000 - $25,000", value: "$10,000 - $25,000" },
-        { label: "$25,000+", value: "$25,000+" },
+        { label: "< ETB 10,000", value: "< ETB 10,000" },
+        { label: "ETB 10,000 – 30,000", value: "ETB 10,000 – 30,000" },
+        { label: "ETB 30,000 – 50,000", value: "ETB 30,000 – 50,000" },
+        { label: "ETB 50,000 – 100,000", value: "ETB 50,000 – 100,000" },
+        { label: "> ETB 100,000", value: "> ETB 100,000" },
       ],
     },
     success: {

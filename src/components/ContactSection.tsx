@@ -7,6 +7,7 @@ import { siteData } from "@/lib/data";
 
 export default function ContactSection() {
   const [settings, setSettings] = useState<Partial<SiteSettings>>({});
+  const [serviceOptions, setServiceOptions] = useState<string[]>(siteData.contact.form.serviceOptions);
 
   const [formData, setFormData] = useState({
     name: "",
@@ -23,20 +24,26 @@ export default function ContactSection() {
   const [errorMsg, setErrorMsg] = useState("");
 
   useEffect(() => {
-    async function loadSettings() {
-      try {
-        const res = await fetch("/api/settings");
-        if (res.ok) {
-          const data = await res.json();
-          if (data.settings) {
-            setSettings(data.settings);
-          }
+    // Load site settings
+    fetch("/api/settings")
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (data?.settings) setSettings(data.settings);
+      })
+      .catch(() => {});
+
+    // Load services from DB for the service select; fall back to static list if empty/error
+    fetch("/api/services")
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        const services = Array.isArray(data) ? data : data?.services;
+        if (Array.isArray(services) && services.length > 0) {
+          const names = services.map((s: { title: string }) => s.title);
+          // Always append generic options at the end
+          setServiceOptions([...names, "Multiple Services", "Other"]);
         }
-      } catch (err: unknown) {
-        console.error("Failed to load settings in ContactSection", err);
-      }
-    }
-    loadSettings();
+      })
+      .catch(() => {});
   }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -65,7 +72,7 @@ export default function ContactSection() {
           email: "",
           company: "",
           phone: "",
-          service: siteData.contact.form.serviceOptions[0],
+          service: serviceOptions[0] || siteData.contact.form.serviceOptions[0],
           budget: "",
           message: "",
         });
@@ -191,7 +198,7 @@ export default function ContactSection() {
                       onChange={(e) => setFormData({ ...formData, service: e.target.value })}
                       className="w-full bg-white border border-eureka-border rounded-xl text-eureka-dark px-4 py-3 text-sm focus:border-eureka-blue focus:ring-2 focus:ring-eureka-blue/20 focus:outline-none transition-all shadow-sm"
                     >
-                      {siteData.contact.form.serviceOptions.map((option) => (
+                      {serviceOptions.map((option) => (
                         <option key={option} value={option}>{option}</option>
                       ))}
                     </select>

@@ -840,7 +840,22 @@ export async function submitContactSubmission(
   try {
     const db = getDb();
     if (!db) return { success: true };
-    const { error } = await db.from("contact_submissions").insert([newSub]);
+
+    // DB insert — explicitly exclude `read` since the column doesn't exist in Supabase
+    const dbPayload = {
+      id: newSub.id,
+      created_at: newSub.created_at,
+      name: newSub.name,
+      email: newSub.email,
+      company: newSub.company,
+      phone: newSub.phone,
+      service: newSub.service,
+      budget: newSub.budget,
+      message: newSub.message,
+      status: newSub.status,
+    };
+
+    const { error } = await db.from("contact_submissions").insert([dbPayload]);
     if (error) {
       console.error("Supabase submitContactSubmission error:", error.message);
       return { success: false, error: error.message };
@@ -868,13 +883,14 @@ export async function updateContactStatus(
     return { success: false, error: "Lead not found" };
   }
   try {
-    const updates: Partial<ContactSubmission> = {};
-    if (status !== undefined) updates.status = status;
-    if (read !== undefined) updates.read = read;
+    // Only update status in DB — `read` column doesn't exist in contact_submissions
+    const dbUpdates: Record<string, unknown> = {};
+    if (status !== undefined) dbUpdates.status = status;
+    // Note: `read` is intentionally excluded from DB updates
 
     const db = getDb();
     if (!db) return { success: true };
-    let query = db.from("contact_submissions").update(updates);
+    let query = db.from("contact_submissions").update(dbUpdates);
     if (isUUID(id)) {
       query = query.eq("id", id);
     }

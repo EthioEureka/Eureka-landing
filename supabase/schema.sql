@@ -74,8 +74,13 @@ CREATE TABLE IF NOT EXISTS public.contact_submissions (
   service TEXT,
   budget TEXT,
   message TEXT NOT NULL,
-  status TEXT DEFAULT 'new'
+  status TEXT DEFAULT 'new',
+  read BOOLEAN DEFAULT false
 );
+
+-- MIGRATION: Add read and status columns if the table already exists:
+-- ALTER TABLE public.contact_submissions ADD COLUMN IF NOT EXISTS read BOOLEAN DEFAULT false;
+-- ALTER TABLE public.contact_submissions ADD COLUMN IF NOT EXISTS status TEXT DEFAULT 'new';
 
 -- 5. SITE SETTINGS TABLE
 CREATE TABLE IF NOT EXISTS public.site_settings (
