@@ -105,16 +105,7 @@ export default function ProcessTimeline() {
                 viewport={{ once: true }}
                 transition={{ delay: 0.5 }}
               >
-                <p className="text-sm text-eureka-slate font-mono uppercase tracking-wider font-semibold mb-3">
-                  Timeline Progress
-                </p>
-                <div className="h-2 bg-eureka-border rounded-full overflow-hidden">
-                  <motion.div
-                    className="h-full bg-gradient-to-r from-eureka-blue to-eureka-indigo rounded-full"
-                    animate={{ width: `${((activeStage + 1) / stages.length) * 100}%` }}
-                    transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-                  />
-                </div>
+                
                 <p className="text-xs text-eureka-slate mt-2 text-center">
                   Stage {activeStage + 1} of {stages.length}
                 </p>
