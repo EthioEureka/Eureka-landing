@@ -325,7 +325,6 @@ export default function Hero({ projects }: HeroProps) {
                             </h4>
                             <p className="text-xs text-eureka-slate">{card.category}</p>
                           </div>
-                          <ExternalLink size={16} className="text-eureka-slate group-hover:text-eureka-blue transition-colors" />
                         </div>
                       </div>
                     </Link>
