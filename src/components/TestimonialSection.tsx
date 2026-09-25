@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { motion } from "framer-motion";
 import { Quote } from "lucide-react";
 import { Testimonial } from "@/lib/types";
 import { siteData } from "@/lib/data";
@@ -12,29 +13,47 @@ interface TestimonialSectionProps {
 export default function TestimonialSection({ testimonials }: TestimonialSectionProps) {
   if (!testimonials || testimonials.length === 0) return null;
 
+  // Duplicate items 4x to guarantee a seamless 50% infinite marquee loop
+  const marqueeCards = [...testimonials, ...testimonials, ...testimonials, ...testimonials];
+
   return (
     <section className="py-24 md:py-36 bg-slate-50 border-b border-eureka-border relative overflow-hidden">
-      <div className="max-w-7xl mx-auto px-6 md:px-12">
+      <div className="max-w-7xl mx-auto px-6 md:px-12 mb-16">
+        <span className="text-xs font-mono tracking-[0.2em] text-eureka-blue font-semibold uppercase flex items-center gap-2 mb-4">
+          <span className="w-2 h-2 bg-eureka-blue rounded-full" />
+          {siteData.testimonials.sectionTag}
+        </span>
+        <h2 className="text-section-headline font-extrabold text-eureka-dark tracking-tight">
+          {siteData.testimonials.headline}
+        </h2>
+      </div>
+
+      {/* Infinite Horizontal Moving Loop Ticker Container */}
+      <div className="relative w-full overflow-hidden py-4 select-none">
         
-        <div className="mb-16">
-          <span className="text-xs font-mono tracking-[0.2em] text-eureka-blue font-semibold uppercase flex items-center gap-2 mb-4">
-            <span className="w-2 h-2 bg-eureka-blue rounded-full" />
-            {siteData.testimonials.sectionTag}
-          </span>
-          <h2 className="text-section-headline font-extrabold text-eureka-dark tracking-tight">
-            {siteData.testimonials.headline}
-          </h2>
-        </div>
+        {/* Left and Right Fade Gradients */}
+        <div className="absolute top-0 bottom-0 left-0 w-16 md:w-32 bg-gradient-to-r from-slate-50 via-slate-50/80 to-transparent pointer-events-none z-10" />
+        <div className="absolute top-0 bottom-0 right-0 w-16 md:w-32 bg-gradient-to-l from-slate-50 via-slate-50/80 to-transparent pointer-events-none z-10" />
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {testimonials.map((t, idx) => (
+        {/* Continuous 50% X Infinite Motion Ticker (No hover stop) */}
+        <motion.div
+          className="flex gap-6 md:gap-8 items-stretch"
+          animate={{ x: ["0%", "-50%"] }}
+          transition={{
+            duration: Math.max(25, testimonials.length * 8),
+            repeat: Infinity,
+            ease: "linear",
+          }}
+          style={{ willChange: "transform" }}
+        >
+          {marqueeCards.map((t, idx) => (
             <div
-              key={t.id || idx}
-              className="bg-white border border-eureka-border rounded-2xl p-8 flex flex-col justify-between relative group hover:border-eureka-blue hover:shadow-eureka-md transition-all"
+              key={`${t.id || idx}-${idx}`}
+              className="w-[320px] sm:w-[380px] md:w-[420px] shrink-0 bg-white border border-eureka-border rounded-2xl p-8 flex flex-col justify-between relative shadow-eureka-sm hover:border-eureka-blue hover:shadow-eureka-md transition-all"
             >
-              <Quote className="text-eureka-blue/40 mb-6 group-hover:text-eureka-blue transition-colors" size={32} />
+              <Quote className="text-eureka-blue/40 mb-6 shrink-0" size={32} />
 
-              <p className="text-base text-eureka-dark font-normal leading-relaxed mb-8 italic">
+              <p className="text-sm md:text-base text-eureka-dark font-normal leading-relaxed mb-8 italic">
                 &ldquo;{t.quote}&rdquo;
               </p>
 
@@ -58,8 +77,7 @@ export default function TestimonialSection({ testimonials }: TestimonialSectionP
               </div>
             </div>
           ))}
-        </div>
-
+        </motion.div>
       </div>
     </section>
   );
